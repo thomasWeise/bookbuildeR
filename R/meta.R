@@ -22,7 +22,7 @@ meta.commit <- function() {
 #' @export meta.repository
 meta.repository <- function() {
   env.var <- "TRAVIS_REPO_SLUG";
-  repo   <- Sys.getenv(x="TRAVIS_REPO_SLUG", unset=NULL);
+  repo    <- Sys.getenv(x=env.var, unset=NULL);
   if( is.null(repo) || (length(repo) != 1L) || (nchar(repo) <= 0L)) {
     exit("Repository unknown because environment variable '",
          env.var,
