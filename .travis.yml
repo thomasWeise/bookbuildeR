@@ -10,5 +10,5 @@ r:
   - devel
 after_script:
   - |
-    R -e 'if(require("plotteR")) { remove.packages("plotteR"); }; r <- devtools::install_github("thomasWeise/plotteR"); if(r) { cat("OK\n"); q(save="no", status=0); } else { cat("error: ", r, "\n", sep="", collapse=""); q(save="no", status=1); }'
+    R -e 'if(require("bookbuildeR")) { remove.packages("bookbuildeR"); }; r <- devtools::install_github("thomasWeise/bookbuildeR"); if(r) { cat("OK\n"); q(save="no", status=0); } else { cat("error: ", r, "\n", sep="", collapse=""); q(save="no", status=1); }'
 

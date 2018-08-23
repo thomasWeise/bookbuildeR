@@ -1,4 +1,12 @@
 
+# the other commands
+#' @include meta.R
+.commands <- list();
+.commands[["\\\\meta.time"]]       <- function(match) meta.time();
+.commands[["\\\\meta.repository"]] <- function(match) meta.repository();
+.commands[["\\\\meta.commit"]]     <- function(match) meta.commit();
+.commands.names <- names(.commands);
+
 # load a single file and pipe it to the output
 #' @importFrom ore ore.subst
 #' @importFrom utilizeR path.relativize
@@ -22,7 +30,7 @@
   close(src);
 
   # resolve all relative paths
-  input.start <- "\\relinput{";
+  input.start <- "\\relative.input{";
   for(line in lines) {
     line.trimmed <- trimws(line);
     if(startsWith(line.trimmed, input.start)) {
@@ -39,8 +47,8 @@
 
     # ok, we are in a normal line
 
-    # implement the '\relpath' command which will
-    line <- ore.subst(regex="\\\\relpath\\{(.+)\\}",
+    # implement the '\relative.path' command which will
+    line <- ore.subst(regex="\\\\relative.path\\{(.+)\\}",
                       replacement=function(relPath) {
                         groups <- attr(relPath, "groups");
                         if(is.null(groups) || (length(groups) != 1L)) {
@@ -53,6 +61,13 @@
                           rootDir)
                       },
                       text=line);
+
+    # now do the other replacements
+    for(i in seq_along(.commands)) {
+      line <- ore.subst(regex=.commands.names[[i]],
+                        replacement=.commands[[i]],
+                        text=line);
+    }
 
     # write the contents
     writeLines(text=line, con=output);
