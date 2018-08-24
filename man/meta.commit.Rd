@@ -10,6 +10,7 @@ meta.commit()
 a string identifying the commit of the repository for which we build
 }
 \description{
-This function will only work if we build with travis.ci. It
-  loads the commit identifier from the environment.
+This function will only work if we build with travis.ci or have
+  an environment variable \code{COMMIT} set. It loads the commit identifier
+  from the environment.
 }

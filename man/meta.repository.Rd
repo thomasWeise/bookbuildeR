@@ -10,6 +10,7 @@ meta.repository()
 a string identifying the repository for which we build
 }
 \description{
-This function will only work if we build with travis.ci. It
-  loads the repository identifier from the environment.
+This function will only work if we build with travis.ci or have
+  an environment variable \code{REPOSITORY} set. It loads the repository
+  identifier from the environment.
 }
