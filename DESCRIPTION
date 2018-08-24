@@ -21,6 +21,8 @@ LazyData: true
 RoxygenNote: 6.0.1.9000
 Collate: 
     'logger.R'
-    'meta.R'
     'pandoc.R'
+    'epub.R'
+    'latex.R'
+    'meta.R'
     'preprocessor.R'
