@@ -9,7 +9,7 @@ test_that("Test meta.time", {
 
 
 test_that("Test meta.repo", {
-  if(Sys.getenv("TRAVIS", unset=NUL) == "true") {
+  if(Sys.getenv("TRAVIS", unset=NA) == "true") {
     c <- Sys.getenv("TRAVIS_REPO_SLUG", unset=NA);
     if(!(is.null(c) || is.na(c))) {
       cat("Found repository slug: '", c, "'.\n", sep="", collapse="");
@@ -22,7 +22,7 @@ test_that("Test meta.repo", {
 
 
 test_that("Test meta.commit", {
-  if(Sys.getenv("TRAVIS", unset=NULL) == "true") {
+  if(Sys.getenv("TRAVIS", unset=NA) == "true") {
     c <- Sys.getenv("TRAVIS_COMMIT", unset=NA);
     if(!(is.null(c) || is.na(c))) {
       cat("Found commit: '", c, "'.\n", sep="", collapse="");
