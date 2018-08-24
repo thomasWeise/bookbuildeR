@@ -10,8 +10,8 @@ test_that("Test meta.time", {
 
 test_that("Test meta.repo", {
   if(Sys.getenv("TRAVIS", unset=NUL) == "true") {
-    c <- Sys.getenv("TRAVIS_REPO_SLUG", unset=NUL);
-    if(!(is.null(c))) {
+    c <- Sys.getenv("TRAVIS_REPO_SLUG", unset=NA);
+    if(!(is.null(c) || is.na(c))) {
       cat("Found repository slug: '", c, "'.\n", sep="", collapse="");
       expect_identical(c, meta.repository());
     }
@@ -23,8 +23,8 @@ test_that("Test meta.repo", {
 
 test_that("Test meta.commit", {
   if(Sys.getenv("TRAVIS", unset=NULL) == "true") {
-    c <- Sys.getenv("TRAVIS_COMMIT", unset=NULL);
-    if(!(is.null(c))) {
+    c <- Sys.getenv("TRAVIS_COMMIT", unset=NA);
+    if(!(is.null(c) || is.na(c))) {
       cat("Found commit: '", c, "'.\n", sep="", collapse="");
       expect_identical(c, meta.commit());
       return(NULL);

@@ -6,9 +6,8 @@
 #' @export meta.commit
 meta.commit <- function() {
   env.var <- "TRAVIS_COMMIT";
-  commit <- Sys.getenv(x=env.var, unset=NULL);
-return(commit);
-  if(is.null(commit) || (length(commit) != 1L) || (nchar(commit) <= 0L)) {
+  commit <- Sys.getenv(x=env.var, unset=NA);
+  if(is.null(commit) || is.na(commit)|| (length(commit) != 1L) || (nchar(commit) <= 0L)) {
     exit("Commit unknown because environment variable '",
          env.var,
          "' not set, maybe you are not building with travis.ci?");
@@ -23,9 +22,8 @@ return(commit);
 #' @export meta.repository
 meta.repository <- function() {
   env.var <- "TRAVIS_REPO_SLUG";
-  repo    <- Sys.getenv(x=env.var, unset=NULL);
-return(repo);
-  if(is.null(repo) || (length(repo) != 1L) || (nchar(repo) <= 0L)) {
+  repo    <- Sys.getenv(x=env.var, unset=NA);
+  if(is.null(repo) || is.na(repo) || (length(repo) != 1L) || (nchar(repo) <= 0L)) {
     exit("Repository unknown because environment variable '",
          env.var,
          "' not set, maybe you are not building with travis.ci?");
