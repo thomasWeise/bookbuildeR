@@ -82,10 +82,12 @@
 #' @param sourceFile the source file
 #' @param destName the name of the destination file (to be created in the same
 #'   folder as the source file)
+#' @param bibliography do we have a bibliography?
 #' @return the canonical path to the destination file
 #' @include logger.R
 #' @export preprocess.doc
-preprocess.doc <- function(sourceFile, destName) {
+preprocess.doc <- function(sourceFile, destName,
+                           bibliography=TRUE) {
   # get the canonical path of the source file
   sourceFile <- check.file(sourceFile);
 
@@ -111,6 +113,11 @@ preprocess.doc <- function(sourceFile, destName) {
 
   # copy contents from source to destination and traverse directory where necessary
   .preprocess.input(sourceFile, sourceDir, output);
+
+  # add proper bibliography section
+  if((!(is.na(bibliography) || is.null(bibliography))) && bibliography) {
+    writeLines(text=c("", "# Bibliography {-}"))
+  }
 
   close(output);
 
