@@ -83,14 +83,14 @@ pandoc.invoke <- function(sourceFile,
   result <- system2("pandoc", args=args);
 
   if(result != 0L) {
-    exit(pandoc, " has failed with error code ", result, " for arguments '",
+    exit("pandoc has failed with error code ", result, " for arguments '",
          paste(args, sep=" ", collapse=" "), "' in directory '", sourceDir, "'.");
   }
 
   setwd(wd);
 
   destFile <- check.file(destFile);
-  .logger(pandoc, " has succeeded for arguments '",
+  .logger("pandoc has succeeded for arguments '",
          paste(args, sep=" ", collapse=" "),
          "' in directory '",
          sourceDir, "' and produced file '",

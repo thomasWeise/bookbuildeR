@@ -57,8 +57,6 @@ bookbuildeR.main <- function(sourceFile,
 
   unlink(tempFile, force=TRUE);
   .logger("Finished deleting temporary source '",
-          tempFile, "'.");
-
-  .logger("Finished building a pdf output '", dest, "' via LaTeX.");
+          tempFile, "' - we are done.");
   return(list(pdf=pdf, epub=epub));
 }

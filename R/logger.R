@@ -10,20 +10,23 @@ exit <- function(...) {
   q(status=1L);
 }
 
-# the internal strict error handler
-.failed.to.normalize <- function(e) {
-  exit("Failed to normalize path '",
-       path,
-       "' with message '",
-       e,
-       "'.");
-}
-
-.check.path <- function(path) {
+.check.path <- function(path, type) {
   return(tryCatch(
       normalizePath(path, mustWork=TRUE),
-      error=.failed.to.normalize,
-      warning=.failed.to.normalize));
+      error=function(e) {
+        exit("Failed to normalize path '",
+             path,
+             "' for ", type, " with message '",
+             e,
+             "'.")
+      },
+      warning=function(e) {
+        exit("Warning when trying to normalize path '",
+             path,
+             "' for ", type, " with message '",
+             e,
+             "'.")
+      }));
 }
 
 #' @title Check that the file identified by the given path exists
@@ -33,7 +36,7 @@ exit <- function(...) {
 #' @export check.file
 check.file <- function(path) {
   ret <- .check.path(path);
-  if(!(file.exists(ret))) {
+  if(!(file.exists(ret, "file"))) {
     exit("File '", ret, "' does not exist.");
   }
   return(ret);
@@ -46,7 +49,7 @@ check.file <- function(path) {
 #' @export check.dir
 check.dir <- function(path) {
   ret <- .check.path(path);
-  if(!(dir.exists(ret))) {
+  if(!(dir.exists(ret, "directory"))) {
     exit("Directory '", ret, "' does not exist.");
   }
   return(ret);
