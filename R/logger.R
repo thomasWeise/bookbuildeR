@@ -14,18 +14,19 @@ exit <- function(...) {
   return(tryCatch(
       normalizePath(path, mustWork=TRUE),
       error=function(e) {
-        exit("Failed to normalize path '",
-             path,
-             "' for ", type, " with message '",
+        exit("Failed to normalize ",
+             type, " path '",
+             "' with message '",
              e,
              "'.")
       },
       warning=function(e) {
-        exit("Warning when trying to normalize path '",
-             path,
-             "' for ", type, " with message '",
-             e,
-             "'.")
+        exit("Warning when trying to normalize ",
+              type, " path '",
+              path,
+              "' with message '",
+              e,
+              "'.")
       }));
 }
 
@@ -35,8 +36,8 @@ exit <- function(...) {
 #' @return the normalized path
 #' @export check.file
 check.file <- function(path) {
-  ret <- .check.path(path);
-  if(!(file.exists(ret, "file"))) {
+  ret <- .check.path(path, "file");
+  if(!(file.exists(ret))) {
     exit("File '", ret, "' does not exist.");
   }
   return(ret);
@@ -48,8 +49,8 @@ check.file <- function(path) {
 #' @return the normalized path
 #' @export check.dir
 check.dir <- function(path) {
-  ret <- .check.path(path);
-  if(!(dir.exists(ret, "directory"))) {
+  ret <- .check.path(path, "directory");
+  if(!(dir.exists(ret))) {
     exit("Directory '", ret, "' does not exist.");
   }
   return(ret);
