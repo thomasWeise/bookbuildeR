@@ -10,12 +10,11 @@
 # load a single file and pipe it to the output
 #' @importFrom ore ore.subst
 #' @importFrom utilizeR path.relativize
+#' @include logger.R
 .preprocess.input <- function(sourceFile, rootDir, output) {
 
   # check if we can open the source file
-  if(!file.exists(sourceFile)) {
-    exit("Source file '", sourceFile, "' does not exist.");
-  }
+  sourceFile <- check.file(sourceFile);
 
   # get the current directory
   sourceDir <- dirname(sourceFile);
@@ -37,7 +36,7 @@
       source.next <- trimws(substr(x=line.trimmed,
                                    start=(nchar(input.start)+1L),
                                    stop=(nchar(line)-1L)));
-      source.next <- normalizePath(file.path(sourceDir, source.next), mustWork = TRUE);
+      source.next <- check.file(file.path(sourceDir, source.next));
 
       # write an empty line and then begin processing the next contents recursively
       writeLines(text="", con=output);
@@ -56,8 +55,7 @@
                                sourceFile, "'.");
                         }
                         path.relativize(
-                          normalizePath(file.path(sourceDir, groups[1L]),
-                                        mustWork=TRUE),
+                          check.file(file.path(sourceDir, groups[1L])),
                           rootDir)
                       },
                       text=line);
@@ -89,10 +87,7 @@
 #' @export preprocess.doc
 preprocess.doc <- function(sourceFile, destName) {
   # get the canonical path of the source file
-  sourceFile <- normalizePath(sourceFile, mustWork=TRUE);
-  if(!file.exists(sourceFile)) {
-    exit("Source file '", sourceFile, "' does not exist.");
-  }
+  sourceFile <- check.file(sourceFile);
 
   # get the source directory
   sourceDir <- dirname(sourceFile);
@@ -104,7 +99,7 @@ preprocess.doc <- function(sourceFile, destName) {
   }
 
   output <- file(destFile, open="wt");
-  destFile <- normalizePath(destFile, mustWork = TRUE);
+  destFile <- check.file(destFile);
 
   .logger("Pre-processing contents from main source file '",
          sourceFile,

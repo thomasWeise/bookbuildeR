@@ -24,5 +24,6 @@ Collate:
     'pandoc.R'
     'epub.R'
     'latex.R'
+    'main.R'
     'meta.R'
     'preprocessor.R'

@@ -57,7 +57,8 @@ pandoc.epub<- function(sourceFile,
     len <- len + 1L;
   }
 
-  dest <- do.call(pandoc.invoke, params);
+  destFile <- do.call(pandoc.invoke, params);
 
-  .logger("Finished building a EPUB output '", dest, "'.");
+  .logger("Finished building a EPUB output '", destFile, "'.");
+  return(destFile);
 }

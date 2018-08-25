@@ -29,11 +29,7 @@ pandoc.invoke <- function(sourceFile,
                           bibliography=TRUE,
                           ...) {
   # get the canonical path of the source file
-  sourceFile <- normalizePath(sourceFile, mustWork=FALSE);
-  if(!file.exists(sourceFile)) {
-    exit("Source file '", sourceFile, "' does not exist.");
-  }
-
+  sourceFile <- check.file(sourceFile);
   # get the source directory
   sourceDir <- dirname(sourceFile);
 
@@ -46,47 +42,8 @@ pandoc.invoke <- function(sourceFile,
   # get destination directory
   destDir <- dirname(destFile);
   dir.create(destDir, showWarnings = FALSE, recursive=TRUE);
-  if(!dir.exists(destDir)) {
-    exit("Destination directory '", destDir, "' could not be created.");
-  }
-  destDir  <- normalizePath(destDir, mustWork = TRUE);
+  destDir  <- check.dir(destDir);
   destFile <- normalizePath(file.path(destDir, basename(destFile)), mustWork = FALSE);
-
-  # find the location of pandoc
-  pandoc <- "pandoc";
-  home <- Sys.getenv(x="HOME", unset=NA);
-  pandoc.via.cabal <- FALSE;
-  if((!(is.na(home) || is.null(home))) && (length(home) == 1L) && (nchar(home) > 0L)) {
-    # we test whether it has been installed via cabal
-    test <- normalizePath(file.path(home, ".cabal", "bin", "pandoc"), mustWork = FALSE);
-    if(file.exists(test)) {
-      pandoc <- test;
-      pandoc.via.cabal <- TRUE;
-    }
-  }
-  if(!(pandoc.via.cabal)) {
-    # maybe the cabal folder is under root, which may be the case in a docker
-    # image
-    test <- "/root/.cabal/bin/pandoc";
-    if(file.exists(test)) {
-      pandoc <- test;
-      pandoc.via.cabal <- TRUE;
-    }
-  }
-
-  # setup the environment to point to cabal, if it exists
-  env <- character();
-  if(pandoc.via.cabal) {
-    .logger("Using pandoc executable '", pandoc, "' from cabal.");
-    env.path <- Sys.getenv(x="PATH", unset=NA);
-    cabal.path <- dirname(pandoc);
-    if((nchar(cabal.path) > 0L) && (dir.exists(cabal.path))) {
-      # if so, we need to add the cabal binaries folder to the path
-      env <- c(paste("PATH=", env.path, ":", cabal.path, ";", sep="", collapse=""));
-    }
-  } else {
-    .logger("Using plain pandoc, did not detect cabal-based installation.");
-  }
 
   .logger("Applying pandoc to create '", destFile, "' from '", sourceFile, "'.");
 
@@ -97,6 +54,7 @@ pandoc.invoke <- function(sourceFile,
             paste("--output=", destFile, sep="", collapse=""),
             "--fail-if-warnings");
 
+  # add some standard argumens
   if(!is.na(tabstops)) {
     args <- c(args, paste("--tab-stop=", tabstops, sep="", collapse=""));
   }
@@ -110,7 +68,7 @@ pandoc.invoke <- function(sourceFile,
     }
   }
 
-    if((!(is.null(crossref) || is.na(crossref))) && crossref) {
+  if((!(is.null(crossref) || is.na(crossref))) && crossref) {
     args <- c(args, "--filter pandoc-crossref");
   }
 
@@ -122,14 +80,21 @@ pandoc.invoke <- function(sourceFile,
   args <- c(args, sourceFile);
   args <- as.vector(unname(unlist(args, recursive = TRUE)));
 
-  result <- system2(pandoc, args=args, env=env);
+  result <- system2("pandoc", args=args);
 
   if(result != 0L) {
     exit(pandoc, " has failed with error code ", result, " for arguments '",
          paste(args, sep=" ", collapse=" "), "' in directory '", sourceDir, "'.");
   }
 
-  .logger(pandoc, " has succeeded for arguments '",
-         paste(args, sep=" ", collapse=" "), "' in directory '", sourceDir, "'.");
   setwd(wd);
+
+  destFile <- check.file(destFile);
+  .logger(pandoc, " has succeeded for arguments '",
+         paste(args, sep=" ", collapse=" "),
+         "' in directory '",
+         sourceDir, "' and produced file '",
+         destFile, "'.");
+
+  return(destFile);
 }

@@ -51,7 +51,8 @@ pandoc.latex <- function(sourceFile,
     len <- len + 1L;
   }
 
-  dest <- do.call(pandoc.invoke, params);
+  destFile <- do.call(pandoc.invoke, params);
 
-  .logger("Finished building a pdf output '", dest, "' via LaTeX.");
+  .logger("Finished building a pdf output '", destFile, "' via LaTeX.");
+  return(destFile);
 }
