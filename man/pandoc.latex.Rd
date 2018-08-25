@@ -36,8 +36,6 @@ or \code{NA} to not replace}
 \item{topLevelDivision}{the top-level division}
 
 \item{numberSections}{should sections be numbered?}
-
-\item{format.out}{the output format}
 }
 \value{
 the canonical path to the destination file

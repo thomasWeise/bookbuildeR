@@ -35,8 +35,6 @@ or \code{NA} to not replace}
 \item{numberSections}{should sections be numbered?}
 
 \item{mathToGraphic}{should math be converted to graphics?}
-
-\item{format.out}{the output format}
 }
 \value{
 the canonical path to the destination file

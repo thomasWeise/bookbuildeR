@@ -4,7 +4,6 @@
 #' @param destDir the destination directory
 #' @param destName the base name of the destination file without extension
 #' @param format.in the input format
-#' @param format.out the output format
 #' @param standalone should we produce a stand-alone document?
 #' @param tabstops the number of spaces with which we replace a tab character,
 #'   or \code{NA} to not replace
