@@ -19,7 +19,7 @@ bookbuildeR.main <- function(sourceFile,
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
 
-  tempFile <- tempfile(tempdir=dirname(sourceFile),
+  tempFile <- tempfile(tmpdir=dirname(sourceFile),
                        fileext=paste(".", format.in,
                                      sep="", collapse=""));
 
