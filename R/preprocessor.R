@@ -58,13 +58,15 @@
                           check.file(file.path(sourceDir, groups[1L])),
                           rootDir)
                       },
-                      text=line);
+                      text=line,
+                      all=TRUE);
 
     # now do the other replacements
     for(i in seq_along(.commands)) {
       line <- ore.subst(regex=.commands.names[[i]],
                         replacement=.commands[[i]],
-                        text=line);
+                        text=line,
+                        all=TRUE);
     }
 
     # write the contents
