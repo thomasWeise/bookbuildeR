@@ -116,7 +116,8 @@ preprocess.doc <- function(sourceFile, destName,
 
   # add proper bibliography section
   if((!(is.na(bibliography) || is.null(bibliography))) && bibliography) {
-    writeLines(text=c("", "# Bibliography {-}"))
+    writeLines(text=c("", "# Bibliography {-}"),
+               con=output)
   }
 
   close(output);

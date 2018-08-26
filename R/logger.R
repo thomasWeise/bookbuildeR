@@ -16,6 +16,7 @@ exit <- function(...) {
       error=function(e) {
         exit("Failed to normalize ",
              type, " path '",
+             path,
              "' with message '",
              e,
              "'.")
