@@ -10,6 +10,7 @@
 #' @include logger.R
 #' @include latex.R
 #' @include epub.R
+#' @export bookbuildeR.main
 bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
                              destName="book",
