@@ -30,7 +30,8 @@ test_that("Test preprocess.doc", {
                                       "12345",
                                       "",
                                       "root.md",
-                                      paste("x ", meta.time(), " y", sep="", collapse="")));
+                                      paste("x ", meta.time(), " y", sep="", collapse=""),
+                                      "", "# Bibliography {-}"));
 
   unlink(dir, recursive=TRUE);
 })
