@@ -49,7 +49,7 @@ pandoc.invoke <- function(sourceFile,
 
   wd <- getwd();
   setwd(sourceDir);
-  if(startsWidth(format.in, "markdown")) {
+  if(startsWith(format.in, "markdown")) {
     format.in <- paste(format.in,
                        "definition_lists",
                        "smart",
