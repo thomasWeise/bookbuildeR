@@ -49,7 +49,18 @@ pandoc.invoke <- function(sourceFile,
 
   wd <- getwd();
   setwd(sourceDir);
-  args <- c(paste("--read=", format.in, sep="", collapse=""),
+  if(startsWidth(format.in, "markdown")) {
+    format.in <- paste(format.in,
+                       "definition_lists",
+                       "smart",
+                       "fenced_code_blocks",
+                       "fenced_code_attributes",
+                       "line_blocks",
+                       "inline_code_attributes",
+                       "latex_macros",
+                       sep="+", collapse="+");
+  }
+  args <- c(paste("--from=", format.in, sep="", collapse=""),
             paste("--write=", format.out, sep="", collapse=""),
             paste("--output=", destFile, sep="", collapse=""),
             "--fail-if-warnings");
