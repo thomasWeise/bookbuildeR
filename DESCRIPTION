@@ -18,7 +18,7 @@ Depends: R (>= 3.3.0)
 Remotes: github::thomasWeise/utilizeR
 ByteCompile: true
 LazyData: true
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Collate: 
     'logger.R'
     'pandoc.R'
@@ -27,3 +27,5 @@ Collate:
     'main.R'
     'meta.R'
     'preprocessor.R'
+    'readmeta.R'
+    'templates.R'
