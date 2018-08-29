@@ -34,6 +34,9 @@ pandoc.epub<- function(sourceFile,
                        mathToGraphic=TRUE,
                        metadata=NULL) {
   .logger("Now building a EPUB.");
+  
+  sourceFile <- check.file(sourceFile);
+  destDir <- check.dir(destDir);
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
@@ -58,7 +61,7 @@ pandoc.epub<- function(sourceFile,
     if(is.non.empty.string(template)) {
       .logger("Found EPUB template specification in metadata for template '",
               template, "'.");
-      template <- template.load(template, dirname(srcfile));
+      template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
         template <- force(template);
         params$template <- template;

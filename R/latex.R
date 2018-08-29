@@ -35,6 +35,9 @@ pandoc.latex <- function(sourceFile,
                          metadata=NULL) {
   .logger("Now building a pdf output via LaTeX.");
 
+  sourceFile <- check.file(sourceFile);
+  destDir <- check.dir(destDir);
+  
   # the basic parameters
   params <- list(sourceFile=sourceFile,
                  destFileName=paste(destName, ".pdf", sep="", collapse=""),
@@ -57,7 +60,7 @@ pandoc.latex <- function(sourceFile,
     if(is.non.empty.string(template)) {
       .logger("Found LaTeX template specification in metadata for template '",
               template, "'.");
-      template <- template.load(template, dirname(srcfile));
+      template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
         template <- force(template);
         params$template <- template;
