@@ -9,7 +9,7 @@ License: GPL-3
 Encoding: UTF-8
 URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
-Imports: utilizeR (>= 0.8.4),
+Imports: utilizeR (>= 0.8.5),
          ore (>= 1.6.1),
          utils (>= 3.4.4),
          yaml (>= 2.1.19)

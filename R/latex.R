@@ -19,6 +19,7 @@
 #' @include pandoc.R
 #' @include logger.R
 #' @include templates.R
+#' @importFrom utilizeR is.non.empty.list is.non.empty.list
 pandoc.latex <- function(sourceFile,
                          destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                          destDir=dirname(sourceFile),
@@ -54,15 +55,13 @@ pandoc.latex <- function(sourceFile,
   }
 
   # see if a template has been specified
-  template <- NA_character_;
-  if((!(is.na(metadata) || is.null(metadata))) &&
-     (is.list(metadata)) && (length(metadata) > 0L)) {
+  if(is.non.empty.list(metadata)) {
     # ok, we have metadata
-    temp <- metadata$template.latex;
-    if(!(is.na(temp) || is.null(temp))) {
+    template <- metadata$template.latex;
+    if(is.non.empty.string(template)) {
       .logger("Found LaTeX template specification in metata for template '",
-              temp, "'.");
-      template <- template.load(template=temp, dir=dirname(srcfile));
+              template, "'.");
+      template <- template.load(template=template, dir=dirname(srcfile));
       params$template <- template;
       len <- len + 1L;
     }

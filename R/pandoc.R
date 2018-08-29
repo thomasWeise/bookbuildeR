@@ -17,6 +17,7 @@
 #' @return the canonical path to the destination file
 #' @include logger.R
 #' @export pandoc.invoke
+#' @importFrom utilizeR is.not.na.or.null
 pandoc.invoke <- function(sourceFile,
                           destFileName,
                           destDir=dirname(sourceFile),
@@ -67,35 +68,35 @@ pandoc.invoke <- function(sourceFile,
             paste("--output=", destFile, sep="", collapse=""),
             "--fail-if-warnings");
 
-  if(!is.na(tabstops)) { # add some standard argumens
+  if(is.not.na.or.null(tabstops)) { # add some standard argumens
     args <- c(args, paste("--tab-stop=", tabstops, sep="", collapse=""));
   }
 
   # should the document be stand-alone
-  if((!(is.na(standalone))) && standalone) {
+  if(isTRUE(standalone)) {
     args <- c(args, "--standalone");
   }
 
   # should we print the table of contents?
-  if((!(is.na(toc.print))) && toc.print) {
+  if(isTRUE(toc.print)) {
     args <- c(args, "--table-of-contents");
-    if(!is.na(toc.depth)) {
+    if(is.not.na.or.null(toc.depth)) {
       args <- c(args, paste("--toc-depth=", toc.depth, sep="", collapse=""));
     }
   }
 
   # should we use the crossref filter?
-  if((!(is.null(crossref) || is.na(crossref))) && crossref) {
+  if(isTRUE(crossref)) {
     args <- c(args, "--filter pandoc-crossref");
   }
 
   # should we have a bibliography?
-  if((!(is.null(bibliography) || is.na(bibliography))) && bibliography) {
+  if(isTRUE(bibliography)) {
     args <- c(args, "--filter pandoc-citeproc");
   }
 
   # has a template been defined?
-  if(!(is.na(template) || is.null(template))) {
+  if(isTRUE(template)) {
     args <- c(args, paste("--template=", template, sep="", collapse=""));
   }
 
