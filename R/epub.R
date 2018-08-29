@@ -54,11 +54,13 @@ pandoc.epub<- function(sourceFile,
   if(is.non.empty.list(metadata)) {
     # ok, we have metadata
     template <- metadata$template.epub;
+    template <- force(template);
     if(is.non.empty.string(template)) {
       .logger("Found EPUB template specification in metadata for template '",
               template, "'.");
-      template <- template.load(template=template, dir=dirname(srcfile));
+      template <- template.load(template, dirname(srcfile));
       if(is.non.empty.string(template)) {
+        template <- force(template);
         params$template <- template;
       }
     } else {

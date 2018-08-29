@@ -16,56 +16,68 @@
 #' @include logger.R
 #' @export template.load
 #' @importFrom utils download.file
+#' @importFrom utilizeR is.non.empty.string
 template.load <- function(template, dir=getwd()) {
+  dir <- force(dir);
   dir <- check.dir(dir);
+  template <- force(template);
 
   # does the template already exist?
   template.path <- file.path(dir, template);
+  template.path <- force(template.path);
   if(file.exists(template.path)) {
-    template.path <- check.file(template.path);
     .logger("Template '",
             template,
             "' exists as file '",
             template.path, "'.");
-    return(template.path);
-  }
+  } else {
+    # does it exist somewhere in PATH?
+    have.not <- TRUE;
+    for(path in .path) {
+      template.path <- file.path(path, template);
+      template.path <- force(template.path);
+      if(file.exists(template.path)) {
+        have.not <- FALSE;
+        .logger("Discovered local copy of template '",
+                template,
+                "' in PATH as file '",
+                template.path, "'.");
+        break;
+      }
+    }
 
-  # does it exist somewhere in PATH?
-  for(path in .path) {
-    template.path <- file.path(path, template);
-    if(file.exists(template.path)) {
-      template.path <- check.file(template.path);
-      .logger("Discovered local copy of template '",
-              template,
-              "' in PATH as file '",
-              template.path, "'.");
-      return(template.path);
+    if(have.not) {
+      # is it a shortcut for a known url?
+      have <- .templates[[template]];
+      have <- force(have);
+      if(is.non.empty.string(have)) {
+        template <- have;
+        template <- force(template);
+      }
+
+      template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
+      template.path <- force(template.path);
+
+      tryCatch({
+        download.file(url=template, destfile=template.path);
+        .logger("Finished downloading template from '",
+                template,
+                "' to file '",
+                template.path, "'.");
+      }, error=function(e) {
+        exit("Error '", e,
+             "' when trying to access url '",
+             template, "'.");
+      }, warning=function(e) {
+        exit("Warning '", e,
+             "' when trying to access url '",
+             template, "'.");
+      })
     }
   }
 
-  # is it a shortcut for a known url?
-  have <- .templates[[template]];
-  if(!is.null(have)) {
-    template <- have;
-  }
-
-  template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
-
-  tryCatch({
-    download.file(url=template, destfile=template.path);
-    .logger("Finished downloading template from '",
-            template,
-            "' to file '",
-            template.path, "'.");
-  }, error=function(e) {
-    exit("Error '", e,
-         "' when trying to access url '",
-         template, "'.");
-  }, warning=function(e) {
-    exit("Warning '", e,
-         "' when trying to access url '",
-         template, "'.");
-  })
-
-  return(check.file(template.path));
+  template.path <- force(template.path);
+  template.path <- check.file(template.path);
+  template.path <- force(template.path);
+  return(template.path);
 }
