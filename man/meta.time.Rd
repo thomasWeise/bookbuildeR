@@ -7,8 +7,8 @@
 meta.time()
 }
 \value{
-the current date as string
+the current date and time as string
 }
 \description{
-Get the current date as string.
+Get the current date and time as string.
 }

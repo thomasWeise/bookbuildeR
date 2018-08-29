@@ -47,11 +47,20 @@ meta.repository <- function() {
 
 # make sure that we always return the same time
 .now <- strftime(Sys.time(), format="%F %T");
+.date <- strsplit(.now, " ", TRUE)[[1L]][1L];
 
 #' @title Get the Current Date and Time
-#' @description Get the current date as string.
-#' @return the current date as string
+#' @description Get the current date and time as string.
+#' @return the current date and time as string
 #' @export meta.time
 meta.time <- function() {
   return(.now);
+}
+
+#' @title Get the Current Date
+#' @description Get the current date as string.
+#' @return the current date as string
+#' @export meta.time
+meta.date <- function() {
+  return(.date);
 }

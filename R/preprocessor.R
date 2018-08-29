@@ -3,6 +3,7 @@
 #' @include meta.R
 .commands <- list();
 .commands[["\\\\meta.time"]]       <- function(match) meta.time();
+.commands[["\\\\meta.date"]]       <- function(match) meta.date();
 .commands[["\\\\meta.repository"]] <- function(match) meta.repository();
 .commands[["\\\\meta.commit"]]     <- function(match) meta.commit();
 .commands.names <- names(.commands);

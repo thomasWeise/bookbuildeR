@@ -8,6 +8,14 @@ test_that("Test meta.time", {
 })
 
 
+test_that("Test meta.date", {
+  t <- meta.date();
+  Sys.sleep(16L);
+  expect_identical(t, meta.date());
+  expect_true(startsWith(meta.time(), meta.date()));
+})
+
+
 test_that("Test meta.repo", {
   v <- Sys.getenv("TRAVIS", unset=NA);
   if((!(is.na(v))) && (v == "true")) {
