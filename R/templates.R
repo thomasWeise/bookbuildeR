@@ -31,35 +31,17 @@ template.load <- function(template, dir=getwd()) {
             "' exists as file '",
             template.path, "'.");
   } else {
-    template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
-    template.path <- force(template.path);
-    
     # does it exist somewhere in PATH?
     have.not <- TRUE;
     for(path in .path) {
-      template.path.2 <- file.path(path, template);
-      template.path.2 <- force(template.path.2);
-      if(file.exists(template.path.2)) {
+      template.path <- file.path(path, template);
+      template.path <- force(template.path);
+      if(file.exists(template.path)) {
         have.not <- FALSE;
         .logger("Discovered local copy of template '",
                 template,
                 "' in PATH as file '",
-                template.path.2, "'.");
-        
-        tryCatch({
-          file.copy(from=template.path.2, to=template.path, overwrite=TRUE);
-        }, error=function(e) {
-          exit("Error '", e,
-               "' when trying to copy file '",
-               template.path.2, "' to file '",
-               template.path, "'.");
-        }, warning=function(e) {
-          exit("Warning '", e,
-               "' when trying to copy file '",
-               template.path.2, "' to file '",
-               template.path, "'.");
-        })
-        
+                template.path, "'.");
         break;
       }
     }
@@ -72,6 +54,9 @@ template.load <- function(template, dir=getwd()) {
         template <- have;
         template <- force(template);
       }
+
+      template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
+      template.path <- force(template.path);
 
       tryCatch({
         download.file(url=template, destfile=template.path);
@@ -87,7 +72,7 @@ template.load <- function(template, dir=getwd()) {
         exit("Warning '", e,
              "' when trying to access url '",
              template, "'.");
-      });
+      })
     }
   }
 
