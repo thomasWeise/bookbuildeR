@@ -96,7 +96,7 @@ pandoc.invoke <- function(sourceFile,
   }
 
   # has a template been defined?
-  if(isTRUE(template)) {
+  if(is.non.empty.string(template)) {
     args <- c(args, paste("--template=", template, sep="", collapse=""));
   }
 
