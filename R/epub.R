@@ -67,25 +67,26 @@ pandoc.epub<- function(sourceFile,
   }
 
   len <- length(params);
+
+  len <- len + 1L;
   params[[len]] <- "--ascii";
+
   len <- len + 1L;
   params[[len]] <- "--self-contained";
-  len <- len + 1L;
 
   if(numberSections) {
-    params[[len]] <- "--number-sections";
     len <- len + 1L;
+    params[[len]] <- "--number-sections";
   }
 
   if(mathToGraphic) {
-    params[[len]] <-"--filter=latex-formulae-filter";
     len <- len + 1L;
+    params[[len]] <-"--filter=latex-formulae-filter";
   }
 
-
-  .logger("Invoking pandoc.invoke with parameters '",
-          paste(params, sep=", ", collapse=", "),
-          "'.");
+#  .logger("Invoking pandoc.invoke with parameters '",
+#          paste(params, sep=", ", collapse=", "),
+#          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
   .logger("Finished building a EPUB output '", destFile, "'.");

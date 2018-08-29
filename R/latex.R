@@ -66,17 +66,18 @@ pandoc.latex <- function(sourceFile,
   }
 
   len <- length(params);
-  params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
+
   len <- len + 1L;
+  params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
 
   if(numberSections) {
-    params[[len]] <- "--number-sections";
     len <- len + 1L;
+    params[[len]] <- "--number-sections";
   }
 
-  .logger("Invoking pandoc.invoke with parameters '",
-          paste(params, sep=", ", collapse=", "),
-          "'.");
+#  .logger("Invoking pandoc.invoke with parameters '",
+#          paste(params, sep=", ", collapse=", "),
+#          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
   .logger("Finished building a pdf output '", destFile, "' via LaTeX.");
