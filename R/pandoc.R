@@ -17,7 +17,7 @@
 #' @return the canonical path to the destination file
 #' @include logger.R
 #' @export pandoc.invoke
-#' @importFrom utilizeR is.non.empty.string
+#' @importFrom utilizeR is.non.empty.string is.not.na.or.null
 pandoc.invoke <- function(sourceFile,
                           destFileName,
                           destDir=dirname(sourceFile),
