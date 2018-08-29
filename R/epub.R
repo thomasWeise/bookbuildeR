@@ -37,8 +37,8 @@ pandoc.epub<- function(sourceFile,
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
-                 destDir=destDir,
                  destFileName=paste(destName, ".epub", sep="", collapse=""),
+                 destDir=destDir,
                  format.in=format.in,
                  format.out="epub3",
                  standalone=standalone,
@@ -49,6 +49,7 @@ pandoc.epub<- function(sourceFile,
                  bibliography=bibliography,
                  template=NA_character_);
 
+
   # see if a template has been specified
   if(is.non.empty.list(metadata)) {
     # ok, we have metadata
@@ -57,7 +58,11 @@ pandoc.epub<- function(sourceFile,
       .logger("Found EPUB template specification in metadata for template '",
               template, "'.");
       template <- template.load(template=template, dir=dirname(srcfile));
-      params$template <- template;
+      if(is.non.empty.string(template)) {
+        params$template <- template;
+      }
+    } else {
+      .logger("No EPUB template specified in metadata.");
     }
   }
 
@@ -77,6 +82,10 @@ pandoc.epub<- function(sourceFile,
     len <- len + 1L;
   }
 
+
+  .logger("Invoking pandoc.invoke with parameters '",
+          paste(params, sep=", ", collapse=", "),
+          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
   .logger("Finished building a EPUB output '", destFile, "'.");

@@ -99,8 +99,13 @@ metadata.read <- function(srcfile) {
          srcfile, "'.");
   });
 
-  .logger("Finished loading metadata from '",
-          srcfile, "'.");
+  if(is.non.empty.list(yaml)) {
+    .logger("Finished loading ",
+             length(yaml), " metadata items from '",
+             srcfile, "'.");
+    return(yaml);
+  }
 
-  return(yaml);
+  .logger("No metadata found in '", srcfile, "'.");
+  return(NULL);
 }

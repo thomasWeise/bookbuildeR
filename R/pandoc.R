@@ -85,6 +85,11 @@ pandoc.invoke <- function(sourceFile,
     }
   }
 
+  # has a template been defined?
+  if(is.non.empty.string(template)) {
+    args <- c(args, paste("--template=", template, sep="", collapse=""));
+  }
+
   # should we use the crossref filter?
   if(isTRUE(crossref)) {
     args <- c(args, "--filter pandoc-crossref");
@@ -93,11 +98,6 @@ pandoc.invoke <- function(sourceFile,
   # should we have a bibliography?
   if(isTRUE(bibliography)) {
     args <- c(args, "--filter pandoc-citeproc");
-  }
-
-  # has a template been defined?
-  if(is.non.empty.string(template)) {
-    args <- c(args, paste("--template=", template, sep="", collapse=""));
   }
 
   # add the additional parameters

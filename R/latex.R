@@ -37,8 +37,8 @@ pandoc.latex <- function(sourceFile,
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
-                 destDir=destDir,
                  destFileName=paste(destName, ".pdf", sep="", collapse=""),
+                 destDir=destDir,
                  format.in=format.in,
                  format.out="latex",
                  standalone=standalone,
@@ -57,7 +57,11 @@ pandoc.latex <- function(sourceFile,
       .logger("Found LaTeX template specification in metadata for template '",
               template, "'.");
       template <- template.load(template=template, dir=dirname(srcfile));
-      params$template <- template;
+      if(is.non.empty.string(template)) {
+        params$template <- template;
+      }
+    } else {
+      .logger("No LaTeX template specified in metadata.");
     }
   }
 
@@ -70,6 +74,9 @@ pandoc.latex <- function(sourceFile,
     len <- len + 1L;
   }
 
+  .logger("Invoking pandoc.invoke with parameters '",
+          paste(params, sep=", ", collapse=", "),
+          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
   .logger("Finished building a pdf output '", destFile, "' via LaTeX.");
