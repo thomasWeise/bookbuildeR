@@ -32,6 +32,7 @@ test_that("Test metadata.read", {
             "sfsdf");
 
   tmpfile <- tempfile();
+  dir.create(path=dirname(tmpfile), showWarnings = FALSE, recursive = TRUE);
   handle <- file(tmpfile, open="wt");
   writeLines(text=data, con=handle);
   close(handle);
@@ -40,4 +41,11 @@ test_that("Test metadata.read", {
   file.remove(tmpfile);
 
   expect_false(is.null(yaml));
+  expect_length(yaml, 12L);
+  expect_identical(yaml$papersize, "a4");
+  expect_identical(yaml$documentclass, "memoir");
+  expect_identical(yaml$lang, "en-US");
+  expect_identical(yaml$keywords, c("Optimization", "Metaheuristics", "Local Search", "Global Search"));
+  expect_identical(yaml$author, "Thomas Weise");
+  expect_identical(yaml$title, "An Introduction to Optimization Algorithms");
 })
