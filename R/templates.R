@@ -1,8 +1,9 @@
 # known templates
 .templates <- list(
-  eisvogel.latex = "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex",
-  arabica.latex = "http://github.com/qualiacode/arabica/blob/master/controls/arabica.latex"
+  arabica.latex = "http://raw.githubusercontent.com/qualiacode/arabica/master/controls/arabica.latex",
+  eisvogel.latex = "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex"
 );
+.templates[["eisvogel-article.latex"]] <- "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex";
 
 # the search path
 .path <- unlist(strsplit(x=Sys.getenv(x="PATH"), split=":", fixed=TRUE));
