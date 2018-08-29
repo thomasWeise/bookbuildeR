@@ -11,6 +11,7 @@ URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
 Imports: utilizeR (>= 0.8.4),
          ore (>= 1.6.1),
+         yaml (>= 2.1.19)
 Suggests: testthat (>= 2.0.0),
           devtools (>= 1.13.5),
           roxygen2 (>= 6.0.1)
@@ -18,7 +19,6 @@ Depends: R (>= 3.3.0)
 Remotes: github::thomasWeise/utilizeR
 ByteCompile: true
 LazyData: true
-RoxygenNote: 6.1.0
 Collate: 
     'logger.R'
     'pandoc.R'
@@ -29,3 +29,4 @@ Collate:
     'preprocessor.R'
     'readmeta.R'
     'templates.R'
+RoxygenNote: 6.0.1.9000

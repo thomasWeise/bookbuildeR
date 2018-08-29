@@ -17,7 +17,7 @@
 #' @export template.load
 template.load <- function(template, dir=getwd()) {
   dir <- check.dir(dir);
-  
+
   # does the template already exist?
   template.path <- file.path(dir, template);
   if(file.exists(template.path)) {
@@ -28,7 +28,7 @@ template.load <- function(template, dir=getwd()) {
             template.path, "'.");
     return(template.path);
   }
-  
+
   # does it exist somewhere in PATH?
   for(path in .path) {
     template.path <- file.path(path, template);
@@ -41,15 +41,15 @@ template.load <- function(template, dir=getwd()) {
       return(template.path);
     }
   }
-  
+
   # is it a shortcut for a known url?
   have <- .templates[[template]];
   if(!is.null(have)) {
     template <- have;
   }
-    
+
   template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
-  
+
   tryCatch({
     download.file(url=template, destfile=template.path);
     .logger("Finished downloading template from '",
@@ -57,12 +57,14 @@ template.load <- function(template, dir=getwd()) {
             "' to file '",
             template.path, "'.");
   }, error=function(e) {
-    exit("Error when trying to access url '",
-            template, "'.");
+    exit("Error '", e,
+         "' when trying to access url '",
+         template, "'.");
   }, warning=function(e) {
-    exit("Warning when trying to access url '",
-            template, "'.");
+    exit("Warning '", e,
+         "' when trying to access url '",
+         template, "'.");
   })
-  
+
   return(check.file(template.path));
 }
