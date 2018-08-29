@@ -103,7 +103,7 @@ preprocess.doc <- function(sourceFile, destName,
   }
 
   output <- file(destFile, open="wt");
-  destFile <- check.file(destFile);
+  destFile <- check.file(destFile, nonZeroSize=FALSE);
 
   .logger("Pre-processing contents from main source file '",
          sourceFile,
@@ -123,6 +123,7 @@ preprocess.doc <- function(sourceFile, destName,
   }
 
   close(output);
+  destFile <- check.file(destFile);
 
   .logger("Finished pre-processing contents from main source file '",
          sourceFile,

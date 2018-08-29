@@ -34,14 +34,18 @@ exit <- function(...) {
 #' @title Check that the file identified by the given path exists
 #' @description Check that the file identified by the given path exists.
 #' @param path the path to the file
+#' @param nonZeroSize enforce that the file size is not zero
 #' @return the normalized path
 #' @export check.file
-check.file <- function(path) {
-  ret <- .check.path(path, "file");
-  if(!(file.exists(ret))) {
-    exit("File '", ret, "' does not exist.");
+check.file <- function(path, nonZeroSize=TRUE) {
+  path <- .check.path(path, "file");
+  if(!(file.exists(path))) {
+    exit("File '", path, "' does not exist.");
   }
-  return(ret);
+  if(nonZeroSize && (file.size(path) <= 0L)) {
+    exit("Size of file '", path, "' is not bigger than zero.");
+  }
+  return(path);
 }
 
 #' @title Check that the directory identified by the given path exists
@@ -50,9 +54,9 @@ check.file <- function(path) {
 #' @return the normalized path
 #' @export check.dir
 check.dir <- function(path) {
-  ret <- .check.path(path, "directory");
-  if(!(dir.exists(ret))) {
-    exit("Directory '", ret, "' does not exist.");
+  path <- .check.path(path, "directory");
+  if(!(dir.exists(path))) {
+    exit("Directory '", path, "' does not exist.");
   }
-  return(ret);
+  return(path);
 }
