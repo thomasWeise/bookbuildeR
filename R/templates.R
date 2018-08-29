@@ -5,7 +5,7 @@
 );
 
 # the search path
-.path <- strsplit(x=Sys.getenv(x="PATH"), split=":", fixed=TRUE);
+.path <- unlist(strsplit(x=Sys.getenv(x="PATH"), split=":", fixed=TRUE));
 
 #' @title Find a Template, Load it into the Specified Directory if Necessary
 #' @description Following a heuristic, try to load a template into the given
