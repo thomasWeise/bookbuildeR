@@ -35,6 +35,7 @@ pandoc.latex <- function(sourceFile,
                          metadata=NULL) {
   .logger("Now building a pdf output via LaTeX.");
 
+  # the basic parameters
   params <- list(sourceFile=sourceFile,
                  destDir=destDir,
                  destFileName=paste(destName, ".pdf", sep="", collapse=""),
@@ -46,25 +47,27 @@ pandoc.latex <- function(sourceFile,
                  toc.depth=toc.depth,
                  crossref=crossref,
                  bibliography=bibliography,
-                 paste("--top-level-division=", topLevelDivision, sep="", collapse=""));
-
-  len <- length(params);
-  if(numberSections) {
-    params[[len]] <- "--number-sections";
-    len <- len + 1L;
-  }
+                 template=NA_character_);
 
   # see if a template has been specified
   if(is.non.empty.list(metadata)) {
     # ok, we have metadata
     template <- metadata$template.latex;
     if(is.non.empty.string(template)) {
-      .logger("Found LaTeX template specification in metata for template '",
+      .logger("Found LaTeX template specification in metadata for template '",
               template, "'.");
       template <- template.load(template=template, dir=dirname(srcfile));
       params$template <- template;
-      len <- len + 1L;
     }
+  }
+
+  len <- length(params);
+  params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
+  len <- len + 1L;
+
+  if(numberSections) {
+    params[[len]] <- "--number-sections";
+    len <- len + 1L;
   }
 
   destFile <- do.call(pandoc.invoke, params);

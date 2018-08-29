@@ -35,6 +35,7 @@ pandoc.epub<- function(sourceFile,
                        metadata=NULL) {
   .logger("Now building a EPUB.");
 
+  # the basic parameters
   params <- list(sourceFile=sourceFile,
                  destDir=destDir,
                  destFileName=paste(destName, ".epub", sep="", collapse=""),
@@ -46,10 +47,26 @@ pandoc.epub<- function(sourceFile,
                  toc.depth=toc.depth,
                  crossref=crossref,
                  bibliography=bibliography,
-                 "--ascii",
-                 "--self-contained");
+                 template=NA_character_);
+
+  # see if a template has been specified
+  if(is.non.empty.list(metadata)) {
+    # ok, we have metadata
+    template <- metadata$template.epub;
+    if(is.non.empty.string(template)) {
+      .logger("Found EPUB template specification in metadata for template '",
+              template, "'.");
+      template <- template.load(template=template, dir=dirname(srcfile));
+      params$template <- template;
+    }
+  }
 
   len <- length(params);
+  params[[len]] <- "--ascii";
+  len <- len + 1L;
+  params[[len]] <- "--self-contained";
+  len <- len + 1L;
+
   if(numberSections) {
     params[[len]] <- "--number-sections";
     len <- len + 1L;
@@ -58,19 +75,6 @@ pandoc.epub<- function(sourceFile,
   if(mathToGraphic) {
     params[[len]] <-"--filter=latex-formulae-filter";
     len <- len + 1L;
-  }
-
-  # see if a template has been specified
-  if(is.non.empty.list(metadata)) {
-    # ok, we have metadata
-    template <- metadata$template.epub;
-    if(is.non.empty.string(template)) {
-      .logger("Found LaTeX template specification in metata for template '",
-              template, "'.");
-      template <- template.load(template=template, dir=dirname(srcfile));
-      params$template <- template;
-      len <- len + 1L;
-    }
   }
 
   destFile <- do.call(pandoc.invoke, params);
