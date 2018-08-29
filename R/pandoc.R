@@ -12,6 +12,7 @@
 #' @param toc.depth the depth of the table of content to print
 #' @param crossref use pandoc-crossref?
 #' @param bibliography do we have a bibliography?
+#' @param template the template to be used, or \code{NA} if none
 #' @param ... the arguments to be passed to pandoc
 #' @return the canonical path to the destination file
 #' @include logger.R
@@ -27,6 +28,7 @@ pandoc.invoke <- function(sourceFile,
                           toc.depth=3L,
                           crossref=TRUE,
                           bibliography=TRUE,
+                          template=NA_character_,
                           ...) {
   # get the canonical path of the source file
   sourceFile <- check.file(sourceFile);
@@ -65,32 +67,44 @@ pandoc.invoke <- function(sourceFile,
             paste("--output=", destFile, sep="", collapse=""),
             "--fail-if-warnings");
 
-  # add some standard argumens
-  if(!is.na(tabstops)) {
+  if(!is.na(tabstops)) { # add some standard argumens
     args <- c(args, paste("--tab-stop=", tabstops, sep="", collapse=""));
   }
-  if(standalone) {
+
+  # should the document be stand-alone
+  if((!(is.na(standalone))) && standalone) {
     args <- c(args, "--standalone");
   }
-  if(toc.print) {
+
+  # should we print the table of contents?
+  if((!(is.na(toc.print))) && toc.print) {
     args <- c(args, "--table-of-contents");
     if(!is.na(toc.depth)) {
       args <- c(args, paste("--toc-depth=", toc.depth, sep="", collapse=""));
     }
   }
 
+  # should we use the crossref filter?
   if((!(is.null(crossref) || is.na(crossref))) && crossref) {
     args <- c(args, "--filter pandoc-crossref");
   }
 
+  # should we have a bibliography?
   if((!(is.null(bibliography) || is.na(bibliography))) && bibliography) {
     args <- c(args, "--filter pandoc-citeproc");
   }
 
+  # has a template been defined?
+  if(!(is.na(template) || is.null(template))) {
+    args <- c(args, paste("--template=", template, sep="", collapse=""));
+  }
+
+  # add the additional parameters
   args <- c(args, list(...));
   args <- c(args, sourceFile);
   args <- as.vector(unname(unlist(args, recursive = TRUE)));
 
+  # invoke the pandoc program
   result <- system2("pandoc", args=args);
 
   if(result != 0L) {

@@ -10,30 +10,37 @@
 #' @include logger.R
 #' @include latex.R
 #' @include epub.R
+#' @include readmeta.R
 #' @export bookbuildeR.main
 bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
                              destName="book",
                              destDir) {
-  .logger("Welcome to bookbuildeR.");
+  .logger("Welcome to bookbuildeR."); # begin
 
+  # check source file and destination directory
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
 
+  # create the temporary folder
   tempFile <- tempfile(tmpdir=dirname(sourceFile),
                        fileext=paste(".", format.in,
                                      sep="", collapse=""));
 
+  # do the pre-processing
   tempFile <- preprocess.doc(sourceFile=sourceFile,
                              destName=basename(tempFile));
 
   .logger("Finished building the composed markdown document '",
           tempFile, "'.");
 
+  metadata <- metadata.read(srcfile=tempFile);
+
   pdf <- pandoc.latex(sourceFile=tempFile,
                       destName=destName,
                       destDir=destDir,
-                      format.in=format.in);
+                      format.in=format.in,
+                      metadata=metadata);
 
   .logger("Finished generating pdf file '",
           pdf,
@@ -52,7 +59,8 @@ bookbuildeR.main <- function(sourceFile,
   epub <- pandoc.epub(sourceFile=tempFile,
                       destName=destName,
                       destDir=destDir,
-                      format.in=format.in);
+                      format.in=format.in,
+                      metadata=metadata);
   .logger("Finished building the book in EPUB format, generated file '",
           epub, "'.");
 

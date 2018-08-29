@@ -9,7 +9,7 @@ pandoc.latex(sourceFile, destName = sub(pattern = "\\\\..*", replacement = "",
   format.in = "markdown", standalone = TRUE, tabstops = 2L,
   toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
   bibliography = TRUE, topLevelDivision = "chapter",
-  numberSections = TRUE)
+  numberSections = TRUE, metadata = NULL)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}
@@ -36,6 +36,8 @@ or \code{NA} to not replace}
 \item{topLevelDivision}{the top-level division}
 
 \item{numberSections}{should sections be numbered?}
+
+\item{metadata}{the metadata}
 }
 \value{
 the canonical path to the destination file

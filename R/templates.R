@@ -15,6 +15,7 @@
 #' @return the fully qualified path to the template
 #' @include logger.R
 #' @export template.load
+#' @importFrom utils download.file
 template.load <- function(template, dir=getwd()) {
   dir <- check.dir(dir);
 

@@ -13,10 +13,12 @@
 #' @param bibliography do we have a bibliography?
 #' @param numberSections should sections be numbered?
 #' @param mathToGraphic should math be converted to graphics?
+#' @param metadata the metadata
 #' @return the canonical path to the destination file
 #' @export pandoc.epub
 #' @include pandoc.R
 #' @include logger.R
+#' @include templates.R
 pandoc.epub<- function(sourceFile,
                        destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                        destDir=dirname(sourceFile),
@@ -28,7 +30,8 @@ pandoc.epub<- function(sourceFile,
                        crossref=TRUE,
                        bibliography=TRUE,
                        numberSections=TRUE,
-                       mathToGraphic=TRUE) {
+                       mathToGraphic=TRUE,
+                       metadata=NULL) {
   .logger("Now building a EPUB.");
 
   params <- list(sourceFile=sourceFile,
@@ -54,6 +57,21 @@ pandoc.epub<- function(sourceFile,
   if(mathToGraphic) {
     params[[len]] <-"--filter=latex-formulae-filter";
     len <- len + 1L;
+  }
+
+  # see if a template has been specified
+  template <- NA_character_;
+  if((!(is.na(metadata) || is.null(metadata))) &&
+     (is.list(metadata)) && (length(metadata) > 0L)) {
+    # ok, we have metadata
+    temp <- metadata$template.epub;
+    if(!(is.na(temp) || is.null(temp))) {
+      .logger("Found EPUB template specification in metata for template '",
+              temp, "'.");
+      template <- template.load(template=temp, dir=dirname(srcfile));
+      params$template <- template;
+      len <- len + 1L;
+    }
   }
 
   destFile <- do.call(pandoc.invoke, params);

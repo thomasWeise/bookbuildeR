@@ -8,18 +8,17 @@
 metadata.read <- function(srcfile) {
   srcfile <- check.file(srcfile);
 
-  level <- 0L;
+  notInYaml <- TRUE;
   text <- character(1024);
   text.length <- 0L;
   inMultiLine <- FALSE;
 
   tryCatch({
-    handle <- file(srcfile, "rt");
-    while(level < 2L) {
+    handle <- file(srcfile, open="rt");
+    while(TRUE) {
       # read the line
       line <- readLines(con=handle, n=1L);
       if(length(line) <= 0L) {
-        level <- 2L;
         break;
       }
       # pick the first line
@@ -27,15 +26,16 @@ metadata.read <- function(srcfile) {
       if(nchar(line) <= 0L) {
         inMultiLine <- FALSE;
       }
+
       # remove the right end white space
       line <- trimws(line, which="right");
       # trim complete line
       line.trim <- trimws(line);
 
-      # level==0 means we are not in the metadata
-      if(level <= 0L) {
+      # 'notInYaml' means we are not in the metadata
+      if(notInYaml) {
         if(startsWith(line.trim, "---")) {
-          level <- 1L; # now we are in the meta data
+          notInYaml <- FALSE; # now we are in the meta data
           inMultiLine <- FALSE;
         }
         next;
@@ -43,12 +43,12 @@ metadata.read <- function(srcfile) {
 
       # ok, we are in the metadata
       if(startsWith(line.trim, "---") || startsWith(line.trim, "...")) {
-        level <- 2L; # we have reached the end of metadata
-        break;
+        break; # we have reached the end of metadata
       }
 
       if(inMultiLine) { # we are in a multi-line content, add to last line
-        text[text.length] <- paste(text[text.length], line, sep=" ", collapse=" ");
+        text[text.length] <- paste(text[text.length],
+                                   line.trim, sep=" ", collapse=" ");
         next;
       }
 
@@ -62,6 +62,8 @@ metadata.read <- function(srcfile) {
       text.length <- text.length + 1L;
       text[text.length] <- line;
     }
+
+    # close, we are finished
     close(handle);
   }, error=function(e) {
     exit("Error '", e,

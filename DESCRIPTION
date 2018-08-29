@@ -11,6 +11,7 @@ URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
 Imports: utilizeR (>= 0.8.4),
          ore (>= 1.6.1),
+         utils (>= 3.4.4),
          yaml (>= 2.1.19)
 Suggests: testthat (>= 2.0.0),
           devtools (>= 1.13.5),
@@ -21,12 +22,12 @@ ByteCompile: true
 LazyData: true
 Collate: 
     'logger.R'
+    'templates.R'
     'pandoc.R'
     'epub.R'
     'latex.R'
+    'readmeta.R'
     'main.R'
     'meta.R'
     'preprocessor.R'
-    'readmeta.R'
-    'templates.R'
 RoxygenNote: 6.0.1.9000

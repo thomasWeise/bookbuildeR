@@ -13,10 +13,12 @@
 #' @param bibliography do we have a bibliography?
 #' @param topLevelDivision the top-level division
 #' @param numberSections should sections be numbered?
+#' @param metadata the metadata
 #' @return the canonical path to the destination file
 #' @export pandoc.latex
 #' @include pandoc.R
 #' @include logger.R
+#' @include templates.R
 pandoc.latex <- function(sourceFile,
                          destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                          destDir=dirname(sourceFile),
@@ -28,7 +30,8 @@ pandoc.latex <- function(sourceFile,
                          crossref=TRUE,
                          bibliography=TRUE,
                          topLevelDivision="chapter",
-                         numberSections=TRUE) {
+                         numberSections=TRUE,
+                         metadata=NULL) {
   .logger("Now building a pdf output via LaTeX.");
 
   params <- list(sourceFile=sourceFile,
@@ -48,6 +51,21 @@ pandoc.latex <- function(sourceFile,
   if(numberSections) {
     params[[len]] <- "--number-sections";
     len <- len + 1L;
+  }
+
+  # see if a template has been specified
+  template <- NA_character_;
+  if((!(is.na(metadata) || is.null(metadata))) &&
+     (is.list(metadata)) && (length(metadata) > 0L)) {
+    # ok, we have metadata
+    temp <- metadata$template.latex;
+    if(!(is.na(temp) || is.null(temp))) {
+      .logger("Found LaTeX template specification in metata for template '",
+              temp, "'.");
+      template <- template.load(template=temp, dir=dirname(srcfile));
+      params$template <- template;
+      len <- len + 1L;
+    }
   }
 
   destFile <- do.call(pandoc.invoke, params);

@@ -7,7 +7,7 @@
 pandoc.invoke(sourceFile, destFileName, destDir = dirname(sourceFile),
   format.in = "markdown", format.out = "latex", standalone = TRUE,
   tabstops = 2L, toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, ...)
+  bibliography = TRUE, template = NA_character_, ...)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}
@@ -32,6 +32,8 @@ or \code{NA} to not replace}
 \item{crossref}{use pandoc-crossref?}
 
 \item{bibliography}{do we have a bibliography?}
+
+\item{template}{the template to be used, or \code{NA} if none}
 
 \item{...}{the arguments to be passed to pandoc}
 }
