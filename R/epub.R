@@ -10,6 +10,7 @@
 #' @param toc.print print a table of contents?
 #' @param toc.depth the depth of the table of content to print
 #' @param crossref use pandoc-crossref?
+#' @param bibliography do we have a bibliography?
 #' @param numberSections should sections be numbered?
 #' @param mathToGraphic should math be converted to graphics?
 #' @param metadata the metadata
@@ -28,6 +29,7 @@ pandoc.epub<- function(sourceFile,
                        toc.print=TRUE,
                        toc.depth=3L,
                        crossref=TRUE,
+                       bibliography=TRUE,
                        numberSections=TRUE,
                        mathToGraphic=TRUE,
                        metadata=NULL) {
@@ -47,6 +49,7 @@ pandoc.epub<- function(sourceFile,
                  toc.print=toc.print,
                  toc.depth=toc.depth,
                  crossref=crossref,
+                 bibliography=bibliography,
                  template=NA_character_);
 
 

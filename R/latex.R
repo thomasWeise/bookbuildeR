@@ -10,6 +10,7 @@
 #' @param toc.print print a table of contents?
 #' @param toc.depth the depth of the table of content to print
 #' @param crossref use pandoc-crossref?
+#' @param bibliography do we have a bibliography?
 #' @param topLevelDivision the top-level division
 #' @param numberSections should sections be numbered?
 #' @param metadata the metadata
@@ -28,6 +29,7 @@ pandoc.latex <- function(sourceFile,
                          toc.print=TRUE,
                          toc.depth=3L,
                          crossref=TRUE,
+                         bibliography=TRUE,
                          topLevelDivision="chapter",
                          numberSections=TRUE,
                          metadata=NULL) {
@@ -47,6 +49,7 @@ pandoc.latex <- function(sourceFile,
                  toc.print=toc.print,
                  toc.depth=toc.depth,
                  crossref=crossref,
+                 bibliography=bibliography,
                  template=NA_character_);
 
   # see if a template has been specified

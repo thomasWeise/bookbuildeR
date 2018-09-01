@@ -20,17 +20,18 @@ bookbuildeR.main <- function(sourceFile,
 
   # check source file and destination directory
   sourceFile <- check.file(sourceFile);
+  sourceDir <- check.dir(dirname(sourceFile));
   destDir <- check.dir(destDir);
 
   # create the temporary folder
-  tempFile <- tempfile(tmpdir=dirname(sourceFile),
+  tempFile <- tempfile(tmpdir=sourceDir,
                        fileext=paste(".", format.in,
                                      sep="", collapse=""));
 
   # do the pre-processing
   tempFile <- preprocess.doc(sourceFile=sourceFile,
                              destName=basename(tempFile));
-
+  
   logger("Finished building the composed markdown document '",
           tempFile, "'.");
 
