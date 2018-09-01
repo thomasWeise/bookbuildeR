@@ -1,19 +1,22 @@
 
 # resolve a path
-#' @importFrom utilizeR path.relativize
+#' @importFrom utilizeR path.relativize is.non.empty.vector is.non.empty.string
 #' @include logger.R
 .resolve.path <- function(path, currentDir, rootDir) {
   if((!(is.non.empty.vector(path))) ||
      (length(path) != 1L)) {
     exit("Incorrect arguments for resolving relative path.");
   }
+  
   path <- path[[1L]];
-
+  path <- force(path);
   if(!is.non.empty.string(path)) {
     exit("Error trying to resolve empty path relative to directory '",
          currentDir, "' towards '", rootDir, "'.");
   }
+  
   path <- trimws(path);
+  path <- force(path);
   if(!is.non.empty.string(path)) {
     exit("Error trying to resolve path '",
          path,
@@ -21,18 +24,23 @@
          currentDir, "' towards '", rootDir, "'.");
   }
 
-  path <- check.file(file.path(currentDir, path));
+  path <- file.path(currentDir, path);
+  path <- force(path);
+  path <- check.file(path);
+  path <- force(path);
+  
   path <- path.relativize(path, rootDir);
+  path <- force(path);
   check.file(file.path(rootDir, path));
 
-  return(path)
+  return(path);
 }
 
 # load a single file and pipe it to the output
 #' @include logger.R
-#' @importFrom utilizeR is.non.empty.string
+#' @importFrom utilizeR is.non.empty.string is.non.empty.vector
 .load.file <- function(relativeFile, currentDir, rootDir) {
-  .logger("Beginning to load file '",
+  logger("Beginning to load file '",
           relativeFile, "' as relative path to '",
           currentDir, "'.");
 
@@ -54,35 +62,49 @@
   }
 
   # check if we can open the source file
-  sourceFile <- check.file(file.path(currentDir, relativeFile));
+  sourceFile <- file.path(currentDir, relativeFile);
+  sourceFile <- force(sourceFile);
+  sourceFile <- check.file(sourceFile);
+  sourceFile <- force(sourceFile); 
 
   # get the current directory
-  sourceDir <- check.dir(dirname(sourceFile));
+  sourceDir <- dirname(sourceFile);
+  sourceDir <- force(sourceDir);
+  sourceDir <- check.dir(sourceDir);
+  sourceDir <- force(sourceDir);
 
   # read the contents
-  src <- file(sourceFile, open="rt");
+  src  <- file(sourceFile, open="rt");
   text <- readLines(src);
   close(src);
 
-  text <- paste(text, sep="\n", collapse="\n");
-
+  # ensure that there is text
+  text <- force(text);
+  if(is.non.empty.vector(text)) {
+    text <- paste(text, sep="\n", collapse="\n");
+  } else {
+    exit("File '", sourceFile, "' has no text.");
+  }
   # recursively apply .load.file
-  text <- preprocess.regexp(
-    regex="\\\\.resolve.path\\{.+\\}",
+  text <- preprocess.regexp.groups(
+    regex="\\\\relative\\.path\\{(.*?)\\}",
     func=.resolve.path,
     text=text,
+    currentDir=sourceDir,
     rootDir=rootDir);
+  text <- force(text);
 
   # recursively apply .load.file
-  text <- preprocess.regexp(
-            regex="\\\\relative.input\\{.+\\}",
+  text <- preprocess.regexp.groups(
+            regex="\\\\relative\\.input\\{(.*?)\\}",
             func=.load.file,
             text=text,
             currentDir=sourceDir,
             rootDir=rootDir);
+  text <- force(text);
 
   if(is.non.empty.string(text)) {
-    .logger("Finished loading source file '",
+    logger("Finished loading source file '",
             sourceFile,
             "', found ", nchar(text),
             " characters.");
@@ -102,22 +124,31 @@
 #' @return the text string resulting from loading the file
 #' @include logger.R
 #' @importFrom utilizeR is.non.empty.string
+#' @export preprocess.input
 preprocess.input <- function(sourceFile) {
-  .logger("Recursively loading file '", sourceFile, "'.");
+  logger("Recursively loading file '", sourceFile, "'.");
 
   # check if we can open the source file
   sourceFile <- check.file(sourceFile);
+  sourceFile <- force(sourceFile);
 
   # get the current directory
-  sourceDir <- check.dir(dirname(sourceFile));
+  sourceDir <- dirname(sourceFile);
+  sourceDir <- force(sourceDir);
+  sourceDir <- check.dir(sourceDir);
+  sourceDir <- force(sourceDir);
 
-  text <- .loadFile(basename(sourceFile), sourceDir, sourceDir);
+  # load the file
+  text <- .load.file(basename(sourceFile), sourceDir, sourceDir);
+  text <- force(text);
 
   if(is.non.empty.string(text)) {
-    .logger("Finished recursively loading file '",
+    logger("Finished recursively loading file '",
             sourceFile, "', found ",
             nchar(text), " characters.");
-    return(trimws(text));
+    text <- trimws(text);
+    text <- force(text);
+    return(text);
   }
 
   exit("Error loading file '", sourceFile,

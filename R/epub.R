@@ -10,7 +10,6 @@
 #' @param toc.print print a table of contents?
 #' @param toc.depth the depth of the table of content to print
 #' @param crossref use pandoc-crossref?
-#' @param bibliography do we have a bibliography?
 #' @param numberSections should sections be numbered?
 #' @param mathToGraphic should math be converted to graphics?
 #' @param metadata the metadata
@@ -29,11 +28,10 @@ pandoc.epub<- function(sourceFile,
                        toc.print=TRUE,
                        toc.depth=3L,
                        crossref=TRUE,
-                       bibliography=TRUE,
                        numberSections=TRUE,
                        mathToGraphic=TRUE,
                        metadata=NULL) {
-  .logger("Now building a EPUB.");
+  logger("Now building a EPUB.");
   
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
@@ -49,7 +47,6 @@ pandoc.epub<- function(sourceFile,
                  toc.print=toc.print,
                  toc.depth=toc.depth,
                  crossref=crossref,
-                 bibliography=bibliography,
                  template=NA_character_);
 
 
@@ -59,7 +56,7 @@ pandoc.epub<- function(sourceFile,
     template <- metadata$template.epub;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      .logger("Found EPUB template specification in metadata for template '",
+      logger("Found EPUB template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -67,7 +64,7 @@ pandoc.epub<- function(sourceFile,
         params$template <- template;
       }
     } else {
-      .logger("No EPUB template specified in metadata.");
+      logger("No EPUB template specified in metadata.");
     }
   }
 
@@ -89,11 +86,11 @@ pandoc.epub<- function(sourceFile,
     params[[len]] <-"--filter=latex-formulae-filter";
   }
 
-#  .logger("Invoking pandoc.invoke with parameters '",
+#  logger("Invoking pandoc.invoke with parameters '",
 #          paste(params, sep=", ", collapse=", "),
 #          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
-  .logger("Finished building a EPUB output '", destFile, "'.");
+  logger("Finished building a EPUB output '", destFile, "'.");
   return(destFile);
 }

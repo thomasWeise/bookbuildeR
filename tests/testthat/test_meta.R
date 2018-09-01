@@ -1,5 +1,6 @@
-library("bookbuildeR")
-context("meta")
+library("bookbuildeR");
+library("testthat");
+context("meta");
 
 test_that("Test meta.time", {
   t <- meta.time();

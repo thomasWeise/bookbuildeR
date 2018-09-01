@@ -1,5 +1,6 @@
-library("bookbuildeR")
-context("readmeta")
+library("bookbuildeR");
+library("testthat");
+context("readmeta");
 
 test_that("Test metadata.read", {
 
@@ -39,6 +40,8 @@ test_that("Test metadata.read", {
 
   yaml <- metadata.read(tmpfile);
   file.remove(tmpfile);
+  unlink(tmpfile);
+  expect_false(file.exists(tmpfile));
 
   expect_false(is.null(yaml));
   expect_length(yaml, 12L);

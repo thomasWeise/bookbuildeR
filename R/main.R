@@ -16,7 +16,7 @@ bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
                              destName="book",
                              destDir) {
-  .logger("Welcome to bookbuildeR."); # begin
+  logger("Welcome to bookbuildeR."); # begin
 
   # check source file and destination directory
   sourceFile <- check.file(sourceFile);
@@ -31,7 +31,7 @@ bookbuildeR.main <- function(sourceFile,
   tempFile <- preprocess.doc(sourceFile=sourceFile,
                              destName=basename(tempFile));
 
-  .logger("Finished building the composed markdown document '",
+  logger("Finished building the composed markdown document '",
           tempFile, "'.");
 
   metadata <- metadata.read(srcfile=tempFile);
@@ -42,7 +42,7 @@ bookbuildeR.main <- function(sourceFile,
                       format.in=format.in,
                       metadata=metadata);
 
-  .logger("Finished generating pdf file '",
+  logger("Finished generating pdf file '",
           pdf,
           "' via pandoc/LaTeX tool chain, now filtering it.");
 
@@ -51,7 +51,7 @@ bookbuildeR.main <- function(sourceFile,
     exit("Failed to filter the pdf file '",
          pdf, "' - it must somehow be corrupt!");
   } else {
-    .logger("Successfully filtered pdf file '",
+    logger("Successfully filtered pdf file '",
             pdf,
             "', it now should be very standard conform.");
   }
@@ -61,11 +61,11 @@ bookbuildeR.main <- function(sourceFile,
                       destDir=destDir,
                       format.in=format.in,
                       metadata=metadata);
-  .logger("Finished building the book in EPUB format, generated file '",
+  logger("Finished building the book in EPUB format, generated file '",
           epub, "'.");
 
   unlink(tempFile, force=TRUE);
-  .logger("Finished deleting temporary source '",
+  logger("Finished deleting temporary source '",
           tempFile, "' - we are done.");
   return(list(pdf=pdf, epub=epub));
 }

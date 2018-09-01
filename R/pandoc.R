@@ -48,7 +48,7 @@ pandoc.invoke <- function(sourceFile,
   destDir  <- check.dir(destDir);
   destFile <- normalizePath(file.path(destDir, basename(destFile)), mustWork = FALSE);
 
-  .logger("Applying pandoc to create '", destFile, "' from '", sourceFile, "'.");
+  logger("Applying pandoc to create '", destFile, "' from '", sourceFile, "'.");
 
   wd <- getwd();
   setwd(sourceDir);
@@ -116,7 +116,7 @@ pandoc.invoke <- function(sourceFile,
   setwd(wd);
 
   destFile <- check.file(destFile);
-  .logger("pandoc has succeeded for arguments '",
+  logger("pandoc has succeeded for arguments '",
          paste(args, sep=" ", collapse=" "),
          "' in directory '",
          sourceDir, "' and produced file '",

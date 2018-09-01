@@ -4,12 +4,12 @@
 \alias{pandoc.latex}
 \title{Invoke Pandoc to Produce a \code{pdf} via LaTeX}
 \usage{
-pandoc.latex(sourceFile, destName = sub(pattern = "\\\\..*", replacement = "",
-  x = basename(sourceFile)), destDir = dirname(sourceFile),
+pandoc.latex(sourceFile, destName = sub(pattern = "\\\\..*", replacement
+  = "", x = basename(sourceFile)), destDir = dirname(sourceFile),
   format.in = "markdown", standalone = TRUE, tabstops = 2L,
   toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, topLevelDivision = "chapter",
-  numberSections = TRUE, metadata = NULL)
+  topLevelDivision = "chapter", numberSections = TRUE,
+  metadata = NULL)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}
@@ -30,8 +30,6 @@ or \code{NA} to not replace}
 \item{toc.depth}{the depth of the table of content to print}
 
 \item{crossref}{use pandoc-crossref?}
-
-\item{bibliography}{do we have a bibliography?}
 
 \item{topLevelDivision}{the top-level division}
 

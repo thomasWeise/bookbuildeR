@@ -8,38 +8,46 @@
   }
 
   type <- found[[1L]];
+  type <- force(type);
   if(!(is.non.empty.string(type))) {
     exit("Empty text block type: '", type, "'.");
   }
   type <- tolower(trimws(type));
+  type <- force(type);
   if(nchar(type) <= 0L) {
     exit("Text block type only composed of white space.");
   }
 
   label <- found[[2L]];
+  label <- force(label);
   if(is.non.empty.string(label)) {
     label <- trimws(label);
+    label <- force(label);
   } else {
     label <- NA;
   }
 
   body <- found[[3L]];
+  body <- force(body);
   if(!(is.non.empty.string(body))) {
     exit("Empty text block body: '", body, "'.");
   }
   body <- trimws(body);
+  body <- force(body);
   if(nchar(body) <= 0L) {
     exit("Text block body only composed of white space.");
   }
 
   count <- (get0(x=type, envir=env, inherits=FALSE, ifnotfound=0L) + 1L);
+  count <- force(count);
   assign(x=type, value=count, pos=env);
   title <- paste(toupper(substr(type, 1L, 1L)),
                  substr(type, 2L, nchar(type)),
                  "&nbsp;",
                  count,
                  sep="", collapse="");
-
+  title <- force(title);
+  
   if(is.non.empty.string(label)) {
     found <- get0(x=label, envir=env, inherits=FALSE, ifnotfound=NULL);
     if(is.null(found)) {
@@ -48,7 +56,10 @@
       exit("Error: text block label '", label, "' already defined as '", found, "'.");
     }
   }
-  return(paste("\n\n**", title, ":**&nbsp;", body, "\n\n", sep="", collapse=""));
+  
+  result <- paste("\n\n**", title, ".**&nbsp;", body, "\n\n", sep="", collapse="");
+  result <- force(result);
+  return(result);
 }
 
 # the inner text.ref substitution
@@ -61,14 +72,17 @@
   }
 
   label <- found[[1L]];
+  label <- force(label);
   if(is.non.empty.string(label)) {
     label <- trimws(label);
+    label <- force(label);
     if(is.non.empty.string(label)) {
       found <- get0(x=label, envir=env, inherits=FALSE, ifnotfound=NULL);
-      if(is.null(found)) {
-        exit("Error: \\text.ref label '", label, "' not found.");
+      found <- force(found);
+      if(is.non.empty.string(found)) {
+        return(found);
       }
-      return(found);
+      exit("Error: \\text.ref label '", label, "' not found.");
     }
   }
   exit("Empty label in \\text.ref or label composed only of white space.")
@@ -86,12 +100,16 @@ preprocess.textblocks <- function(text) {
   env  <- new.env();
 
   # implement the '\text.block' command
-  text <- preprocess.regexp(regex="\\\\text.block\\{(.+)\\}\\{(.*)\\}\\{(.+)\\}",
-                            func=.text.block.subst.inner,
-                            text=text, env=env);
+  text <- preprocess.regexp.groups(regex="\\\\text.block\\{(.*?)\\}\\{(.*?)\\}\\{(.*?)\\}",
+                                   func=.text.block.subst.inner,
+                                   text=text, env=env);
+  text <- force(text);
 
   # implement the '\text.ref' command
-  return(preprocess.regexp(regex="\\\\text.ref\\{(.+)\\}",
-                           func=.text.ref.subst.inner,
-                           text=text, env=env));
+  text <- preprocess.regexp.groups(regex="\\\\text.ref\\{(.*?)\\}",
+                                   func=.text.ref.subst.inner,
+                                   text=text, env=env);
+  text <- force(text);
+  
+  return(text);
 }

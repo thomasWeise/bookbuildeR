@@ -13,12 +13,13 @@
 #' @param text the text to process
 #' @return the processed text
 #' @include preprocessorRegexp.R
+#' @export preprocess.plain
 preprocess.plain <- function(text) {
   # now do the other replacements
   for(command in .commands) {
-    text <- preprocess.regexp(regex=command$regexp,
-                              func=command$func,
-                              text=text);
+    text <- preprocess.regexp.no.groups(regex=command$regexp,
+                                        func=command$func,
+                                        text=text);
   }
 
   return(text);

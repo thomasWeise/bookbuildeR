@@ -1,5 +1,6 @@
-library("bookbuildeR")
-context("preprocess.doc")
+library("bookbuildeR");
+library("testthat");
+context("preprocess.doc");
 
 test_that("Test preprocess.doc", {
   dir <- tempdir();
@@ -26,12 +27,10 @@ test_that("Test preprocess.doc", {
   dest <- preprocess.doc(root, "vv.md");
   expect_identical(dest, file.path(dir, "vv.md"));
   expect_identical(readLines(dest), c("blabla a/2.md",
-                                      "",
                                       "12345",
-                                      "",
                                       "root.md",
-                                      paste("x ", meta.time(), " y", sep="", collapse=""),
-                                      "", "# Bibliography {-}"));
+                                      paste("x ", meta.time(), " y", sep="", collapse="")));
 
   unlink(dir, recursive=TRUE);
+  expect_false(dir.exists(dir));
 })

@@ -28,7 +28,7 @@ template.load <- function(template, dir=getwd()) {
   template.path <- force(template.path);
   if(file.exists(template.path)) {
     template.path <- normalizePath(template.path, mustWork = FALSE);
-    .logger("Template '",
+    logger("Template '",
             template,
             "' exists as file '",
             template.path, "'.");
@@ -41,7 +41,7 @@ template.load <- function(template, dir=getwd()) {
       if(file.exists(template.path)) {
         template.path <- normalizePath(template.path, mustWork = FALSE);
         have.not <- FALSE;
-        .logger("Discovered local copy of template '",
+        logger("Discovered local copy of template '",
                 template,
                 "' in PATH as file '",
                 template.path, "'.");
@@ -64,7 +64,7 @@ template.load <- function(template, dir=getwd()) {
       tryCatch({
         download.file(url=template, destfile=template.path);
         template.path <- normalizePath(template.path, mustWork = FALSE);
-        .logger("Finished downloading template from '",
+        logger("Finished downloading template from '",
                 template,
                 "' to file '",
                 template.path, "'.");

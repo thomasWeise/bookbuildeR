@@ -10,7 +10,6 @@
 #' @param toc.print print a table of contents?
 #' @param toc.depth the depth of the table of content to print
 #' @param crossref use pandoc-crossref?
-#' @param bibliography do we have a bibliography?
 #' @param topLevelDivision the top-level division
 #' @param numberSections should sections be numbered?
 #' @param metadata the metadata
@@ -29,11 +28,10 @@ pandoc.latex <- function(sourceFile,
                          toc.print=TRUE,
                          toc.depth=3L,
                          crossref=TRUE,
-                         bibliography=TRUE,
                          topLevelDivision="chapter",
                          numberSections=TRUE,
                          metadata=NULL) {
-  .logger("Now building a pdf output via LaTeX.");
+  logger("Now building a pdf output via LaTeX.");
 
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
@@ -49,7 +47,6 @@ pandoc.latex <- function(sourceFile,
                  toc.print=toc.print,
                  toc.depth=toc.depth,
                  crossref=crossref,
-                 bibliography=bibliography,
                  template=NA_character_);
 
   # see if a template has been specified
@@ -58,7 +55,7 @@ pandoc.latex <- function(sourceFile,
     template <- metadata$template.latex;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      .logger("Found LaTeX template specification in metadata for template '",
+      logger("Found LaTeX template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -66,7 +63,7 @@ pandoc.latex <- function(sourceFile,
         params$template <- template;
       }
     } else {
-      .logger("No LaTeX template specified in metadata.");
+      logger("No LaTeX template specified in metadata.");
     }
   }
 
@@ -80,11 +77,11 @@ pandoc.latex <- function(sourceFile,
     params[[len]] <- "--number-sections";
   }
 
-#  .logger("Invoking pandoc.invoke with parameters '",
+#  logger("Invoking pandoc.invoke with parameters '",
 #          paste(params, sep=", ", collapse=", "),
 #          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
-  .logger("Finished building a pdf output '", destFile, "' via LaTeX.");
+  logger("Finished building a pdf output '", destFile, "' via LaTeX.");
   return(destFile);
 }

@@ -4,12 +4,11 @@
 \alias{pandoc.epub}
 \title{Invoke Pandoc to Produce a \code{EPUB} via LaTeX}
 \usage{
-pandoc.epub(sourceFile, destName = sub(pattern = "\\\\..*", replacement = "",
-  x = basename(sourceFile)), destDir = dirname(sourceFile),
+pandoc.epub(sourceFile, destName = sub(pattern = "\\\\..*", replacement =
+  "", x = basename(sourceFile)), destDir = dirname(sourceFile),
   format.in = "markdown", standalone = TRUE, tabstops = 2L,
   toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, numberSections = TRUE, mathToGraphic = TRUE,
-  metadata = NULL)
+  numberSections = TRUE, mathToGraphic = TRUE, metadata = NULL)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}
@@ -30,8 +29,6 @@ or \code{NA} to not replace}
 \item{toc.depth}{the depth of the table of content to print}
 
 \item{crossref}{use pandoc-crossref?}
-
-\item{bibliography}{do we have a bibliography?}
 
 \item{numberSections}{should sections be numbered?}
 

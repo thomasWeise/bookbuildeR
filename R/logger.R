@@ -1,13 +1,17 @@
+#' @title A logger function writing a log message to the output
+#' @description writs a log message with a date and time in front to the outpuut
+#' @param ... the arguments to be \code{cat}'ed to the ouput
 #' @importFrom utilizeR makeLogger
-.logger <- makeLogger(TRUE);
+#' @export logger
+logger <- makeLogger(TRUE);
 
 #' @title Quit the Processing with an Error
 #' @description Well, exit the current process, throw an error.
 #' @param ... the error message
 #' @export exit
 exit <- function(...) {
-  .logger(...);
-  q(status=1L);
+  logger(...);
+  q(save="no", status=1L);
 }
 
 .check.path <- function(path, type) {

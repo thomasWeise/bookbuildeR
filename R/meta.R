@@ -60,7 +60,7 @@ meta.time <- function() {
 #' @title Get the Current Date
 #' @description Get the current date as string.
 #' @return the current date as string
-#' @export meta.time
+#' @export meta.date
 meta.date <- function() {
   return(.date);
 }
