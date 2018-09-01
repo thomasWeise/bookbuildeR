@@ -3,7 +3,10 @@ library("testthat");
 context("preprocess.input");
 
 test_that("Test preprocessor.input plain", {
-  root.file <- tempfile();
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.file <- tempfile(tmpdir=maindir);
   root.text <- c("a", "b", "c");
   con       <- file(root.file, "wt");
   writeLines(text=root.text, con=con);
@@ -12,14 +15,18 @@ test_that("Test preprocessor.input plain", {
   text <- preprocess.input(root.file);
   expect_identical(text, "a\nb\nc");
   
-  unlink(root.file);
+  unlink(maindir, recursive=TRUE);
   expect_false(file.exists(root.file));
+  expect_false(dir.exists(maindir));
 })
 
 
 test_that("Test preprocessor.input recursive same dir", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir = maindir);
+  dir.create(root.dir, showWarnings = FALSE, recursive=TRUE);
   
   same.file <- tempfile(tmpdir=root.dir);
   same.text <- c("x", "y", "z");
@@ -38,15 +45,19 @@ test_that("Test preprocessor.input recursive same dir", {
   text <- preprocess.input(root.file);
   expect_identical(text, "a\nb\nx\ny\nz\nc");
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(dir.exists(root.dir));
 })
 
 test_that("Test preprocessor.input recursive same dir with relative path", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir=maindir);
+  dir.create(root.dir, recursive=TRUE);
   
   same.file <- tempfile(tmpdir=root.dir);
   same.text <- c("x", "y", "z");
@@ -69,7 +80,8 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
                          basename(same.file),
                    "\nc", sep="", collapse=""));
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(dir.exists(root.dir));
@@ -77,8 +89,11 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
 
 
 test_that("Test preprocessor.input recursive other dir", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir=maindir);
+  dir.create(root.dir, recursive=TRUE);
   
   sub.dir <- tempfile(tmpdir=root.dir);
   dir.create(sub.dir);
@@ -102,7 +117,8 @@ test_that("Test preprocessor.input recursive other dir", {
   text <- preprocess.input(root.file);
   expect_identical(text, "a\nb\nx\ny\nz\nc");
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(dir.exists(root.dir));
@@ -111,8 +127,11 @@ test_that("Test preprocessor.input recursive other dir", {
 
 
 test_that("Test preprocessor.input recursive same dir with relative path", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir=maindir);
+  dir.create(root.dir, recursive = TRUE);
   
   same.file <- tempfile(tmpdir=root.dir);
   same.text <- c("x", "y", "z");
@@ -135,7 +154,8 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
                          basename(same.file),
                          "\nc", sep="", collapse=""));
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(dir.exists(root.dir));
@@ -143,8 +163,11 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
 
 
 test_that("Test preprocessor.input recursive other dir with relative paths", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir=maindir);
+  dir.create(root.dir, recursive=TRUE);
   
   sub.dir <- tempfile(tmpdir=root.dir);
   dir.create(sub.dir);
@@ -183,7 +206,8 @@ test_that("Test preprocessor.input recursive other dir with relative paths", {
                                 "\nc",
                                sep="", collapse=""));
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(dir.exists(root.dir));
@@ -193,8 +217,11 @@ test_that("Test preprocessor.input recursive other dir with relative paths", {
 
 
 test_that("Test preprocessor.input recursive other 2 dirs with relative paths", {
-  root.dir <- tempfile();
-  dir.create(root.dir);
+  maindir <- tempfile();
+  dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
+  
+  root.dir <- tempfile(tmpdir=maindir);
+  dir.create(root.dir, recursive=FALSE);
   
   sub.dir <- tempfile(tmpdir=root.dir);
   dir.create(sub.dir);
@@ -261,7 +288,8 @@ test_that("Test preprocessor.input recursive other 2 dirs with relative paths", 
                                "\nc",
                                sep="", collapse=""));
   
-  unlink(root.dir, recursive=TRUE);
+  unlink(maindir, recursive=TRUE);
+  expect_false(dir.exists(maindir));
   expect_false(file.exists(root.file));
   expect_false(file.exists(same.file));
   expect_false(file.exists(same.file.2));
