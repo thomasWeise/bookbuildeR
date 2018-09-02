@@ -4,13 +4,14 @@
 #' @param sourceFile the source file
 #' @param destName the name of the destination file (to be created in the same
 #'   folder as the source file)
+#' @param bibliograph the bibliography
 #' @return the canonical path to the destination file
 #' @include logger.R
 #' @include preprocessorInput.R
 #' @include preprocessorPlain.R
 #' @include preprocessorTextblock.R
 #' @export preprocess.doc
-preprocess.doc <- function(sourceFile, destName) {
+preprocess.doc <- function(sourceFile, destName, bibliography=TRUE) {
   # get the canonical path of the source file
   sourceFile <- check.file(sourceFile);
   sourceDir <- check.dir(dirname(sourceFile));
@@ -42,6 +43,12 @@ preprocess.doc <- function(sourceFile, destName) {
   
   output <- file(destFile, open="wt");
   writeLines(text=text, con=output);
+  
+  # add proper bibliography section
+  if(isTRUE(bibliography)) {
+    writeLines(text=c("", "# Bibliography {-}"),  con=output)
+  }
+  
   close(output);
   destFile <- check.file(destFile);
 

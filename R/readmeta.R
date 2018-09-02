@@ -109,3 +109,22 @@ metadata.read <- function(srcfile) {
   logger("No metadata found in '", srcfile, "'.");
   return(NULL);
 }
+
+#' @title Check if a bibliography is specified in the metadata
+#' @description Check if a bibliography is specified in the metadata
+#' @param metadata the meta data
+#' @return \code{TRUE} if \code{metadata} specifies a bibliography, \code{FALSE}
+#'   otherwise
+#' @importFrom utilizeR is.non.empty.list is.non.empty.string
+#' @export metadata.hasBibliography
+metadata.hasBibliography <- function(metadata=NULL) {
+  if(is.non.empty.list(metadata)) {
+    # do we have a bibliography?
+    bibliography <- metadata$bibliography;
+    if(is.non.empty.vector(bibliography)) {
+      bibliography <- bibliography[[1L]];
+    }
+    return(is.non.empty.string(bibliography));
+  }
+  return(FALSE);
+}

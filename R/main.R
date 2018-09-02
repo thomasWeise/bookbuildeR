@@ -36,11 +36,13 @@ bookbuildeR.main <- function(sourceFile,
           tempFile, "'.");
 
   metadata <- metadata.read(srcfile=tempFile);
-
+  bibliography <- metadata.hasBibliography(metadata);
+  
   pdf <- pandoc.latex(sourceFile=tempFile,
                       destName=destName,
                       destDir=destDir,
                       format.in=format.in,
+                      bibliography=bibliography,
                       metadata=metadata);
 
   logger("Finished generating pdf file '",
@@ -61,6 +63,7 @@ bookbuildeR.main <- function(sourceFile,
                       destName=destName,
                       destDir=destDir,
                       format.in=format.in,
+                      bibliography=bibliography,
                       metadata=metadata);
   logger("Finished building the book in EPUB format, generated file '",
           epub, "'.");
