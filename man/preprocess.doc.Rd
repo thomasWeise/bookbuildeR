@@ -4,15 +4,13 @@
 \alias{preprocess.doc}
 \title{Pre-Process a Document File}
 \usage{
-preprocess.doc(sourceFile, destName, bibliography = TRUE)
+preprocess.doc(sourceFile, destName)
 }
 \arguments{
 \item{sourceFile}{the source file}
 
 \item{destName}{the name of the destination file (to be created in the same
 folder as the source file)}
-
-\item{bibliography}{the bibliography}
 }
 \value{
 the canonical path to the destination file

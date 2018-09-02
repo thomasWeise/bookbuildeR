@@ -37,6 +37,15 @@ bookbuildeR.main <- function(sourceFile,
 
   metadata <- metadata.read(srcfile=tempFile);
   bibliography <- metadata.hasBibliography(metadata);
+  if(bibliography) {
+    logger("According to the metadata, a bibliography is used, adding header to '",
+           tempFile, "'.");
+    con <- file(tempFile, "at");
+    writeLines(text=c("", "# Bibliography {-}"),  con=output)
+    close(con);
+  } else {
+    logger("According to the metadata, NO bibliography is used.");
+  }
   
   pdf <- pandoc.latex(sourceFile=tempFile,
                       destName=destName,
