@@ -39,7 +39,7 @@
 # load a single file and pipe it to the output
 #' @include logger.R
 #' @importFrom utilizeR is.non.empty.string is.non.empty.vector
-.load.file <- function(relativeFile, currentDir, rootDir) {
+.load.file <- function(relativeFile, currentDir, rootDir, surroundByNewlines) {
   logger("Beginning to load file '",
           relativeFile, "' as relative path to '",
           currentDir, "'.");
@@ -81,11 +81,17 @@
   # ensure that there is text
   text <- force(text);
   if(is.non.empty.vector(text)) {
-    text <- paste(text, sep="\n", collapse="\n");
+    text <- trimws(paste(text, sep="\n", collapse="\n"));
+    text <- force(text);
+    if(surroundByNewlines) {
+      text <- paste("\n\n", text, "\n\n", sep="", collapse="");
+      text <- force(text);
+    }
   } else {
     exit("File '", sourceFile, "' has no text.");
   }
-  # recursively apply .load.file
+  
+  # apply the relative path resolver
   text <- preprocess.regexp.groups(
     regex="\\\\relative\\.path\\{(.*?)\\}",
     func=.resolve.path,
@@ -96,11 +102,12 @@
 
   # recursively apply .load.file
   text <- preprocess.regexp.groups(
-            regex="\\\\relative\\.input\\{(.*?)\\}",
+            regex="\\s*\\\\relative\\.input\\{(.*?)\\}\\s*",
             func=.load.file,
             text=text,
             currentDir=sourceDir,
-            rootDir=rootDir);
+            rootDir=rootDir,
+            surroundByNewlines=TRUE);
   text <- force(text);
 
   if(is.non.empty.string(text)) {
@@ -139,14 +146,14 @@ preprocess.input <- function(sourceFile) {
   sourceDir <- force(sourceDir);
 
   # load the file
-  text <- .load.file(basename(sourceFile), sourceDir, sourceDir);
+  text <- .load.file(basename(sourceFile), sourceDir, sourceDir, FALSE);
   text <- force(text);
 
   if(is.non.empty.string(text)) {
+    text <- trimws(text);
     logger("Finished recursively loading file '",
             sourceFile, "', found ",
             nchar(text), " characters.");
-    text <- trimws(text);
     text <- force(text);
     return(text);
   }
