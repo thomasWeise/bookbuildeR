@@ -12,7 +12,7 @@ preprocess.doc(sourceFile, destName, bibliography = TRUE)
 \item{destName}{the name of the destination file (to be created in the same
 folder as the source file)}
 
-\item{bibliograph}{the bibliography}
+\item{bibliography}{the bibliography}
 }
 \value{
 the canonical path to the destination file

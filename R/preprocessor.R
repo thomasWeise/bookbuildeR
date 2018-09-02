@@ -4,7 +4,7 @@
 #' @param sourceFile the source file
 #' @param destName the name of the destination file (to be created in the same
 #'   folder as the source file)
-#' @param bibliograph the bibliography
+#' @param bibliography the bibliography
 #' @return the canonical path to the destination file
 #' @include logger.R
 #' @include preprocessorInput.R
