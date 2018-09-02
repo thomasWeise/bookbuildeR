@@ -43,7 +43,7 @@ test_that("Test preprocessor.input recursive same dir", {
   close(con);
 
   text <- preprocess.input(root.file);
-  expect_identical(text, "a\nb\n\nx\ny\nz\n\nc");
+  expect_identical(text, "a\nb\n\n\nx\ny\nz\n\n\nc");
   
   unlink(maindir, recursive=TRUE);
   expect_false(dir.exists(maindir));
@@ -76,7 +76,7 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
   
   text <- preprocess.input(root.file);
   expect_identical(text,
-                   paste("a\nb\n\nx\ny\nz\n\n",
+                   paste("a\nb\n\n\nx\ny\nz\n\n\n",
                          basename(same.file),
                    "\nc", sep="", collapse=""));
   
@@ -115,7 +115,7 @@ test_that("Test preprocessor.input recursive other dir", {
   close(con);
   
   text <- preprocess.input(root.file);
-  expect_identical(text, "a\nb\n\nx\ny\nz\n\nc");
+  expect_identical(text, "a\nb\n\n\nx\ny\nz\n\n\nc");
   
   unlink(maindir, recursive=TRUE);
   expect_false(dir.exists(maindir));
@@ -150,7 +150,7 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
   
   text <- preprocess.input(root.file);
   expect_identical(text,
-                   paste("a\nb\n\nx\ny\nz\n\n",
+                   paste("a\nb\n\n\nx\ny\nz\n\n\n",
                          basename(same.file),
                          "\nc", sep="", collapse=""));
   
@@ -199,9 +199,9 @@ test_that("Test preprocessor.input recursive other dir with relative paths", {
   close(con);
   
   text <- preprocess.input(root.file);
-  expect_identical(text, paste("a\nb\n\nx\ny\nv",
+  expect_identical(text, paste("a\nb\n\n\nx\ny\nv",
                                relpath,  
-                               "w\nz\n\n",
+                               "w\nz\n\n\n",
                                relpath,
                                 "\nc",
                                sep="", collapse=""));
@@ -279,11 +279,11 @@ test_that("Test preprocessor.input recursive other 2 dirs with relative paths", 
   close(con);
   
   text <- preprocess.input(root.file);
-  expect_identical(text, paste("a\nb\n\nx\n\nl\nm\n",
+  expect_identical(text, paste("a\nb\n\n\nx\n\n\nl\nm\n",
                                relpath2,
-                               "\nn\n\ny\nv",
+                               "\nn\n\n\ny\nv",
                                relpath,  
-                               "w\nz\n\n",
+                               "w\nz\n\n\n",
                                relpath,
                                "\nc",
                                sep="", collapse=""));

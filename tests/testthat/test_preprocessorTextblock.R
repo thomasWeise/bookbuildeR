@@ -7,7 +7,7 @@ test_that("Test preprocess.doc 1 definition", {
     "xyz\\text.block{definition}{label}{body.}abc"
   );
   expect_identical(result,
-                   "xyz\n\n**Definition&nbsp;1.**&nbsp;body.\n\nabc");
+                   "xyz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc");
 })
 
 test_that("Test preprocess.doc 2 definition", {
@@ -15,7 +15,7 @@ test_that("Test preprocess.doc 2 definition", {
     "xyz\\text.block{definition}{label}{body.}abc\\text.block{definition}{label2}{body2.}lmn"
   );
   expect_identical(result,
-                   "xyz\n\n**Definition&nbsp;1.**&nbsp;body.\n\nabc\n\n**Definition&nbsp;2.**&nbsp;body2.\n\nlmn");
+                   "xyz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc\n\n\n**Definition&nbsp;2.**&nbsp;body2.\n\n\nlmn");
 })
 
 
@@ -24,5 +24,5 @@ test_that("Test preprocess.doc 2 definition and references", {
     "x\\text.ref{label2}yz\\text.block{definition}{label}{body.}abc\\text.block{definition}{label2}{body2.}l\\text.ref{label}mn"
   );
   expect_identical(result,
-                   "xDefinition&nbsp;2yz\n\n**Definition&nbsp;1.**&nbsp;body.\n\nabc\n\n**Definition&nbsp;2.**&nbsp;body2.\n\nlDefinition&nbsp;1mn");
+                   "xDefinition&nbsp;2yz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc\n\n\n**Definition&nbsp;2.**&nbsp;body2.\n\n\nlDefinition&nbsp;1mn");
 })

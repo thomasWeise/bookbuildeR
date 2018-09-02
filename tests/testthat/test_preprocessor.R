@@ -33,6 +33,8 @@ test_that("Test preprocess.doc", {
              con=con);
   close(con);
 
+  text <- preprocess.plain(preprocess.input(root));
+  
   dest <- preprocess.doc(root, "vv.md");
   expect_identical(dest, file.path(dir, "vv.md"));
   con <- file(dest, "rt");
@@ -40,12 +42,14 @@ test_that("Test preprocess.doc", {
   close(con);
   
   expect_identical(lines, c("blabla a/2.md",
-                             "",
+                             "", "",
                              "12345",
-                             "", "", "",
+                             "", "", "", "", "",
                              "root.md",
                              paste("x ", meta.time(), " y", sep="", collapse="")));
-
+  lines <- paste(lines, sep="\n", collapse="\n");
+  expect_identical(lines, text);
+  
   unlink(dir, recursive=TRUE);
   expect_false(dir.exists(dir));
 })

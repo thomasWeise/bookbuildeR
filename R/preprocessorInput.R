@@ -84,7 +84,7 @@
     text <- trimws(paste(text, sep="\n", collapse="\n"));
     text <- force(text);
     if(surroundByNewlines) {
-      text <- paste("\n\n", text, "\n\n", sep="", collapse="");
+      text <- paste("\n\n\n", text, "\n\n\n", sep="", collapse="");
       text <- force(text);
     }
   } else {

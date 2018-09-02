@@ -57,7 +57,7 @@
     }
   }
   
-  result <- paste("\n\n**", title, ".**&nbsp;", body, "\n\n", sep="", collapse="");
+  result <- paste("\n\n\n**", title, ".**&nbsp;", body, "\n\n\n", sep="", collapse="");
   result <- force(result);
   return(result);
 }
