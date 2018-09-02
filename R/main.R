@@ -41,7 +41,7 @@ bookbuildeR.main <- function(sourceFile,
     logger("According to the metadata, a bibliography is used, adding header to '",
            tempFile, "'.");
     con <- file(tempFile, "at");
-    writeLines(text=c("", "# Bibliography {-}"),  con=output)
+    writeLines(text=c("", "# Bibliography {-}"),  con=con)
     close(con);
   } else {
     logger("According to the metadata, NO bibliography is used.");
