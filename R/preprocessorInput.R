@@ -7,14 +7,14 @@
      (length(path) != 1L)) {
     exit("Incorrect arguments for resolving relative path.");
   }
-  
+
   path <- path[[1L]];
   path <- force(path);
   if(!is.non.empty.string(path)) {
     exit("Error trying to resolve empty path relative to directory '",
          currentDir, "' towards '", rootDir, "'.");
   }
-  
+
   path <- trimws(path);
   path <- force(path);
   if(!is.non.empty.string(path)) {
@@ -28,7 +28,7 @@
   path <- force(path);
   path <- check.file(path);
   path <- force(path);
-  
+
   path <- path.relativize(path, rootDir);
   path <- force(path);
   check.file(file.path(rootDir, path));
@@ -65,7 +65,7 @@
   sourceFile <- file.path(currentDir, relativeFile);
   sourceFile <- force(sourceFile);
   sourceFile <- check.file(sourceFile);
-  sourceFile <- force(sourceFile); 
+  sourceFile <- force(sourceFile);
 
   # get the current directory
   sourceDir <- dirname(sourceFile);
@@ -90,24 +90,13 @@
   } else {
     exit("File '", sourceFile, "' has no text.");
   }
-  
+
   # apply the relative path resolver
-  text <- preprocess.regexp.groups(
-    regex="\\\\relative\\.path\\{(.*?)\\}",
-    func=.resolve.path,
-    text=text,
-    currentDir=sourceDir,
-    rootDir=rootDir);
+  text <- .cmd.relative.path(text, currentDir=sourceDir, rootDir=rootDir);
   text <- force(text);
 
   # recursively apply .load.file
-  text <- preprocess.regexp.groups(
-            regex="\\s*\\\\relative\\.input\\{(.*?)\\}\\s*",
-            func=.load.file,
-            text=text,
-            currentDir=sourceDir,
-            rootDir=rootDir,
-            surroundByNewlines=TRUE);
+  text <- .cmd.relative.input(text, currentDir=sourceDir, rootDir=rootDir, surroundByNewlines=TRUE);
   text <- force(text);
 
   if(is.non.empty.string(text)) {
@@ -122,6 +111,10 @@
        "' -- found no text.");
 }
 
+
+#' @include preprocessorCommand.R
+.cmd.relative.path  <- preprocess.command("relative.path", 1L, .resolve.path);
+.cmd.relative.input <- preprocess.command("relative.input", 1L, .load.file, stripWhiteSpace = TRUE);
 
 #' @title Recursively Load a Directory Structure
 #' @description Load a source file and return it as text string, while

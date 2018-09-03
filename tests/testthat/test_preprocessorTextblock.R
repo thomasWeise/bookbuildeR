@@ -9,20 +9,3 @@ test_that("Test preprocess.doc 1 definition", {
   expect_identical(result,
                    "xyz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc");
 })
-
-test_that("Test preprocess.doc 2 definition", {
-  result <- preprocess.textblocks(
-    "xyz\\text.block{definition}{label}{body.}abc\\text.block{definition}{label2}{body2.}lmn"
-  );
-  expect_identical(result,
-                   "xyz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc\n\n\n**Definition&nbsp;2.**&nbsp;body2.\n\n\nlmn");
-})
-
-
-test_that("Test preprocess.doc 2 definition and references", {
-  result <- preprocess.textblocks(
-    "x\\text.ref{label2}yz\\text.block{definition}{label}{body.}abc\\text.block{definition}{label2}{body2.}l\\text.ref{label}mn"
-  );
-  expect_identical(result,
-                   "xDefinition&nbsp;2yz\n\n\n**Definition&nbsp;1.**&nbsp;body.\n\n\nabc\n\n\n**Definition&nbsp;2.**&nbsp;body2.\n\n\nlDefinition&nbsp;1mn");
-})
