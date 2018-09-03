@@ -1,12 +1,12 @@
 
 # the other commands
 #' @include meta.R
-#' @importFrom ore ore ore.escape
+#' @importFrom ore ore.escape
 .commands <- list(
-  list(regexp=ore(ore.escape("\\meta.time")),       func=function(match) meta.time()),
-  list(regexp=ore(ore.escape("\\meta.date")),       func=function(match) meta.date()),
-  list(regexp=ore(ore.escape("\\meta.repository")), func=function(match) meta.repository()),
-  list(regexp=ore(ore.escape("\\meta.commit")),     func=function(match) meta.commit())
+  list(regexp=ore.escape("\\meta.time"),       func=function(match) meta.time()),
+  list(regexp=ore.escape("\\meta.date"),       func=function(match) meta.date()),
+  list(regexp=ore.escape("\\meta.repository"), func=function(match) meta.repository()),
+  list(regexp=ore.escape("\\meta.commit"),     func=function(match) meta.commit())
 );
 
 #' @title Expand the Simple Commands in via Regular Expressions
