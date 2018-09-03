@@ -39,7 +39,8 @@
 # load a single file and pipe it to the output
 #' @include logger.R
 #' @importFrom utilizeR is.non.empty.string is.non.empty.vector
-.load.file <- function(relativeFile, currentDir, rootDir, surroundByNewlines) {
+.load.file <- function(relativeFile, currentDir, rootDir, .surroundByNewlines,
+                       .regexp.lf, .regexp.rp) {
   logger("Beginning to load file '",
           relativeFile, "' as relative path to '",
           currentDir, "'.");
@@ -83,7 +84,7 @@
   if(is.non.empty.vector(text)) {
     text <- trimws(paste(text, sep="\n", collapse="\n"));
     text <- force(text);
-    if(surroundByNewlines) {
+    if(.surroundByNewlines) {
       text <- paste("\n\n\n", text, "\n\n\n", sep="", collapse="");
       text <- force(text);
     }
@@ -92,11 +93,15 @@
   }
 
   # apply the relative path resolver
-  text <- .cmd.relative.path(text, currentDir=sourceDir, rootDir=rootDir);
+  text <- preprocess.command(.regexp.rp,
+                    text, .resolve.path, currentDir=sourceDir, rootDir=rootDir);
   text <- force(text);
 
   # recursively apply .load.file
-  text <- .cmd.relative.input(text, currentDir=sourceDir, rootDir=rootDir, surroundByNewlines=TRUE);
+  text <- preprocess.command(.regexp.lf, text,
+                    .load.file, currentDir=sourceDir, rootDir=rootDir,
+                    .surroundByNewlines=TRUE, .regexp.lf=.regexp.lf,
+                    .regexp.rp=.regexp.rp);
   text <- force(text);
 
   if(is.non.empty.string(text)) {
@@ -112,10 +117,6 @@
 }
 
 
-#' @include preprocessorCommand.R
-.cmd.relative.path  <- preprocess.command("relative.path", 1L, .resolve.path);
-.cmd.relative.input <- preprocess.command("relative.input", 1L, .load.file, stripWhiteSpace = TRUE);
-
 #' @title Recursively Load a Directory Structure
 #' @description Load a source file and return it as text string, while
 #'   recursively solving commands \code{relative.path} and
@@ -123,6 +124,7 @@
 #' @param sourceFile the source file path
 #' @return the text string resulting from loading the file
 #' @include logger.R
+#' @include preprocessorCommand.R
 #' @importFrom utilizeR is.non.empty.string
 #' @export preprocess.input
 preprocess.input <- function(sourceFile) {
@@ -139,7 +141,11 @@ preprocess.input <- function(sourceFile) {
   sourceDir <- force(sourceDir);
 
   # load the file
-  text <- .load.file(basename(sourceFile), sourceDir, sourceDir, FALSE);
+  text <- .load.file(basename(sourceFile), sourceDir, sourceDir,
+                     .surroundByNewlines=FALSE,
+                     .regexp.lf=preprocess.command.regexp("relative.input", 1L, 
+                                                          stripWhiteSpace = TRUE),
+                     .regexp.rp=preprocess.command.regexp("relative.path", 1L));
   text <- force(text);
 
   if(is.non.empty.string(text)) {

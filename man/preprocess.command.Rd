@@ -2,25 +2,24 @@
 % Please edit documentation in R/preprocessorCommand.R
 \name{preprocess.command}
 \alias{preprocess.command}
-\title{Create a Command based on a Regular Expression}
+\title{Pre-process a text with regular expression that contains at least one group}
 \usage{
-preprocess.command(prefix = "", n = 1L, func, char.open = "{",
-  char.close = "}", stripWhiteSpace = FALSE)
+preprocess.command(regex, text, func, ...)
 }
 \arguments{
-\item{prefix}{the prefix of the command}
+\item{regex}{the regular expression}
 
-\item{n}{the number of parameters}
+\item{text}{the text}
 
-\item{func}{the function to be invoked}
+\item{func}{the function which receives the strings matched to the groups as
+vector}
 
-\item{char.open}{the opening character}
-
-\item{char.close}{the closing character}
-
-\item{stripWhiteSpace}{should the white space aroung the command be stripped}
+\item{...}{the parameters to be passed to \code{func}}
+}
+\value{
+the processed string
 }
 \description{
-Create a function that can be applied to a string and performs a
-  regular expression replacement based on invoking a function \code{func}.
+replace all instances of a regular expression in a text via a
+function
 }

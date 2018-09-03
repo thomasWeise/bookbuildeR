@@ -89,24 +89,25 @@
   exit("Empty label in \\text.ref or label composed only of white space.")
 }
 
-#' @include preprocessorCommand.R
-.block <- preprocess.command("text.block", 3L, .text.block.subst.inner, stripWhiteSpace=TRUE);
-.ref   <- preprocess.command("text.ref",   1L, .text.ref.subst.inner,   stripWhiteSpace=FALSE);
-
 #' @title Process all Text Blocks in a Markdown file
 #' @description Emulate environments like "proof" or "definition".
 #' @param text the array of text
 #' @return the output text
 #' @export preprocess.textblocks
+#' @include preprocessorCommand.R
 preprocess.textblocks <- function(text) {
   env  <- new.env();
 
   # implement the '\text.block' command
-  text <- .block(text, env=env);
+  text <- preprocess.command(
+            preprocess.command.regexp("text.block", 3L, stripWhiteSpace=TRUE),
+            text, .text.block.subst.inner, env=env);
   text <- force(text);
 
   # implement the '\text.ref' command
-  text <- .ref(text, env=env);
+  text <- preprocess.command(
+            preprocess.command.regexp("text.ref", 1L, stripWhiteSpace=FALSE),
+            text, .text.ref.subst.inner, env=env);
   text <- force(text);
 
   return(text);
