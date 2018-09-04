@@ -22,10 +22,6 @@ metadata.read <- function(srcfile) {
                  error=function(e)
                           exit("Error '", e,
                                "' occured when reading metadata from file '",
-                               srcfile, "'."),
-                 warning=function(e)
-                          logger("Warning '", e,
-                               "' occured when reading metadata from file '",
                                srcfile, "'."));
       if(length(line) <= 0L) {
         break;

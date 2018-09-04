@@ -79,10 +79,7 @@
   text <- tryCatch(readLines(src),
            error=function(e) exit("Error '", e,
                                   "' occured when reading input file '", src,
-                                  "'."),
-           warning=function(e) logger("Warning '", e,
-                                    "' occured when reading input file '", src,
-                                    "'."));
+                                  "'."));
   close(src);
 
   # ensure that there is text
