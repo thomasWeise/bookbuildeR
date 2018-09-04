@@ -76,7 +76,13 @@
 
   # read the contents
   src  <- file(sourceFile, open="rt");
-  text <- readLines(src);
+  text <- tryCatch(readLines(src),
+           error=function(e) exit("Error '", e,
+                                  "' occured when reading input file '", src,
+                                  "'."),
+           warning=function(e) exit("Warning '", e,
+                                    "' occured when reading input file '", src,
+                                    "'."));
   close(src);
 
   # ensure that there is text
@@ -143,7 +149,7 @@ preprocess.input <- function(sourceFile) {
   # load the file
   text <- .load.file(basename(sourceFile), sourceDir, sourceDir,
                      .surroundByNewlines=FALSE,
-                     .regexp.lf=preprocess.command.regexp("relative.input", 1L, 
+                     .regexp.lf=preprocess.command.regexp("relative.input", 1L,
                                                           stripWhiteSpace = TRUE),
                      .regexp.rp=preprocess.command.regexp("relative.path", 1L));
   text <- force(text);

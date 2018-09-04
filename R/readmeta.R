@@ -17,7 +17,15 @@ metadata.read <- function(srcfile) {
     handle <- file(srcfile, open="rt");
     while(TRUE) {
       # read the line
-      line <- readLines(con=handle, n=1L);
+      line <- tryCatch(readLines(con=handle, n=1L),
+                 error=function(e)
+                          exit("Error '", e,
+                               "' occured when reading metadata from file '",
+                               srcfile, "'."),
+                 warning=function(e)
+                          exit("Warning '", e,
+                               "' occured when reading metadata from file '",
+                               srcfile, "'."));
       if(length(line) <= 0L) {
         break;
       }

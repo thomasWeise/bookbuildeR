@@ -34,7 +34,7 @@ pandoc.epub<- function(sourceFile,
                        mathToGraphic=TRUE,
                        metadata=NULL) {
   logger("Now building a EPUB.");
-  
+
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
 
@@ -86,7 +86,7 @@ pandoc.epub<- function(sourceFile,
 
   if(mathToGraphic) {
     len <- len + 1L;
-    params[[len]] <-"--filter=latex-formulae-filter";
+    params[[len]] <-"--filter latex-formulae-filter";
   }
 
 #  logger("Invoking pandoc.invoke with parameters '",
