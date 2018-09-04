@@ -5,6 +5,7 @@
 #' @return a list with key-value pairs from the YAML metadata
 #' @export metadata.read
 #' @importFrom yaml read_yaml
+#' @include logger.R
 metadata.read <- function(srcfile) {
   srcfile <- check.file(srcfile);
 
@@ -23,7 +24,7 @@ metadata.read <- function(srcfile) {
                                "' occured when reading metadata from file '",
                                srcfile, "'."),
                  warning=function(e)
-                          exit("Warning '", e,
+                          logger("Warning '", e,
                                "' occured when reading metadata from file '",
                                srcfile, "'."));
       if(length(line) <= 0L) {

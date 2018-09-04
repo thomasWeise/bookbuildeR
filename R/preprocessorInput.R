@@ -80,7 +80,7 @@
            error=function(e) exit("Error '", e,
                                   "' occured when reading input file '", src,
                                   "'."),
-           warning=function(e) exit("Warning '", e,
+           warning=function(e) logger("Warning '", e,
                                     "' occured when reading input file '", src,
                                     "'."));
   close(src);
