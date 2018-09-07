@@ -25,6 +25,7 @@ Collate:
     'templates.R'
     'pandoc.R'
     'epub.R'
+    'git.R'
     'latex.R'
     'readmeta.R'
     'main.R'
