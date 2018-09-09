@@ -22,6 +22,7 @@ ByteCompile: true
 LazyData: true
 Collate: 
     'logger.R'
+    'codeRead.R'
     'templates.R'
     'pandoc.R'
     'epub.R'

@@ -3,6 +3,7 @@
 export(bookbuildeR.main)
 export(check.dir)
 export(check.file)
+export(code.read)
 export(exit)
 export(git.clone)
 export(logger)
