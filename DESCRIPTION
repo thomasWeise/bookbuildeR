@@ -23,6 +23,7 @@ LazyData: true
 Collate: 
     'logger.R'
     'codeRead.R'
+    'codeLoad.R'
     'templates.R'
     'pandoc.R'
     'epub.R'

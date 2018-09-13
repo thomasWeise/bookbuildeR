@@ -8,22 +8,22 @@
 code.read <- function(path, lines=NULL, tags=NULL) {
   path <- check.file(path);
   logger("reading text from file '", path, "'.");
-  
+
   handle <- file(path, "rt");
   text <- readLines(handle);
   close(handle);
   logger("finished text from file '", path, "', now processing it.");
-  
+
   # pick the selected lines
   if((!(is.null(lines))) && (length(lines) > 0L)) {
     text <- text[sort(unique(lines))];
   }
-  
+
   # iterate through the tags
   if(!is.null(tags)) {
     lines <- NULL;
     not   <- NULL;
-    for(tag in tags) {
+    for(tag in trimws(tags)) {
       start <- grep(pattern=paste("start\\s+", tag, sep="", collapse=""),
                     x=text,
                     ignore.case=TRUE,
@@ -33,7 +33,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
                   ignore.case=TRUE,
                   fixed=FALSE);
 
-      # check the number of occurences 
+      # check the number of occurences
       l <- length(start);
       if(l != length(end)) {
         exit("Number ", l,
@@ -46,7 +46,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
         exit("Did not find tag '", tag,
              "' in '", path, "'.");
       }
-      
+
       # iterate over findings
       for(i in seq_along(start)) {
         s <- start[i];
@@ -61,33 +61,33 @@ code.read <- function(path, lines=NULL, tags=NULL) {
 
         # remember useless tag lines
         not <- unique(unlist(c(not, c(s, e))));
-        
+
         # add lines
         lines <- unique(unlist(c(lines, ((s+1L):(e-1L)))));
         lines <- force(lines);
       }
     } # / tag in tags
-  
+
     # remove tag lines
     for(t in not) {
       t <- match(t, lines);
       if(!(is.na(t))) { lines <- lines[-t]; }
     }
-    
+
     # select the text
     text <- text[sort(unique(lines))];
   } # /is.null(tags)
   text <- trimws(text, which="right");
   text <- gsub("\t", "  ", text, fixed=TRUE);
   text <- force(text);
-  
+
   # remove trailing space
   ends  <- nchar(text);
   check <- which(ends > 0L);
   ends  <- ends[check];
   cmp.1 <- rep.int(" ", times=length(check));
-  cmp.2 <- text[check]; 
-  
+  cmp.2 <- text[check];
+
   # find the longest trailing spaces
   for(i in seq_len(min(ends))) {
     if(any(substr(cmp.2, i, i) != cmp.1)) {
@@ -97,7 +97,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
       break;
     }
   }
-  
+
 # fix trailing and leading newlines
   len <- length(text);
   if(len <= 0L) {
@@ -121,7 +121,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
     }
     text <- text[i:j]
   }
-  
+
   # make a single string, remove triple new lines
   text <- force(text);
   text <- paste(text, sep="\n", collapse="\n");
@@ -134,10 +134,14 @@ code.read <- function(path, lines=NULL, tags=NULL) {
       break;
     }
   }
-  
+
   text <- trimws(text, which="right");
   text <- force(text);
-  
+  if(nchar(text) <= 0) {
+    exit("After trimming, the selected code from file '",
+         path, "' is empty.");
+  }
+
   logger("Finished reading ",
          length(gregexpr("\n", text, fixed=TRUE)[[1]]),
          " lines of text from file '",
