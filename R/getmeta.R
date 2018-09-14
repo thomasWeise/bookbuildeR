@@ -84,3 +84,23 @@ metadata.hasBibliography <- function(metadata=NULL) {
   }
   return(FALSE);
 }
+
+
+#' @title Get the source code repository if any is specified in the metadata
+#' @description Get the source code repository if any is specified in the metadata
+#' @param metadata the meta data
+#' @return the url of the source code repository, \code{NULL} if none is specified
+#' @importFrom utilizeR is.non.empty.list is.non.empty.string
+#' @export metadata.getCodeRepo
+metadata.getCodeRepo <- function(metadata=NULL) {
+  if(is.non.empty.list(metadata)) {
+    codeRepo <- metadata$codeRepo;
+    if(is.non.empty.vector(codeRepo)) {
+      codeRepo <- codeRepo[[1L]];
+    }
+    if(is.non.empty.string(codeRepo)) {
+      return(codeRepo);
+    }
+  }
+  return(NULL);
+}
