@@ -9,10 +9,16 @@ code.load(path, lines = "", tags = "", basePath = NULL)
 \arguments{
 \item{path}{the path to the file to read}
 
-\item{lines}{a set of selected lines, given as R integer vector expression string}
+\item{lines}{a set of selected lines, given as R integer vector expression
+string}
 
-\item{tags}{the list of marking start and end given as string with comma-separated values}
+\item{tags}{the list of marking start and end given as string with
+comma-separated values}
+
+\item{basePath}{the base path against which the \code{path} should be
+resolved}
 }
 \description{
-Read snippets of code from a file. Similar to \code{code.read}, but interpret the parameters from strings.
+Read snippets of code from a file. Similar to \code{code.read},
+  but interpret the parameters from strings.
 }

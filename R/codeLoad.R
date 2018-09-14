@@ -1,8 +1,13 @@
 #' @title Read Code from a File according to Parameters given as Strings
-#' @description Read snippets of code from a file. Similar to \code{code.read}, but interpret the parameters from strings.
+#' @description Read snippets of code from a file. Similar to \code{code.read},
+#'   but interpret the parameters from strings.
 #' @param path the path to the file to read
-#' @param lines a set of selected lines, given as R integer vector expression string
-#' @param tags the list of marking start and end given as string with comma-separated values
+#' @param lines a set of selected lines, given as R integer vector expression
+#'   string
+#' @param tags the list of marking start and end given as string with
+#'   comma-separated values
+#' @param basePath the base path against which the \code{path} should be
+#'   resolved
 #' @export code.load
 #' @include logger.R
 #' @include codeRead.R
