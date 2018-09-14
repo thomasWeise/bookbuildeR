@@ -137,7 +137,7 @@ test_that("Test metadata.read with code repo", {
 
 
 
-test_that("Test metadata.read without code repo", {
+test_that("Test metadata.read with code repo and bibliography", {
   
   data <- c("blablabla",
             "dgdfgdg",
@@ -148,6 +148,8 @@ test_that("Test metadata.read without code repo", {
             "author: Thomas Weise",
             "keywords: [Optimization, Metaheuristics, Local Search, Global Search]",
             "",
+            "codeRepo: https://github.com/thomasWeise/bookbuildeR.git",
+            "bibliography: bibliography.bib",
             "abstract: |",
             "In this book, I try to give an introduction to optimization algorithms.",
             "",
@@ -170,13 +172,14 @@ test_that("Test metadata.read without code repo", {
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
   
   expect_false(is.null(yaml));
-  expect_length(yaml, 11L);
+  expect_length(yaml, 13L);
   expect_identical(yaml$papersize, "a4");
   expect_identical(yaml$documentclass, "memoir");
   expect_identical(yaml$lang, "en-US");
   expect_identical(yaml$keywords, c("Optimization", "Metaheuristics", "Local Search", "Global Search"));
   expect_identical(yaml$author, "Thomas Weise");
   expect_identical(yaml$title, "An Introduction to Optimization Algorithms");
-  expect_null(metadata.getCodeRepo(yaml));
-  expect_false(metadata.hasBibliography(yaml));
+  
+  expect_identical(metadata.getCodeRepo(yaml), "https://github.com/thomasWeise/bookbuildeR.git");
+  expect_true(metadata.hasBibliography(yaml));
 })
