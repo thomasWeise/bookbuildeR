@@ -4,7 +4,7 @@
 #' @param sourceFile the source file
 #' @param destName the name of the destination file (to be created in the same
 #'   folder as the source file)
-#' @return the canonical path to the destination file
+#' @return a list \code{list(path=path, meta=meta)} with the canonical path \code{path} to the destination file and the yaml metadata \code{meta}
 #' @include logger.R
 #' @include preprocessorInput.R
 #' @include preprocessorPlain.R
@@ -31,7 +31,9 @@ preprocess.doc <- function(sourceFile, destName) {
   # do the pre-processing
   text <- preprocess.plain(text);
   text <- preprocess.textblocks(text);
-  
+
+  meta <- metadata.get(text);
+    
   text <- unname(unlist(strsplit(
               text, split="\n", fixed = TRUE)));
   
@@ -51,5 +53,5 @@ preprocess.doc <- function(sourceFile, destName) {
          "' to output file '",
          destFile,
          "'.");
-  return(destFile);
+  return(list(path=destFile, meta=meta));
 }

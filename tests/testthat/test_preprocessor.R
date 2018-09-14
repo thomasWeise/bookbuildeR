@@ -35,7 +35,7 @@ test_that("Test preprocess.doc", {
 
   text <- preprocess.plain(preprocess.input(root));
 
-  dest <- preprocess.doc(root, "vv.md");
+  dest <- preprocess.doc(root, "vv.md")$path;
   expect_identical(dest, file.path(dir, "vv.md"));
   con <- file(dest, "rt");
   lines <- readLines(con);
@@ -99,7 +99,7 @@ test_that("Test preprocess.doc with code", {
 
   text <- preprocess.plain(preprocess.input(root));
 
-  dest <- preprocess.doc(root, "vv.md");
+  dest <- preprocess.doc(root, "vv.md")$path;
   expect_identical(dest, file.path(dir, "vv.md"));
   con <- file(dest, "rt");
   lines <- readLines(con);

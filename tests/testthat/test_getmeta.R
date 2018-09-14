@@ -32,16 +32,8 @@ test_that("Test metadata.read with bibliography", {
             "",
             "sfsdf");
 
-  tmpfile <- tempfile();
-  dir.create(path=dirname(tmpfile), showWarnings = FALSE, recursive = TRUE);
-  handle <- file(tmpfile, open="wt");
-  writeLines(text=data, con=handle);
-  close(handle);
-
-  yaml <- metadata.read(tmpfile);
-  file.remove(tmpfile);
-  unlink(tmpfile);
-  expect_false(file.exists(tmpfile));
+  
+  yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
 
   expect_false(is.null(yaml));
   expect_length(yaml, 12L);
@@ -80,16 +72,8 @@ test_that("Test metadata.read without bibliography", {
             "",
             "sfsdf");
   
-  tmpfile <- tempfile();
-  dir.create(path=dirname(tmpfile), showWarnings = FALSE, recursive = TRUE);
-  handle <- file(tmpfile, open="wt");
-  writeLines(text=data, con=handle);
-  close(handle);
   
-  yaml <- metadata.read(tmpfile);
-  file.remove(tmpfile);
-  unlink(tmpfile);
-  expect_false(file.exists(tmpfile));
+  yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
   
   expect_false(is.null(yaml));
   expect_length(yaml, 11L);

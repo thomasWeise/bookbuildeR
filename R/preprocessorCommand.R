@@ -71,9 +71,38 @@ preprocess.command.regexp <- function(prefix="", n=1L, stripWhiteSpace=FALSE) {
   return(t);
 }
 
-# the internal regexpression invoker for regular expressions with groups
+
+
+#' @title Pre-process a text with regular expression that contains at least one group
+#' @description replace all instances of a regular expression in a text via a
+#' function
+#' @param regex the regular expression
+#' @param text the text
+#' @param func the function which receives the strings matched to the groups as
+#' vector
+#' @param ... the parameters to be passed to \code{func}
+#' @return the processed string
+#' @importFrom ore ore.subst
+#' @export preprocess.command
+preprocess.command <- function(regex, text, func, ...) {
+  result <- tryCatch(
+    ore.subst(regex=regex, replacement=.preprocessor.regexp.invoke,
+              preprocessor=.preprocess.command.strip,
+              text=text, func=func, ..., all=TRUE),
+    error=function(e) exit("Error '", e,
+                           "' occured while invoking grouplfull regex processor on expression '",
+                           regex, "'."),
+    warnining=function(e) exit("Warning '", e,
+                               "' occured while invoking groupfull regex processor on expression '",
+                               regex, "'."));
+  result <- force(result);
+  return(result);
+}
+
+
+# A Function that can Santize and Preprocess the Groups
 #' @importFrom ore groups
-.preprocess.regexp.command <- function(found, func, ...) {
+.preprocessor.regexp.invoke <- function(found, func, preprocessor=trimws, ...) {
   if(is.null(found)) {
     exit("Error in groupfull regular expression processing: '",
          found, "' occurences.");
@@ -92,45 +121,19 @@ preprocess.command.regexp <- function(prefix="", n=1L, stripWhiteSpace=FALSE) {
   if(n > 0L) {
     result <- tryCatch(
       as.character(unname(unlist(vapply(X=seq_len(n),
-        FUN=function(i) {
-          t <- vapply(X=unname(unlist(g[i, ])),
-                      FUN=.preprocess.command.strip,
-                      FUN.VALUE = "");
-          t <- force(t);
-          t <- func(t, ...);
-          t <- force(t);
-          return(t);
-        }, FUN.VALUE = "")))),
+                                        FUN=function(i) {
+                                          t <- vapply(X=unname(unlist(g[i, ])),
+                                                      FUN=preprocessor,
+                                                      FUN.VALUE = "");
+                                          t <- force(t);
+                                          t <- func(t, ...);
+                                          t <- force(t);
+                                          return(t);
+                                        }, FUN.VALUE = "")))),
       error=function(e) exit("Error '", e, "' occured while invoking regex processor."),
       warnining=function(e) exit("Warning '", e, "' occured while invoking regex processor."));
     result <- force(result);
     return(result);
   }
   exit("Zero group rows in regular expression match '", g, "'.");
-}
-
-
-#' @title Pre-process a text with regular expression that contains at least one group
-#' @description replace all instances of a regular expression in a text via a
-#' function
-#' @param regex the regular expression
-#' @param text the text
-#' @param func the function which receives the strings matched to the groups as
-#' vector
-#' @param ... the parameters to be passed to \code{func}
-#' @return the processed string
-#' @importFrom ore ore.subst
-#' @export preprocess.command
-preprocess.command <- function(regex, text, func, ...) {
-  result <- tryCatch(
-    ore.subst(regex=regex, replacement=.preprocess.regexp.command,
-              text=text, func=func, ..., all=TRUE),
-    error=function(e) exit("Error '", e,
-                           "' occured while invoking grouplfull regex processor on expression '",
-                           regex, "'."),
-    warnining=function(e) exit("Warning '", e,
-                               "' occured while invoking groupfull regex processor on expression '",
-                               regex, "'."));
-  result <- force(result);
-  return(result);
 }

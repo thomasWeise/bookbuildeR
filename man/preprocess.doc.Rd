@@ -13,7 +13,7 @@ preprocess.doc(sourceFile, destName)
 folder as the source file)}
 }
 \value{
-the canonical path to the destination file
+a list \code{list(path=path, meta=meta)} with the canonical path \code{path} to the destination file and the yaml metadata \code{meta}
 }
 \description{
 Pre-process the root file of a hierarchically structured

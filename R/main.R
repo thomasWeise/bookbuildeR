@@ -10,7 +10,6 @@
 #' @include logger.R
 #' @include latex.R
 #' @include epub.R
-#' @include readmeta.R
 #' @export bookbuildeR.main
 bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
@@ -29,13 +28,14 @@ bookbuildeR.main <- function(sourceFile,
                                      sep="", collapse=""));
 
   # do the pre-processing
-  tempFile <- preprocess.doc(sourceFile=sourceFile,
+  result <- preprocess.doc(sourceFile=sourceFile,
                              destName=basename(tempFile));
+  tempFile <- result$path;
+  metadata <- result$meta;
   
   logger("Finished building the composed markdown document '",
           tempFile, "'.");
 
-  metadata <- metadata.read(srcfile=tempFile);
   bibliography <- metadata.hasBibliography(metadata);
   if(bibliography) {
     logger("According to the metadata, a bibliography is used, adding header to '",
