@@ -21,19 +21,21 @@ git.clone <- function(repo) {
            "' successfully completed to path '",
            destDir);
     
+    # get the commit id
     commit <- system2("git", args=c("-C", destDir, "log",
                                     "--no-abbrev-commit"),
                       stdout = TRUE, stderr = TRUE);
-    ret <- attr(commit, "status");
+    ret <- attr(commit, "status"); # check return code
     if(is.null(ret) || (is.numeric(ret) && (ret == 0))) {
-      if(length(commit) > 0L) {
+      if(length(commit) > 0L) { # check loaded data
         grepped <- grep("^\\s*commit\\s+.+", commit);
         if((!(is.null(grepped))) && (length(grepped) > 0L)) {
+          # get the discovered commit
           commit <- trimws(commit[[grepped[[1L]]]]);
           commit.l <- nchar(commit);
-          if(commit.l > 0L) {
+          if(commit.l > 0L) { # check its trimmed version
             commit <- trimws(substr(commit, 7, commit.l));
-            if(nchar(commit) == 40L) {
+            if(nchar(commit) == 40L) { # commit is right length
               logger("Repository '",
                      repo, "' commit is '",
                      commit, "'.");

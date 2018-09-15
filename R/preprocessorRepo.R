@@ -10,15 +10,23 @@
 #' @include getmeta.R
 #' @export preprocess.repo
 preprocess.repo <- function(text, metadata) {
-  repo <- metadata.getCodeRepo(metadata);
-  if(is.null(repo)) {
+  repository <- metadata.getCodeRepo(metadata);
+  if(is.null(repository)) {
     logger("No source code repository specified.");
     return(text);
   }
-  logger("Source code repository '", repo,
+  logger("Source code repository '", repository,
          "' repository specified.");
   
-  repo <- git.clone(repo);
+  repo <- git.clone(repository);
+  
+  # print the repo code
+  text <- gsub("\\repo.commit", repo$commit, text, fixed=TRUE);
+  if(endsWith(repository, ".git")) {
+    repository <- substr(repository, 1L, (nchar(repository)-4L));
+  }
+  text <- gsub("\\repo.name", repository, text, fixed=TRUE);
+  
   path <- repo$path;
   text <- preprocess.command(
     preprocess.command.regexp("repo.code", 3L),
