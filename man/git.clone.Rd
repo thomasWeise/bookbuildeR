@@ -10,7 +10,8 @@ git.clone(repo)
 \item{repo}{the repository url}
 }
 \value{
-the path to the cloned repository
+a \code{list(path=path, commit=commit)} with the \code{path} to the cloned repository
+and the current \code{commit}.
 }
 \description{
 Use the \code{git} system command to clone/download a git

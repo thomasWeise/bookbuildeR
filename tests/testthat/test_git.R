@@ -3,7 +3,9 @@ library("testthat");
 context("git");
 
 test_that("Test git.clone http", {
-  path <- git.clone("http://github.com/thomasWeise/bookbuildeR.git");
+  ret <- git.clone("http://github.com/thomasWeise/bookbuildeR.git");
+  path <- ret$path;
+  expect_identical(nchar(ret$commit), 40L);
   expect_true(dir.exists(path));
   expect_true(file.exists(file.path(path, "LICENSE")));
   expect_true(file.exists(file.path(path, "DESCRIPTION")));
@@ -16,7 +18,9 @@ test_that("Test git.clone http", {
 
 
 test_that("Test git.clone https", {
-  path <- git.clone("https://github.com/thomasWeise/bookbuildeR.git");
+  ret <- git.clone("https://github.com/thomasWeise/bookbuildeR.git");
+  path <- ret$path;
+  expect_identical(nchar(ret$commit), 40L);
   expect_true(dir.exists(path));
   expect_true(file.exists(file.path(path, "LICENSE")));
   expect_true(file.exists(file.path(path, "DESCRIPTION")));
@@ -29,7 +33,9 @@ test_that("Test git.clone https", {
 
 
 test_that("Test git.clone ssh", {
-  path <- git.clone("ssh://git@github.com/thomasWeise/bookbuildeR.git");
+  ret <- git.clone("ssh://git@github.com/thomasWeise/bookbuildeR.git");
+  path <- ret$path;
+  expect_identical(nchar(ret$commit), 40L);
   expect_true(dir.exists(path));
   expect_true(file.exists(file.path(path, "LICENSE")));
   expect_true(file.exists(file.path(path, "DESCRIPTION")));

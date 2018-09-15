@@ -10,8 +10,7 @@
 #' @include preprocessorPlain.R
 #' @include preprocessorTextblock.R
 #' @include preprocessorCommand.R
-#' @include git.R
-#' @include codeLoad.R
+#' @include preprocessorRepo.R
 #' @export preprocess.doc
 preprocess.doc <- function(sourceFile, destName) {
   # get the canonical path of the source file
@@ -39,17 +38,9 @@ preprocess.doc <- function(sourceFile, destName) {
   meta <- metadata.get(text);
     
   # if a repository is specified, download the repository, load the code, delete the repository
-  repo <- metadata.getCodeRepo(meta);
-  if(!(is.null(repo))) {
-    repo <- git.clone(repo);
-    text <- preprocess.command(
-      preprocess.command.regexp("repo.code", 3L),
-      text,
-      function(params) code.load(params[[1L]], params[[2L]], params[[3L]], repo)
-    );
-    unlink(repo, recursive = TRUE);
-  }
+  text <- preprocess.repo(text, meta);
   
+  # transform text back to lines
   text <- unname(unlist(strsplit(
               text, split="\n", fixed = TRUE)));
   

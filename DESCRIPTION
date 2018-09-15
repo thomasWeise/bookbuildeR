@@ -33,6 +33,7 @@ Collate:
     'latex.R'
     'main.R'
     'meta.R'
+    'preprocessorRepo.R'
     'preprocessorTextblock.R'
     'preprocessorRegexp.R'
     'preprocessorPlain.R'
