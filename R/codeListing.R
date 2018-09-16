@@ -105,7 +105,7 @@ code.listing <- function(
         }
         repo <- paste(repo, path, sep="", collapse="");
         # add reference to actual file on github
-        caption <- paste(caption, " ([src](", repo, "))",
+        caption <- paste(caption, " [src](", repo, ")",
                          sep="", collapse="");
       }
     } else {
