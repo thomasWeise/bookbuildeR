@@ -50,7 +50,8 @@ pandoc.epub<- function(sourceFile,
                  toc.depth=toc.depth,
                  crossref=crossref,
                  bibliography=bibliography,
-                 template=NA_character_);
+                 template=NA_character_,
+                 numberSections=numberSections);
 
 
   # see if a template has been specified
@@ -78,11 +79,6 @@ pandoc.epub<- function(sourceFile,
 
   len <- len + 1L;
   params[[len]] <- "--self-contained";
-
-  if(numberSections) {
-    len <- len + 1L;
-    params[[len]] <- "--number-sections";
-  }
 
   if(mathToGraphic) {
     len <- len + 1L;

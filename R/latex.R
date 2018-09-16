@@ -50,7 +50,8 @@ pandoc.latex <- function(sourceFile,
                  toc.depth=toc.depth,
                  crossref=crossref,
                  bibliography=bibliography,
-                 template=NA_character_);
+                 template=NA_character_,
+                 numberSections=numberSections);
 
   # see if a template has been specified
   if(is.non.empty.list(metadata)) {
@@ -74,11 +75,6 @@ pandoc.latex <- function(sourceFile,
 
   len <- len + 1L;
   params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
-
-  if(numberSections) {
-    len <- len + 1L;
-    params[[len]] <- "--number-sections";
-  }
 
 #  logger("Invoking pandoc.invoke with parameters '",
 #          paste(params, sep=", ", collapse=", "),

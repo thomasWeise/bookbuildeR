@@ -13,6 +13,7 @@
 #' @param crossref use pandoc-crossref?
 #' @param bibliography do we have a bibliography?
 #' @param template the template to be used, or \code{NA} if none
+#' @param numberSections should sections be numbered?
 #' @param ... the arguments to be passed to pandoc
 #' @return the canonical path to the destination file
 #' @include logger.R
@@ -30,6 +31,7 @@ pandoc.invoke <- function(sourceFile,
                           crossref=TRUE,
                           bibliography=TRUE,
                           template=NA_character_,
+                          numberSections=TRUE,
                           ...) {
   # get the canonical path of the source file
   sourceFile <- check.file(sourceFile);
@@ -77,6 +79,11 @@ pandoc.invoke <- function(sourceFile,
     args <- c(args, "--standalone");
   }
 
+  # number sections
+  if(isTRUE(numberSections)) {
+    args <- c(args, "--number-sections");
+  }
+  
   # should we print the table of contents?
   if(isTRUE(toc.print)) {
     args <- c(args, "--table-of-contents");
