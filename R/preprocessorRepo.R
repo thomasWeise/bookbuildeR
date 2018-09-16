@@ -40,8 +40,7 @@ preprocess.repo <- function(text, metadata) {
     text,
     .code.listing.wrap,
     basePath=path,
-    repo=repository,
-    removeMetaComments=TRUE);
+    repo=repository);
   unlink(path, recursive = TRUE);
 
   return(text);
