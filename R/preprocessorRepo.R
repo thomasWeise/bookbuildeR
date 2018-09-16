@@ -7,6 +7,7 @@
 #' @return the preprocessed text
 #' @include logger.R
 #' @include codeLoad.R
+#' @include codeListing.R
 #' @include getmeta.R
 #' @export preprocess.repo
 preprocess.repo <- function(text, metadata) {
@@ -31,8 +32,16 @@ preprocess.repo <- function(text, metadata) {
   text <- preprocess.command(
     preprocess.command.regexp("repo.code", 3L),
     text,
-    function(params) code.load(params[[1L]], params[[2L]], params[[3L]], path)
+    .code.load.wrap,
+    basePath=path
   );
+  text <- preprocess.command(
+    preprocess.command.regexp("repo.listing", 6L),
+    text,
+    .code.listing.wrap,
+    basePath=path,
+    repo=repository,
+    removeMetaComments=TRUE);
   unlink(path, recursive = TRUE);
 
   return(text);

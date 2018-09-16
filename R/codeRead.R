@@ -1,3 +1,67 @@
+.remove.trailing.spaces <- function(text, path) {
+  # remove trailing space
+  text  <- trimws(text, which="right");
+  ends  <- nchar(text);
+  check <- which(ends > 0L);
+  ends  <- ends[check];
+  cmp.1 <- rep.int(" ", times=length(check));
+  cmp.2 <- text[check];
+
+  # find the longest trailing spaces
+  for(i in seq_len(min(ends))) {
+    if(any(substr(cmp.2, i, i) != cmp.1)) {
+      if(i > 1L) {
+        text[check] <- substr(cmp.2, i, ends);
+      }
+      break;
+    }
+  }
+  
+  # fix trailing and leading newlines
+  len <- length(text);
+  if(len <= 0L) {
+    exit("Empty text selected from file '", path, "'.");
+  }
+  for(i in seq_along(text)) {
+    if(nchar(trimws(text[[i]])) > 0L) {
+      break;
+    }
+  }
+  for(j in (len:1L)) {
+    if(nchar(trimws(text[[j]])) > 0L) {
+      break;
+    }
+  }
+  if((i > 1L) || (j < len)) {
+    if(j <= i) {
+      exit("Empty text in after selection and trimming in file '",
+           path, "'.");
+    }
+    text <- text[i:j]
+  }
+  
+  # make a single string, remove triple new lines
+  text <- force(text);
+  text <- paste(text, sep="\n", collapse="\n");
+  l.2 <- nchar(text);
+  while(TRUE) {
+    l.1  <- l.2;
+    text <- gsub("\n\n\n", "\n\n", text, fixed=TRUE);
+    l.2  <- nchar(l.1);
+    if(l.2 >= l.1) {
+      break;
+    }
+  }
+  
+  text <- trimws(text, which="right");
+  text <- force(text);
+  if(nchar(text) <= 0) {
+    exit("After trimming, the selected code from file '",
+         path, "' is empty.");
+  }
+  return(text);
+}
+
 #' @title Read Code from a File
 #' @description Read snippets of code from a file.
 #' @param path the path to the file to read
@@ -77,71 +141,12 @@ code.read <- function(path, lines=NULL, tags=NULL) {
     # select the text
     text <- text[sort(unique(lines))];
   } # /is.null(tags)
-  text <- trimws(text, which="right");
   text <- gsub("\t", "  ", text, fixed=TRUE);
   text <- force(text);
 
-  # remove trailing space
-  ends  <- nchar(text);
-  check <- which(ends > 0L);
-  ends  <- ends[check];
-  cmp.1 <- rep.int(" ", times=length(check));
-  cmp.2 <- text[check];
-
-  # find the longest trailing spaces
-  for(i in seq_len(min(ends))) {
-    if(any(substr(cmp.2, i, i) != cmp.1)) {
-      if(i > 1L) {
-        text[check] <- substr(cmp.2, i, ends);
-      }
-      break;
-    }
-  }
-
-# fix trailing and leading newlines
-  len <- length(text);
-  if(len <= 0L) {
-    exit("Empty text in after selection in file '",
-         path, "'.");
-  }
-  for(i in seq_along(text)) {
-    if(nchar(trimws(text[[i]])) > 0L) {
-      break;
-    }
-  }
-  for(j in (len:1L)) {
-    if(nchar(trimws(text[[j]])) > 0L) {
-      break;
-    }
-  }
-  if((i > 1L) || (j < len)) {
-    if(j <= i) {
-      exit("Empty text in after selection and trimming in file '",
-           path, "'.");
-    }
-    text <- text[i:j]
-  }
-
-  # make a single string, remove triple new lines
+  text <- .remove.trailing.spaces(text, path);
   text <- force(text);
-  text <- paste(text, sep="\n", collapse="\n");
-  l.2 <- nchar(text);
-  while(TRUE) {
-    l.1  <- l.2;
-    text <- gsub("\n\n\n", "\n\n", text, fixed=TRUE);
-    l.2  <- nchar(l.1);
-    if(l.2 >= l.1) {
-      break;
-    }
-  }
-
-  text <- trimws(text, which="right");
-  text <- force(text);
-  if(nchar(text) <= 0) {
-    exit("After trimming, the selected code from file '",
-         path, "' is empty.");
-  }
-
+  
   logger("Finished reading ",
          length(gregexpr("\n", text, fixed=TRUE)[[1]]),
          " lines of text from file '",

@@ -24,6 +24,7 @@ Collate:
     'logger.R'
     'codeRead.R'
     'codeLoad.R'
+    'codeListing.R'
     'templates.R'
     'pandoc.R'
     'epub.R'
