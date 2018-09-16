@@ -49,14 +49,12 @@ code.listing <- function(
                               ore.escape("/**"),
                               ".*?",
                               ore.escape("*/"),
-                              "\\n*?",
                               sep="", collapse=""),
                         options="m");
         } else {
           # deal with R
           if(language == "r") {
-            regexp <- ore(paste("\\s*",
-                                ore.escape("#'"),
+            regexp <- ore(paste(ore.escape("#'"),
                                 ".*?",
                                 "\\n*?",
                                 sep="", collapse=""));
@@ -67,7 +65,7 @@ code.listing <- function(
           # remove meta comments
           n.old <- nchar(code);
 
-          code  <- ore.subst(regexp, "", code, all=FALSE);
+          code  <- ore.subst(regexp, "", code, all=TRUE);
           code  <- force(code);
           if(nchar(code) < n.old) {
             # if the meta-comments were removed, there might be longer trailing space sequences
