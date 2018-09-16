@@ -52,9 +52,9 @@ test_that("Test code.listing with repo, with meta-comment removal", {
                          NULL, NULL, "http://www.github.com/thomasWeise/bla", TRUE);
   expect_equal(text,
                paste(
-               "```{#lst.ref .java caption=\"blabla blabla. [(src)](http://www.github.com/thomasWeise/bla/blob/master",
+               "```{#lst.ref .java caption=\"blabla blabla. ([src](http://www.github.com/thomasWeise/bla/blob/master",
                file,
-               ")\"}\npackage a;\nclass x {\n}\n```\n",
+               "))\"}\npackage a;\nclass x {\n}\n```\n",
                sep="", collapse=""));
   unlink(file);
   expect_false(file.exists(file));
