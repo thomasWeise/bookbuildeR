@@ -28,6 +28,9 @@ comma-separated values}
 resolved}
 
 \item{repo}{a link to the repository, if any is provided}
+
+\item{removeMetaComments}{should the meta-comments of the programming
+language be removed?}
 }
 \description{
 Read snippets of code from a file, put it into a code environment.

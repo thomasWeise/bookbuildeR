@@ -13,6 +13,8 @@
 #' @param basePath the base path against which the \code{path} should be
 #'   resolved
 #' @param repo a link to the repository, if any is provided
+#' @param removeMetaComments should the meta-comments of the programming
+#'   language be removed?
 #' @export code.listing
 #' @include logger.R
 #' @include codeLoad.R
@@ -137,5 +139,5 @@ code.listing <- function(
 
 # the internal wrapper
 .code.listing.wrap <- function(vec, basePath=NULL, repo=NULL) {
-  code.load(vec[1L], vec[2L], vec[3L], vec[4L], vec[5L], vec[6L], basePath, repo);
+  code.listing(vec[1L], vec[2L], vec[3L], vec[4L], vec[5L], vec[6L], basePath, repo);
 }
