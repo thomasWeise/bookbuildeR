@@ -14,6 +14,7 @@
 #' @param topLevelDivision the top-level division
 #' @param numberSections should sections be numbered?
 #' @param metadata the metadata
+#' @param useListings use the listings package for LaTeX code blocks?
 #' @return the canonical path to the destination file
 #' @export pandoc.latex
 #' @include pandoc.R
@@ -32,7 +33,8 @@ pandoc.latex <- function(sourceFile,
                          bibliography=TRUE,
                          topLevelDivision="chapter",
                          numberSections=TRUE,
-                         metadata=NULL) {
+                         metadata=NULL,
+                         useListings=TRUE) {
   logger("Now building a pdf output via LaTeX.");
 
   sourceFile <- check.file(sourceFile);
@@ -75,10 +77,13 @@ pandoc.latex <- function(sourceFile,
 
   len <- len + 1L;
   params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
+  
+  # should we use the listings package?
+  if(isTRUE(useListings)) {
+    len <- len + 1L;
+    params[[len]] <- "--listings";
+  }
 
-#  logger("Invoking pandoc.invoke with parameters '",
-#          paste(params, sep=", ", collapse=", "),
-#          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
   logger("Finished building a pdf output '", destFile, "' via LaTeX.");
