@@ -2,12 +2,13 @@
 % Please edit documentation in R/codeListing.R
 \name{code.listing}
 \alias{code.listing}
-\title{Read Code from a File according to Parameters given as Strings and
- Put it into a Listings Environment}
+\title{Read Code from a File according to Parameters given as Strings and Put
+  it into a Listings Environment}
 \usage{
 code.listing(label = "", caption = "", language = "", path,
   lines = "", tags = "", basePath = NULL, repo = NULL,
-  removeMetaComments = TRUE, numberLines = TRUE)
+  codeBlockCaptions = TRUE, removeMetaComments = TRUE,
+  numberLines = TRUE)
 }
 \arguments{
 \item{label}{the label to use}
@@ -29,12 +30,15 @@ resolved}
 
 \item{repo}{a link to the repository, if any is provided}
 
+\item{codeBlockCaptions}{should we have code block captions?}
+
 \item{removeMetaComments}{should the meta-comments of the programming
 language be removed?}
 
 \item{numberLines}{should the lines be numbered?}
 }
 \description{
-Read snippets of code from a file, put it into a code environment.
-If a github code repository is specified, create a source code link.
+Read snippets of code from a file, put it into a code
+  environment. If a github code repository is specified, create a source code
+  link.
 }

@@ -35,12 +35,17 @@ preprocess.repo <- function(text, metadata) {
     .code.load.wrap,
     basePath=path
   );
+  
+  codeBlockCaptions <- identical(metadata$codeBlockCaptions, "true");
+  logger("Code block captions set to ", codeBlockCaptions, ".");
   text <- preprocess.command(
     preprocess.command.regexp("repo.listing", 6L),
     text,
     .code.listing.wrap,
     basePath=path,
-    repo=repository);
+    repo=repository,
+    codeBlockCaptions=codeBlockCaptions
+    );
   unlink(path, recursive = TRUE);
 
   return(text);

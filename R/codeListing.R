@@ -1,7 +1,8 @@
-#' @title Read Code from a File according to Parameters given as Strings and
-#'  Put it into a Listings Environment
-#' @description Read snippets of code from a file, put it into a code environment.
-#' If a github code repository is specified, create a source code link.
+#' @title Read Code from a File according to Parameters given as Strings and Put
+#'   it into a Listings Environment
+#' @description Read snippets of code from a file, put it into a code
+#'   environment. If a github code repository is specified, create a source code
+#'   link.
 #' @param label the label to use
 #' @param caption the caption to put
 #' @param language the programming language
@@ -13,6 +14,7 @@
 #' @param basePath the base path against which the \code{path} should be
 #'   resolved
 #' @param repo a link to the repository, if any is provided
+#' @param codeBlockCaptions should we have code block captions?
 #' @param removeMetaComments should the meta-comments of the programming
 #'   language be removed?
 #' @param numberLines should the lines be numbered?
@@ -30,6 +32,7 @@ code.listing <- function(
                       lines="", tags="",
                       basePath=NULL,
                       repo=NULL,
+                      codeBlockCaptions=TRUE,
                       removeMetaComments=TRUE,
                       numberLines=TRUE) {
   
@@ -134,14 +137,25 @@ code.listing <- function(
     res <- paste(res, " .numberLines", sep="", collapse="");
   }
   
-  res <- paste(res, " caption=\"",
-               caption, "\"}\n", code, "\n```\n",
+  # put the captions into the right place
+  if(isTRUE(codeBlockCaptions)) {
+    res <- paste("Listing: ",
+                 caption,
+                 "\n\n",
+                 res,
+                 sep="", collapse="");
+  } else {
+    res <- paste(res, " caption=\"",
+                 caption, "\"",
+                 sep="", collapse="");
+  }
+  res <- paste(res, "}\n", code, "\n```\n",
                sep="", collapse="");
   res <- force(res);
   return(res);
 }
 
 # the internal wrapper
-.code.listing.wrap <- function(vec, basePath=NULL, repo=NULL) {
-  code.listing(vec[1L], vec[2L], vec[3L], vec[4L], vec[5L], vec[6L], basePath, repo);
+.code.listing.wrap <- function(vec, basePath=NULL, repo=NULL, codeBlockCaptions=TRUE) {
+  code.listing(vec[1L], vec[2L], vec[3L], vec[4L], vec[5L], vec[6L], basePath, repo, codeBlockCaptions);
 }
