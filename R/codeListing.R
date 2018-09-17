@@ -149,7 +149,7 @@ code.listing <- function(
                  caption, "\"",
                  sep="", collapse="");
   }
-  res <- paste(res, "}\n", code, "\n```\n",
+  res <- paste("\n\n", res, "}\n", code, "\n```\n",
                sep="", collapse="");
   res <- force(res);
   return(res);
