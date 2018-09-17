@@ -15,6 +15,7 @@
 #' @param repo a link to the repository, if any is provided
 #' @param removeMetaComments should the meta-comments of the programming
 #'   language be removed?
+#' @param numberLines should the lines be numbered?
 #' @export code.listing
 #' @include logger.R
 #' @include codeLoad.R
@@ -29,7 +30,8 @@ code.listing <- function(
                       lines="", tags="",
                       basePath=NULL,
                       repo=NULL,
-                      removeMetaComments=TRUE) {
+                      removeMetaComments=TRUE,
+                      numberLines=TRUE) {
   
   # load the code
   code <- code.load(path, lines, tags, basePath);
@@ -73,7 +75,7 @@ code.listing <- function(
             code <- unlist(strsplit(code, "\n", fixed=TRUE)[[1L]]);
             code <- force(code);
             code <- .remove.trailing.spaces(code, path);
-            code <- force(code);
+            code <- force(code);numberLines
           }
         }
       }
@@ -105,7 +107,7 @@ code.listing <- function(
         }
         repo <- paste(repo, path, sep="", collapse="");
         # add reference to actual file on github
-        caption <- paste(caption, " [src](", repo, ")",
+        caption <- paste(caption, " ([src](", repo, "))",
                          sep="", collapse="");
       }
     } else {
@@ -128,6 +130,10 @@ code.listing <- function(
   if(!is.null(language)) {
     res <- paste(res, " .", language, sep="", collapse="");
   }
+  if(isTRUE(numberLines)) {
+    res <- paste(res, " .numberLines", sep="", collapse="");
+  }
+  
   res <- paste(res, " caption=\"",
                caption, "\"}\n", code, "\n```\n",
                sep="", collapse="");

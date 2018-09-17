@@ -7,7 +7,7 @@
 \usage{
 code.listing(label = "", caption = "", language = "", path,
   lines = "", tags = "", basePath = NULL, repo = NULL,
-  removeMetaComments = TRUE)
+  removeMetaComments = TRUE, numberLines = TRUE)
 }
 \arguments{
 \item{label}{the label to use}
@@ -31,6 +31,8 @@ resolved}
 
 \item{removeMetaComments}{should the meta-comments of the programming
 language be removed?}
+
+\item{numberLines}{should the lines be numbered?}
 }
 \description{
 Read snippets of code from a file, put it into a code environment.

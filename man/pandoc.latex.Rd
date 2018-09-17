@@ -9,7 +9,7 @@ pandoc.latex(sourceFile, destName = sub(pattern = "\\\\..*", replacement
   format.in = "markdown", standalone = TRUE, tabstops = 2L,
   toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
   bibliography = TRUE, topLevelDivision = "chapter",
-  numberSections = TRUE, metadata = NULL, useListings = TRUE)
+  numberSections = TRUE, metadata = NULL, useListings = FALSE)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}

@@ -34,7 +34,7 @@ pandoc.latex <- function(sourceFile,
                          topLevelDivision="chapter",
                          numberSections=TRUE,
                          metadata=NULL,
-                         useListings=TRUE) {
+                         useListings=FALSE) {
   logger("Now building a pdf output via LaTeX.");
 
   sourceFile <- check.file(sourceFile);
