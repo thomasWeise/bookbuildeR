@@ -63,6 +63,7 @@ pandoc.invoke <- function(sourceFile,
                        "line_blocks",
                        "inline_code_attributes",
                        "latex_macros",
+                       "implicit_figures",
                        sep="+", collapse="+");
   }
   args <- c(paste("--from=", format.in, sep="", collapse=""),
