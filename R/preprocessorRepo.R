@@ -36,8 +36,11 @@ preprocess.repo <- function(text, metadata) {
     basePath=path
   );
   
-  codeBlockCaptions <- identical(metadata$codeBlockCaptions, "true");
-  logger("Code block captions set to ", codeBlockCaptions, ".");
+  codeBlockCaptions <- (isTRUE(metadata$codeBlockCaptions) ||
+                        identical(metadata$codeBlockCaptions, "true"));
+  logger("Code block captions value '",
+         metadata$codeBlockCaptions,
+        "' lets to ", codeBlockCaptions, ".");
   text <- preprocess.command(
     preprocess.command.regexp("repo.listing", 6L),
     text,
