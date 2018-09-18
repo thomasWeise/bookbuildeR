@@ -46,7 +46,7 @@ meta.repository <- function() {
 }
 
 # make sure that we always return the same time
-.now <- strftime(Sys.time(), format="%F %T");
+.now <- strftime(Sys.time(), format="%F %T UTC%z");
 .date <- strsplit(.now, " ", TRUE)[[1L]][1L];
 
 #' @title Get the Current Date and Time
