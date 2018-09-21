@@ -40,7 +40,8 @@
 #' @include codeLoad.R
 #' @importFrom utilizeR is.non.empty.string is.non.empty.vector
 .load.file <- function(relativeFile, currentDir, rootDir, .surroundByNewlines,
-                       .regexp.lf, .regexp.rp, .regexp.lc) {
+                       .regexp.lf, .regexp.rp, .regexp.lc,
+                       .regexp.rs) {
   logger("Beginning to load file '",
           relativeFile, "' as relative path to '",
           currentDir, "'.");
@@ -104,12 +105,19 @@
   text <- preprocess.command(.regexp.lf, text,
                     .load.file, currentDir=sourceDir, rootDir=rootDir,
                     .surroundByNewlines=TRUE, .regexp.lf=.regexp.lf,
-                    .regexp.rp=.regexp.rp, .regexp.lc=.regexp.lc);
+                    .regexp.rp=.regexp.rp, .regexp.lc=.regexp.lc,
+                    .regexp.rs=.regexp.rs);
   text <- force(text);
 
   # recursively apply code.load
   text <- preprocess.command(.regexp.lc, text,
                              .code.load.wrap,
+                             basePath=sourceDir);
+  text <- force(text);
+  
+  # recursively apply r.source
+  text <- preprocess.command(.regexp.rs, text,
+                             r.source,
                              basePath=sourceDir);
   text <- force(text);
 
@@ -155,7 +163,8 @@ preprocess.input <- function(sourceFile) {
                      .regexp.lf=preprocess.command.regexp("relative.input", 1L,
                                                           stripWhiteSpace = TRUE),
                      .regexp.rp=preprocess.command.regexp("relative.path", 1L),
-                     .regexp.lc=preprocess.command.regexp("relative.code", 3L));
+                     .regexp.lc=preprocess.command.regexp("relative.code", 3L),
+                     .regexp.rs=preprocess.command.regexp("relative.r", 1L));
   text <- force(text);
 
   if(is.non.empty.string(text)) {

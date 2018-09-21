@@ -43,6 +43,8 @@ You can now use the following commands in your markdown:
 - `\repo.listing{label}{caption}{language}{path}{lines}{tags}` puts the result of `\repo.code{path}{lines}{tags}` into a markdown/pandoc-crossref compatible listing environment that can be referenced via `[@label]` (where `label` should start with `lst:`), has caption `caption`, and is formatted for programming language `language`. Furthermore, this method also automatically removes meta-comments, such as `/** ... */` in Java or `#' ..` in R, a feature currently only implemented for Java and R. If the source code repository resides on GitHub, this method will also append a link of the form `(src)` to the caption which goes to the file in the repository.
 - `\repo.name` is replaced with  the source code repository name provided as `codeRepo` in the YAML metadata, without a trailing `.git`, if any.
 - `\repo.commit` is replaced with the commit of the source code repository that was downloaded an during the book building procedure.
+- `\direct.r{rcode}` directly executes a piece `rcode` of `R` code. If the code writes any output via, e.g., `cat(..)`, then this output is pasted into the file. If the code does not produce such output, the its return value is transformed to a string and pasted.
+- `\relative.r{path}` similar to `\direct.r`, but instead execute the file refered by `path`, which is relative to the current directory.
 
 The following commands will only work within Travis.CI builds and (intentionally) crash otherwise:
 

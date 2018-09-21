@@ -88,7 +88,7 @@ test_that("Test preprocessor.input recursive same dir with relative path", {
 })
 
 
-test_that("Test preprocessor.input recursive other dir", {
+test_that("Test preprocessor.input recursive other dir and relative code", {
   maindir <- tempfile();
   dir.create(maindir, showWarnings = FALSE, recursive=TRUE);
   
@@ -98,8 +98,15 @@ test_that("Test preprocessor.input recursive other dir", {
   sub.dir <- tempfile(tmpdir=root.dir);
   dir.create(sub.dir);
   
+  code.file <- tempfile(tmpdir=sub.dir);
+  con       <- file(code.file, "wt");
+  writeLines(text="7-3", con=con);
+  close(con);
+  
   same.file <- tempfile(tmpdir=sub.dir);
-  same.text <- c("x", "y", "z");
+  same.text <- c("x", "y",
+                 paste("\\relative.r{", basename(code.file), "}", sep="", collapse=""),
+                 "z");
   con       <- file(same.file, "wt");
   writeLines(text=same.text, con=con);
   close(con);
@@ -115,7 +122,7 @@ test_that("Test preprocessor.input recursive other dir", {
   close(con);
   
   text <- preprocess.input(root.file);
-  expect_identical(text, "a\nb\n\n\nx\ny\nz\n\n\nc");
+  expect_identical(text, "a\nb\n\n\nx\ny\n4\nz\n\n\nc");
   
   unlink(maindir, recursive=TRUE);
   expect_false(dir.exists(maindir));

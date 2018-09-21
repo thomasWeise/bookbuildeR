@@ -45,4 +45,6 @@ Collate:
     'preprocessorPlain.R'
     'preprocessorInput.R'
     'preprocessor.R'
+    'rexec.R'
+    'rsource.R'
 RoxygenNote: 6.1.0

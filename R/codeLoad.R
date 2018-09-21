@@ -15,7 +15,7 @@
 code.load <- function(path, lines="", tags="", basePath=NULL) {
   if(!is.null(basePath)) {
     path2 <- check.file(file.path(basePath, path));
-    logger("Resolved path '", path,
+    logger("resolved code path '", path,
            "' versus path '", basePath,
            "' for code loading, got '", path2, "'.");
     path <- path2;
@@ -40,12 +40,12 @@ code.load <- function(path, lines="", tags="", basePath=NULL) {
         if(is.integer(res)) {
           lines <- res;
         } else {
-          exit("Lines expression '", old,
+          exit("lines expression '", old,
                "' cannot be translated to an integer vector for file '",
                path, "'.");
         }
       } else {
-        exit("Lines expression '", old,
+        exit("lines expression '", old,
              "' cannot be translated to an vector for file '",
              path, "'.");
       }
@@ -64,7 +64,7 @@ code.load <- function(path, lines="", tags="", basePath=NULL) {
       if(is.non.empty.vector(res)) {
         tags <- res;
       } else {
-        exit("Tags expression '", old,
+        exit("tags expression '", old,
              "' cannot be translated to an vector for file '",
              path, "'.");
       }

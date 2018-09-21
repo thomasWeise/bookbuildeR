@@ -76,7 +76,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
   handle <- file(path, "rt");
   text <- readLines(handle);
   close(handle);
-  logger("finished text from file '", path, "', now processing it.");
+  logger("finished reading text from file '", path, "', now processing it.");
 
   # pick the selected lines
   if((!(is.null(lines))) && (length(lines) > 0L)) {

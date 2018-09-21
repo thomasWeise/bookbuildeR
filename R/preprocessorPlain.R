@@ -21,7 +21,14 @@ preprocess.plain <- function(text) {
     text <- preprocess.regexp(regex=command$regexp,
                               func=command$func,
                               text=text);
+    text <- force(text);
   }
+  
+  # implement the '\direct.r' command
+  text <- preprocess.command(
+    preprocess.command.regexp("direct.r", 1L, stripWhiteSpace=TRUE),
+    text, r.exec);
+  text <- force(text);
 
   return(text);
 }
