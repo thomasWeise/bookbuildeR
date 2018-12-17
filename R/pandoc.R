@@ -70,8 +70,7 @@ pandoc.invoke <- function(sourceFile,
   args <- c(paste("--from=", format.in, sep="", collapse=""),
             paste("--write=", format.out, sep="", collapse=""),
             paste("--output=", destFile, sep="", collapse=""),
-            "--fail-if-warnings",
-            "--verbose");
+            "--fail-if-warnings");
 
   if(is.not.na.or.null(tabstops)) { # add some standard argumens
     args <- c(args, paste("--tab-stop=", tabstops, sep="", collapse=""));
