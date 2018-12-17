@@ -70,7 +70,8 @@ pandoc.invoke <- function(sourceFile,
   args <- c(paste("--from=", format.in, sep="", collapse=""),
             paste("--write=", format.out, sep="", collapse=""),
             paste("--output=", destFile, sep="", collapse=""),
-            "--fail-if-warnings");
+            "--fail-if-warnings",
+            "--verbose");
 
   if(is.not.na.or.null(tabstops)) { # add some standard argumens
     args <- c(args, paste("--tab-stop=", tabstops, sep="", collapse=""));
@@ -85,7 +86,7 @@ pandoc.invoke <- function(sourceFile,
   if(isTRUE(numberSections)) {
     args <- c(args, "--number-sections");
   }
-  
+
   # should we print the table of contents?
   if(isTRUE(toc.print)) {
     args <- c(args, "--table-of-contents");
