@@ -1,14 +1,14 @@
 Package: bookbuildeR
 Type: Package
 Title: An R Package for Building Books or Documents using pandoc 
-Version: 0.8.1
+Version: 0.8.2
 Author: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Maintainer: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Description: With this package, we provide some R utilities for using pandoc.
-    We basically implement a complete tool chain to create tool chain for building electronic books
+    We basically implement a complete tool chain for building electronic books
     by using R, pandoc, and markdown.
-    The tool chain allows for including source code examples, either from local files or linked to a
-    git repository, as well as mathematic equations or figures.
+    The tool chain allows for including source code examples, either from local
+    files or linked to a git repository, as well as mathematic equations or figures.
     Book projects can be hierarchically structured files.
 License: GPL-3
 Encoding: UTF-8
@@ -17,6 +17,7 @@ BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
 Imports: utilizeR (>= 0.8.5),
          ore (>= 1.6.1),
          utils (>= 3.4.4),
+         R.utils (>= 2.7.0),
          yaml (>= 2.1.19)
 Suggests: testthat (>= 2.0.0),
           devtools (>= 1.13.5),

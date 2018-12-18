@@ -1,3 +1,21 @@
+# Fix the svg/svgz problem of pandoc up to at least pandoc 2.5 (27 November 2018)
+# The issue is reported and confirmed at http://github.com/jgm/pandoc/issues/5163
+# The basic problem is that when converting markdown+svgz to EPUB, the svgz
+# images are simply renamed to svg, but not decompressed (svgz is gzipped svg).
+# Here we try to patch this in our path relativization by unpacking the images
+# right where they are.
+# This is only a temporary solution and will be removed once the issue is fixed.
+# Because of this, we require R.utils, which otherwise would not be necessary.
+#' @importFrom R.utils gunzip
+.resolve.svgz <- function(path) {
+  if(endsWith(path, ".svgz")) {
+    dest <- substr(path, 1L, (nchar(path)-1L));
+    gunzip(filename=path, destname=dest, skip=TRUE, remove=FALSE);
+    return(check.file(dest));
+  }
+  return(path);
+}
+
 # resolve a path
 #' @importFrom utilizeR path.relativize is.non.empty.vector is.non.empty.string
 #' @include logger.R
@@ -26,6 +44,7 @@
   path <- file.path(currentDir, path);
   path <- force(path);
   path <- check.file(path);
+  path <- .resolve.svgz(path); # http://github.com/jgm/pandoc/issues/5163
   path <- force(path);
 
   path <- path.relativize(path, rootDir);
@@ -114,7 +133,7 @@
                              .code.load.wrap,
                              basePath=sourceDir);
   text <- force(text);
-  
+
   # recursively apply r.source
   text <- preprocess.command(.regexp.rs, text,
                              r.source,
