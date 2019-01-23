@@ -5,6 +5,7 @@
 .commands <- list(
   list(regexp=ore.escape("\\meta.time"),       func=function(match) meta.time()),
   list(regexp=ore.escape("\\meta.date"),       func=function(match) meta.date()),
+  list(regexp=ore.escape("\\meta.year"),       func=function(match) meta.year()),
   list(regexp=ore.escape("\\meta.repository"), func=function(match) meta.repository()),
   list(regexp=ore.escape("\\meta.commit"),     func=function(match) meta.commit())
 );

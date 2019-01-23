@@ -48,6 +48,7 @@ meta.repository <- function() {
 # make sure that we always return the same time
 .now <- strftime(Sys.time(), format="%F %T UTC%z");
 .date <- strsplit(.now, " ", TRUE)[[1L]][1L];
+.year <- strsplit(.now, "-", TRUE)[[1L]][1L];
 
 #' @title Get the Current Date and Time
 #' @description Get the current date and time as string.
@@ -63,4 +64,12 @@ meta.time <- function() {
 #' @export meta.date
 meta.date <- function() {
   return(.date);
+}
+
+#' @title Get the Current Year
+#' @description Get the current year as string.
+#' @return the current year as string
+#' @export meta.year
+meta.year <- function() {
+  return(.year);
 }

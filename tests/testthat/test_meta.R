@@ -17,6 +17,15 @@ test_that("Test meta.date", {
 })
 
 
+test_that("Test meta.year", {
+  t <- meta.year();
+  Sys.sleep(16L);
+  expect_identical(t, meta.year());
+  expect_true(startsWith(meta.date(), meta.year()));
+  expect_true(is.finite(as.integer(meta.year())));
+})
+
+
 test_that("Test meta.repo", {
   v <- Sys.getenv("TRAVIS", unset=NA);
   if((!(is.na(v))) && (v == "true")) {
