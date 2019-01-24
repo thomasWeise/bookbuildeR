@@ -9,6 +9,7 @@
 #' @export r.exec
 #' @importFrom utilizeR is.non.empty.string
 #' @include logger.R
+#' @importFrom utils capture.output
 r.exec <- function(code) {
   code <- paste(code, sep="\n", collapse="\n");
   code <- force(code);
