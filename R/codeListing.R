@@ -87,9 +87,9 @@ code.listing <- function(
       
       # should we remove unnecessary stuff and annotations?
       if(removeUnnecessary) {
+        n.old <- nchar(code);
+        
         if(language == "java") {
-          n.old <- nchar(code);
-          
           code.split <- unlist(strsplit(code, "\n", fixed=TRUE));
           code.split.trim <- trimws(code.split);
           for(remove in c("@Override", "@FunctionalInterface")) {
@@ -97,13 +97,13 @@ code.listing <- function(
             code.split <- code.split[keep];
             code.split.trim <- code.split.trim[keep];
           }
-          rm(keep); rm(code.split);
-          code <- paste(code.split.trim, sep="\n", collapse="\n");
+          rm(keep); rm(code.split.trim);
+          code <- paste(code.split, sep="\n", collapse="\n");
           rm(code.split);
+          
+          code <- gsub("\nfinal ", "\n", code, fixed=TRUE);
+          code <- gsub(" final ", " ", code, fixed=TRUE);
         }
-        
-        code <- gsub("\nfinal ", "\n", code, fixed=TRUE);
-        code <- gsub(" final ", " ", code, fixed=TRUE);
         
         if(nchar(code) < n.old) {
           # if the unnecessary stuff was removed, there might be longer trailing space sequences
