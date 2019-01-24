@@ -17,6 +17,7 @@
 #' @param codeBlockCaptions should we have code block captions?
 #' @param removeMetaComments should the meta-comments of the programming
 #'   language be removed?
+#' @param removeUnnecessary should we remove all annotations?
 #' @param numberLines should the lines be numbered?
 #' @export code.listing
 #' @include logger.R
@@ -34,6 +35,7 @@ code.listing <- function(
                       repo=NULL,
                       codeBlockCaptions=TRUE,
                       removeMetaComments=TRUE,
+                      removeUnnecessary=TRUE,
                       numberLines=TRUE) {
   
   # load the code
@@ -78,8 +80,38 @@ code.listing <- function(
             code <- unlist(strsplit(code, "\n", fixed=TRUE)[[1L]]);
             code <- force(code);
             code <- .remove.trailing.spaces(code, path);
-            code <- force(code);numberLines
+            code <- force(code);
           }
+        }
+      }
+      
+      # should we remove unnecessary stuff and annotations?
+      if(removeUnnecessary) {
+        if(language == "java") {
+          n.old <- nchar(code);
+          
+          code.split <- unlist(strsplit(code, "\n", fixed=TRUE));
+          code.split.trim <- trimws(code.split);
+          for(remove in c("@Override", "@FunctionalInterface")) {
+            keep <- (code.split.trim != remove);
+            code.split <- code.split[keep];
+            code.split.trim <- code.split.trim[keep];
+          }
+          rm(keep); rm(code.split);
+          code <- paste(code.split.trim, sep="\n", collapse="\n");
+          rm(code.split);
+        }
+        
+        code <- gsub("\nfinal ", "\n", code, fixed=TRUE);
+        code <- gsub(" final ", " ", code, fixed=TRUE);
+        
+        if(nchar(code) < n.old) {
+          # if the unnecessary stuff was removed, there might be longer trailing space sequences
+          logger("Removed some unnecessary stuff from code in file '", path, "'.");
+          code <- unlist(strsplit(code, "\n", fixed=TRUE)[[1L]]);
+          code <- force(code);
+          code <- .remove.trailing.spaces(code, path);
+          code <- force(code);
         }
       }
     } else {

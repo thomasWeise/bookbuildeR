@@ -8,7 +8,7 @@
 code.listing(label = "", caption = "", language = "", path,
   lines = "", tags = "", basePath = NULL, repo = NULL,
   codeBlockCaptions = TRUE, removeMetaComments = TRUE,
-  numberLines = TRUE)
+  removeUnnecessary = TRUE, numberLines = TRUE)
 }
 \arguments{
 \item{label}{the label to use}
@@ -34,6 +34,8 @@ resolved}
 
 \item{removeMetaComments}{should the meta-comments of the programming
 language be removed?}
+
+\item{removeUnnecessary}{should we remove all annotations?}
 
 \item{numberLines}{should the lines be numbered?}
 }
