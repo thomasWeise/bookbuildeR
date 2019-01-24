@@ -103,6 +103,7 @@ code.listing <- function(
           
           code <- gsub("\nfinal ", "\n", code, fixed=TRUE);
           code <- gsub(" final ", " ", code, fixed=TRUE);
+          code <- gsub("(final ", "(", code, fixed=TRUE);
         }
         
         if(nchar(code) < n.old) {
