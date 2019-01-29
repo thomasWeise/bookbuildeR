@@ -91,13 +91,28 @@ code.listing <- function(
         
         if(language == "java") {
           code.split <- unlist(strsplit(code, "\n", fixed=TRUE));
+          if(length(code.split) <= 0L) {
+            exit("Error in file '", path, "', no lines found.");
+          }
           code.split.trim <- trimws(code.split);
           for(remove in c("@Override", "@FunctionalInterface")) {
             keep <- (code.split.trim != remove);
             code.split <- code.split[keep];
+            if(length(code.split) <= 0L) {
+              exit("Error in file '", path, "', no lines remain after removing annotations.");
+            }
             code.split.trim <- code.split.trim[keep];
           }
-          rm(keep); rm(code.split.trim);
+          rm(keep);
+          if(startsWith(code.split.trim[1L], "package ") &&
+             endsWith(code.split.trim[1L], ";")) {
+            if(length(code.split) <= 1L) {
+              exit("Error in file '", path, "', no lines remain after removing package declaration.");
+            }
+            code.split <- code.split[2L:length(code.split)];
+          }
+          
+          rm(code.split.trim);
           code <- paste(code.split, sep="\n", collapse="\n");
           rm(code.split);
           
