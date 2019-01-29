@@ -27,7 +27,7 @@ test_that("Test code.listing plain, with meta-comment removal and normal caption
                          codeBlockCaptions=FALSE,
                          removeMetaComments=TRUE);
   expect_equal(text,
-               "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla.\"}\npackage a;\nclass x {\n}\n```\n");
+               "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla.\"}\nclass x {\n}\n```\n");
   unlink(file);
   expect_false(file.exists(file));
 })
@@ -40,7 +40,8 @@ test_that("Test code.listing plain, no meta comment removal and normal captions"
                          file, NULL,
                          NULL, NULL, NULL,
                          codeBlockCaptions=FALSE,
-                         removeMetaComments=FALSE);
+                         removeMetaComments=FALSE,
+                         removeUnnecessary=FALSE);
   expect_equal(text,
                "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla.\"}\n  package a;\n/** aa\n * x\n */\n  class x {\n  }\n```\n");
   unlink(file);
@@ -60,15 +61,11 @@ test_that("Test code.listing with repo, with meta-comment removal and normal cap
                paste(
                "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla. ([src](http://www.github.com/thomasWeise/bla/blob/master",
                file,
-               "))\"}\npackage a;\nclass x {\n}\n```\n",
+               "))\"}\nclass x {\n}\n```\n",
                sep="", collapse=""));
   unlink(file);
   expect_false(file.exists(file));
 })
-
-
-
-
 
 
 
@@ -83,7 +80,7 @@ test_that("Test code.listing plain, with meta-comment removal and codeblock capt
                        codeBlockCaptions=TRUE,
                        removeMetaComments=TRUE);
   expect_equal(text,
-               "\n\nListing: blabla blabla.\n\n```{#lst.ref .java .numberLines}\npackage a;\nclass x {\n}\n```\n");
+               "\n\nListing: blabla blabla.\n\n```{#lst.ref .java .numberLines}\nclass x {\n}\n```\n");
   unlink(file);
   expect_false(file.exists(file));
 })
@@ -96,7 +93,8 @@ test_that("Test code.listing plain, no meta comment removal and codeblock captio
                        file, NULL,
                        NULL, NULL, NULL,
                        codeBlockCaptions=TRUE,
-                       removeMetaComments=FALSE);
+                       removeMetaComments=FALSE,
+                       removeUnnecessary=FALSE);
   expect_equal(text,
                "\n\nListing: blabla blabla.\n\n```{#lst.ref .java .numberLines}\n  package a;\n/** aa\n * x\n */\n  class x {\n  }\n```\n");
   unlink(file);
@@ -118,7 +116,7 @@ test_that("Test code.listing with repo, with meta-comment removal and codeblock 
                  "blabla blabla. ([src](http://www.github.com/thomasWeise/bla/blob/master",
                  file,
                  "))\n\n",
-                 "```{#lst.ref .java .numberLines}\npackage a;\nclass x {\n}\n```\n",
+                 "```{#lst.ref .java .numberLines}\nclass x {\n}\n```\n",
                  sep="", collapse=""));
   unlink(file);
   expect_false(file.exists(file));
