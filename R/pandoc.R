@@ -65,6 +65,7 @@ pandoc.invoke <- function(sourceFile,
                        "latex_macros",
                        "implicit_figures",
                        "pipe_tables",
+                       "raw_attribute",
                        sep="+", collapse="+");
   }
   args <- c(paste("--from=", format.in, sep="", collapse=""),
