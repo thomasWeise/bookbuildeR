@@ -45,7 +45,7 @@ metadata.get <- function(text) {
   # take care of raw attributes
   s <- "REPLACED";
   text <- trimws(ore.subst(ore(
-                paste(ore.escape("```"), "\\s*(.*?\\n)*", ore.escape("```"),
+                paste(ore.escape("```{="), ".*", ore.escape("}"), "\\s*(.*?\\n)*", ore.escape("```"),
                       sep="", collapse=""), options="m"),
                 function(found) s,
                 text,
