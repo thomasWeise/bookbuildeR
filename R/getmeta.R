@@ -41,6 +41,19 @@ metadata.get <- function(text) {
   if(nchar(text) <= 0L) {
     exit("Empty metadata after multi-line merging?");
   }
+  
+  # take care of raw attributes
+  s <- "REPLACED";
+  text <- trimws(ore.subst(ore(
+                paste(ore.escape("```"), "\\s*(.*?\\n)*", ore.escape("```"),
+                      sep="", collapse=""), options="m"),
+                function(found) s,
+                text,
+                all=TRUE));
+  
+  if((nchar(text) <= 0L) || (text == s)) {
+    exit("Empty metadata after raw attribute removal?");
+  }
 
   tryCatch({
     yaml <- read_yaml(text=text);
