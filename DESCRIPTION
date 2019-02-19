@@ -37,6 +37,7 @@ Collate:
     'preprocessorCommand.R'
     'getmeta.R'
     'git.R'
+    'html.R'
     'latex.R'
     'main.R'
     'meta.R'

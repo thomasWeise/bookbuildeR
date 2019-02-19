@@ -1,4 +1,4 @@
-#' @title Invoke Pandoc to Produce an Electronic Book
+#' @title Invoke Pandoc to Produce a \code{HTML-5} File
 #' @description Invoke Pandoc with the provided parameters.
 #' @param sourceFile the path to the source file
 #' @param destDir the destination directory
@@ -12,15 +12,14 @@
 #' @param crossref use pandoc-crossref?
 #' @param bibliography do we have a bibliography?
 #' @param numberSections should sections be numbered?
-#' @param mathToGraphic should math be converted to graphics?
 #' @param metadata the metadata
 #' @return the canonical path to the destination file
-#' @export pandoc.epub
+#' @export pandoc.html
 #' @include pandoc.R
 #' @include logger.R
 #' @include templates.R
 #' @importFrom utilizeR is.non.empty.list is.non.empty.list
-pandoc.epub<- function(sourceFile,
+pandoc.html<- function(sourceFile,
                        destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                        destDir=dirname(sourceFile),
                        format.in="markdown",
@@ -31,19 +30,18 @@ pandoc.epub<- function(sourceFile,
                        crossref=TRUE,
                        bibliography=TRUE,
                        numberSections=TRUE,
-                       mathToGraphic=TRUE,
                        metadata=NULL) {
-  logger("Now building EPUB.");
+  logger("Now building HTML-5.");
 
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
-                 destFileName=paste(destName, ".epub", sep="", collapse=""),
+                 destFileName=paste(destName, ".html", sep="", collapse=""),
                  destDir=destDir,
                  format.in=format.in,
-                 format.out="epub3",
+                 format.out="html5",
                  standalone=standalone,
                  tabstops=tabstops,
                  toc.print=toc.print,
@@ -57,10 +55,10 @@ pandoc.epub<- function(sourceFile,
   # see if a template has been specified
   if(is.non.empty.list(metadata)) {
     # ok, we have metadata
-    template <- metadata$template.epub;
+    template <- metadata$template.html;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      logger("Found EPUB template specification in metadata for template '",
+      logger("Found HTML template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -68,30 +66,22 @@ pandoc.epub<- function(sourceFile,
         params$template <- template;
       }
     } else {
-      logger("No EPUB template specified in metadata.");
+      logger("No HTML template specified in metadata.");
     }
   }
 
   len <- length(params);
-
-  len <- len + 1L;
-  params[[len]] <- "--ascii";
 
   if(isTRUE(standalone)) {
     len <- len + 1L;
     params[[len]] <- "--self-contained";
   }
 
-  if(isTRUE(mathToGraphic)) {
-    len <- len + 1L;
-    params[[len]] <-"--filter latex-formulae-filter";
-  }
+  len <- len + 1L;
+  params[[len]] <- "--katex";
 
-#  logger("Invoking pandoc.invoke with parameters '",
-#          paste(params, sep=", ", collapse=", "),
-#          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
-  logger("Finished building a EPUB output '", destFile, "'.");
+  logger("Finished building a html5 output '", destFile, "'.");
   return(destFile);
 }

@@ -1,8 +1,8 @@
 # An R Package for Building Books or Documents using `pandoc`
 
-[<img alt="Travis CI Build Status" src="https://img.shields.io/travis/thomasWeise/bookbuildeR/master.svg" height="20"/>](https://travis-ci.org/thomasWeise/bookbuildeR/)
+[<img alt="Travis CI Build Status" src="http://img.shields.io/travis/thomasWeise/bookbuildeR/master.svg" height="20"/>](http://travis-ci.org/thomasWeise/bookbuildeR/)
 
-# Introduction
+# 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
 This package aims at making it easier to dynamically write books online.
@@ -28,7 +28,7 @@ This package, together with a complete installation of [pandoc](http://pandoc.or
 Thus, you can use it as tool for all your book-writing purposes.
 You may even integrate it with [Travis CI](http;//travis-ci.org) and [GitHub](http://www.github.com), as described [here](http://iao.hfuu.edu.cn/157) to achieve a fully-atumated book writing and publishing tool chain.
 
-# Provided Commands
+# 2. Provided Commands
 
 You can now use the following commands in your markdown:
 
@@ -51,12 +51,92 @@ The following commands will only work within Travis.CI builds and (intentionally
 - `\meta.repository` get the repository in format `owner/repository`
 - `\meta.commit` get the commit id
 
-## License
+## 3. License
 
 The copyright holder of this package is Prof. Dr. Thomas Weise (see Contact).
 The package is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
+This package also contains third-party components which are under the following licenses;
+
+### 3.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
+
+We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template) by Pascal Wgler and John MacFarlane, which is under the [BSD 3 license](http://github.com/Wandmalfarbe/pandoc-latex-template/blob/master/LICENSE). For this, the following terms hold:
+
+    % Copyright (c) 2018, Pascal Wagler;  
+    % Copyright (c) 2014--2018, John MacFarlane
+    % 
+    % All rights reserved.
+    % 
+    % Redistribution and use in source and binary forms, with or without 
+    % modification, are permitted provided that the following conditions 
+    % are met:
+    % 
+    % - Redistributions of source code must retain the above copyright 
+    % notice, this list of conditions and the following disclaimer.
+    % 
+    % - Redistributions in binary form must reproduce the above copyright 
+    % notice, this list of conditions and the following disclaimer in the 
+    % documentation and/or other materials provided with the distribution.
+    % 
+    % - Neither the name of John MacFarlane nor the names of other 
+    % contributors may be used to endorse or promote products derived 
+    % from this software without specific prior written permission.
+    % 
+    % THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+    % "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+    % LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+    % FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+    % COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+    % INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+    % BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+    % LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+    % CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+    % LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+    % ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+    % POSSIBILITY OF SUCH DAMAGE.
+    %%
     
-## Contact
+    %%
+    % For usage information and examples visit the GitHub page of this template:
+    % http://github.com/Wandmalfarbe/pandoc-latex-template
+    %%
+    
+###3.2 [tajmone/pandoc-goodies HTML Template](http://github.com/tajmone/pandoc-goodies)
+
+We include the pandoc HTML-5 template from [tajmone/pandoc-goodies](http://github.com/tajmone/pandoc-goodies) by Tristano Ajmone, Sindre Sorhus, and GitHub Inc., which is under the [MIT license](http://raw.githubusercontent.com/tajmone/pandoc-goodies/master/templates/html5/github/LICENSE). For this, the following terms hold:
+
+    MIT License
+    
+    Copyright (c) Tristano Ajmone, 2017 (github.com/tajmone/pandoc-goodies)
+    Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+    Copyright (c) 2017 GitHub Inc.
+    
+    "GitHub Pandoc HTML5 Template" is Copyright (c) Tristano Ajmone, 2017, released
+    under the MIT License (MIT); it contains readaptations of substantial portions
+    of the following third party softwares:
+    
+    (1) "GitHub Markdown CSS", Copyright (c) Sindre Sorhus, MIT License (MIT).
+    (2) "Primer CSS", Copyright (c) 2016 GitHub Inc., MIT License (MIT).
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+
+## 4. Contact
 
 If you have any questions or suggestions, please contact
 [Prof. Dr. Thomas Weise](http://iao.hfuu.edu.cn/team/director) of the

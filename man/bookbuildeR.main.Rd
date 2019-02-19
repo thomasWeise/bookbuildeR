@@ -18,7 +18,7 @@ bookbuildeR.main(sourceFile, format.in = "markdown", destName = "book",
 }
 \value{
 a list where the names are the file types and the keys are the paths
-  to the generated files
+  to the generated files: currently, we generate pdf, epub, and html output.
 }
 \description{
 Invoke the complete bookBuildeR tool chain

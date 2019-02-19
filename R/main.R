@@ -5,11 +5,12 @@
 #' @param destName the base name of the destination file without extension
 #' @param format.in the input format
 #' @return a list where the names are the file types and the keys are the paths
-#'   to the generated files
+#'   to the generated files: currently, we generate pdf, epub, and html output.
 #' @include pandoc.R
 #' @include logger.R
 #' @include latex.R
 #' @include epub.R
+#' @include html.R
 #' @export bookbuildeR.main
 bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
@@ -32,7 +33,7 @@ bookbuildeR.main <- function(sourceFile,
                              destName=basename(tempFile));
   tempFile <- result$path;
   metadata <- result$meta;
-  
+
   logger("Finished building the composed markdown document '",
           tempFile, "'.");
 
@@ -46,7 +47,7 @@ bookbuildeR.main <- function(sourceFile,
   } else {
     logger("According to the metadata, NO bibliography is used.");
   }
-  
+
   pdf <- pandoc.latex(sourceFile=tempFile,
                       destName=destName,
                       destDir=destDir,
@@ -65,7 +66,7 @@ bookbuildeR.main <- function(sourceFile,
   } else {
     logger("Successfully filtered pdf file '",
             pdf,
-            "', it now should be very standard conform.");
+            "', it now should be very standard conform. Now creating EPUB output.");
   }
 
   epub <- pandoc.epub(sourceFile=tempFile,
@@ -75,10 +76,19 @@ bookbuildeR.main <- function(sourceFile,
                       bibliography=bibliography,
                       metadata=metadata);
   logger("Finished building the book in EPUB format, generated file '",
-          epub, "'.");
+          epub, "'., now creating HTML-5 output");
+
+  html <- pandoc.html(sourceFile=tempFile,
+                      destName=destName,
+                      destDir=destDir,
+                      format.in=format.in,
+                      bibliography=bibliography,
+                      metadata=metadata);
+  logger("Finished building the book in HTML format, generated file '",
+         html, "'.");
 
   unlink(tempFile, force=TRUE);
   logger("Finished deleting temporary source '",
           tempFile, "' - we are done.");
-  return(list(pdf=pdf, epub=epub));
+  return(list(pdf=pdf, epub=epub, html=html));
 }
