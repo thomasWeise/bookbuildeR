@@ -1,13 +1,3 @@
-# known templates
-.templates <- list(
-  arabica.latex = "http://raw.githubusercontent.com/qualiacode/arabica/master/controls/arabica.latex",
-  eisvogel.latex = "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex"
-);
-.templates[["eisvogel-article.latex"]] <- "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex";
-
-# the search path
-.path <- unlist(strsplit(x=Sys.getenv(x="PATH"), split=":", fixed=TRUE));
-
 #' @title Find a Template, Load it into the Specified Directory if Necessary
 #' @description Following a heuristic, try to load a template into the given
 #'   directory
@@ -15,9 +5,9 @@
 #' @param template the template
 #' @return the fully qualified path to the template
 #' @include logger.R
-#' @export template.load
 #' @importFrom utils download.file
 #' @importFrom utilizeR is.non.empty.string
+#' @export template.load
 template.load <- function(template, dir=getwd()) {
   dir <- force(dir);
   dir <- check.dir(dir);
@@ -28,38 +18,68 @@ template.load <- function(template, dir=getwd()) {
   template.path <- force(template.path);
   if(file.exists(template.path)) {
     template.path <- normalizePath(template.path, mustWork = FALSE);
-    logger("Template '",
-            template,
-            "' exists as file '",
-            template.path, "'.");
+    logger("Template '", template,
+            "' exists as file '", template.path, "'.");
   } else {
-    # does it exist somewhere in PATH?
+    logger("Template '", template,
+           "' not provided as local file '", template.path,
+           "', now trying sysdata.rda resource with name '", template,
+           "'.");
+
+    # does it exist as resource?
     have.not <- TRUE;
-    for(path in .path) {
-      template.path <- file.path(path, template);
-      template.path <- force(template.path);
-      if(file.exists(template.path)) {
-        template.path <- normalizePath(template.path, mustWork = FALSE);
-        have.not <- FALSE;
-        logger("Discovered local copy of template '",
-                template,
-                "' in PATH as file '",
-                template.path, "'.");
-        break;
+    resource <- template.resources[[template]];
+    if(!(is.null(resource))) {
+      if(!(is.character(resource))) {
+        exit("Corrupted sysdata.rda resource '", resource, "' - is not a character list.");
       }
+      if(length(resource) <= 0L) {
+        exit("Corrupted sysdata.rda resource '", resource, "' - character list is empty.");
+      }
+      template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
+      template.path <- force(template.path);
+      tryCatch({
+        writeLines(text=resource, con=template.path);
+      }, error=function(e) {
+        exit("Error '", e,
+             "' when trying to copy sysdata.rda resource '", template,
+             "' to file '", template.path, "'.");
+      }, warning=function(e) {
+        exit("Warning '", e,
+             "' when trying to copy sysdata.rda resource '", template,
+             "' to file '", template.path, "'.");
+      });
+      logger("Discovered template '",
+             template,
+             "' in sysdata resources '", template,
+             "' and copied it to file '",  template.path, "'.");
+      have.not <- FALSE;
     }
 
     if(have.not) {
+      logger("Template '",
+             template,
+             "' does not exist as sysdata resources '", template,
+             "', now looking checking whether it is a URL we can download.");
+
       # is it a shortcut for a known url?
-      have <- .templates[[template]];
+      have <- template.urls[[template]];
       have <- force(have);
       if(is.non.empty.string(have)) {
+        logger("Template '",
+               template,
+               "' has pre-defined URL '", have,
+               "'.");
         template <- have;
         template <- force(template);
       }
 
       template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
       template.path <- force(template.path);
+      logger("Beginning to download template from '",
+             template,
+             "' to file '",
+             template.path, "'.");
 
       tryCatch({
         download.file(url=template, destfile=template.path);

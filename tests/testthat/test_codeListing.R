@@ -10,6 +10,7 @@ make.file <- function() {
     "/** aa",
     " * x",
     " */",
+    " @SuppressWarnings(\"unchecked\") ",
     "  class x {",
     "  }"
   ), con=handle);
@@ -19,7 +20,7 @@ make.file <- function() {
 
 test_that("Test code.listing plain, with meta-comment removal and normal captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                          "blabla blabla.",
                          "java",
                          file, NULL,
@@ -34,7 +35,7 @@ test_that("Test code.listing plain, with meta-comment removal and normal caption
 
 test_that("Test code.listing plain, no meta comment removal and normal captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                          "blabla blabla.",
                          "java",
                          file, NULL,
@@ -43,14 +44,14 @@ test_that("Test code.listing plain, no meta comment removal and normal captions"
                          removeMetaComments=FALSE,
                          removeUnnecessary=FALSE);
   expect_equal(text,
-               "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla.\"}\n  package a;\n/** aa\n * x\n */\n  class x {\n  }\n```\n");
+               "\n\n```{#lst.ref .java .numberLines caption=\"blabla blabla.\"}\n  package a;\n/** aa\n * x\n */\n @SuppressWarnings(\"unchecked\")\n  class x {\n  }\n```\n");
   unlink(file);
   expect_false(file.exists(file));
 })
 
 test_that("Test code.listing with repo, with meta-comment removal and normal captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                          "blabla blabla.",
                          "java",
                          file, NULL,
@@ -72,7 +73,7 @@ test_that("Test code.listing with repo, with meta-comment removal and normal cap
 
 test_that("Test code.listing plain, with meta-comment removal and codeblock captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                        "blabla blabla.",
                        "java",
                        file, NULL,
@@ -87,7 +88,7 @@ test_that("Test code.listing plain, with meta-comment removal and codeblock capt
 
 test_that("Test code.listing plain, no meta comment removal and codeblock captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                        "blabla blabla.",
                        "java",
                        file, NULL,
@@ -96,14 +97,14 @@ test_that("Test code.listing plain, no meta comment removal and codeblock captio
                        removeMetaComments=FALSE,
                        removeUnnecessary=FALSE);
   expect_equal(text,
-               "\n\nListing: blabla blabla.\n\n```{#lst.ref .java .numberLines}\n  package a;\n/** aa\n * x\n */\n  class x {\n  }\n```\n");
+               "\n\nListing: blabla blabla.\n\n```{#lst.ref .java .numberLines}\n  package a;\n/** aa\n * x\n */\n @SuppressWarnings(\"unchecked\")\n  class x {\n  }\n```\n");
   unlink(file);
   expect_false(file.exists(file));
 })
 
 test_that("Test code.listing with repo, with meta-comment removal and codeblock captions", {
   file <- make.file();
-  text <- code.listing("lst.ref", 
+  text <- code.listing("lst.ref",
                        "blabla blabla.",
                        "java",
                        file, NULL,

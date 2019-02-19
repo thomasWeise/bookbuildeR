@@ -37,10 +37,10 @@ code.listing <- function(
                       removeMetaComments=TRUE,
                       removeUnnecessary=TRUE,
                       numberLines=TRUE) {
-  
+
   # load the code
   code <- code.load(path, lines, tags, basePath);
-  
+
   # deal with programming language
   if(is.non.empty.string(language)) {
     language <- tolower(trimws(language));
@@ -48,7 +48,7 @@ code.listing <- function(
       # pre-process code according to language
       if(removeMetaComments) {
         # deal with meta-comments?
-        
+
         regexp = NULL;
         if(language=="java") {
           # deal with java
@@ -67,7 +67,7 @@ code.listing <- function(
                                 sep="", collapse=""));
           }
         }
-        
+
         if(!is.null(regexp)) {
           # remove meta comments
           n.old <- nchar(code);
@@ -84,11 +84,11 @@ code.listing <- function(
           }
         }
       }
-      
+
       # should we remove unnecessary stuff and annotations?
       if(removeUnnecessary) {
         n.old <- nchar(code);
-        
+
         if(language == "java") {
           code.split <- unlist(strsplit(code, "\n", fixed=TRUE));
           if(length(code.split) <= 0L) {
@@ -106,21 +106,30 @@ code.listing <- function(
           rm(keep);
           if(startsWith(code.split.trim[1L], "package ") &&
              endsWith(code.split.trim[1L], ";")) {
+            keep <- 2L:length(code.split);
+            code.split <- code.split[keep];
             if(length(code.split) <= 1L) {
               exit("Error in file '", path, "', no lines remain after removing package declaration.");
             }
-            code.split <- code.split[2L:length(code.split)];
+            code.split.trim <- code.split.trim[keep];
           }
-          
+
+          suppressWarnings <- startsWith(code.split.trim, "@SuppressWarnings(") &
+                              endsWith(code.split.trim, ")");
+          code.split <- code.split[!suppressWarnings];
+          if(length(code.split) <= 0L) {
+            exit("Error in file '", path, "', no lines remain after removing @SuppressWarnings annotations.");
+          }
+
           rm(code.split.trim);
           code <- paste(code.split, sep="\n", collapse="\n");
           rm(code.split);
-          
+
           code <- gsub("\nfinal ", "\n", code, fixed=TRUE);
           code <- gsub(" final ", " ", code, fixed=TRUE);
           code <- gsub("(final ", "(", code, fixed=TRUE);
         }
-        
+
         if(nchar(code) < n.old) {
           # if the unnecessary stuff was removed, there might be longer trailing space sequences
           logger("Removed some unnecessary stuff from code in file '", path, "'.");
@@ -143,7 +152,7 @@ code.listing <- function(
   } else {
     repo <- NULL;
   }
-  
+
   # the caption
   if(is.non.empty.string(caption)) {
     caption <- trimws(caption);
@@ -167,7 +176,7 @@ code.listing <- function(
   } else {
     exit("Caption of code path '", path, "' cannot be empty.");
   }
-  
+
   if(is.non.empty.string(label)) {
     label <- trimws(label);
     if(!is.non.empty.string(label)) {
@@ -176,7 +185,7 @@ code.listing <- function(
   } else {
     exit("Label of code path '", path, "' cannot just contain be empty.");
   }
-  
+
   res <- paste("```{#", label, sep="", collapse="");
   if(!is.null(language)) {
     res <- paste(res, " .", language, sep="", collapse="");
@@ -184,7 +193,7 @@ code.listing <- function(
   if(isTRUE(numberLines)) {
     res <- paste(res, " .numberLines", sep="", collapse="");
   }
-  
+
   # put the captions into the right place
   if(isTRUE(codeBlockCaptions)) {
     res <- paste("Listing: ",
