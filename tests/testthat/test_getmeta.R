@@ -32,7 +32,7 @@ test_that("Test metadata.read with bibliography", {
             "",
             "sfsdf");
 
-  
+
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
 
   expect_false(is.null(yaml));
@@ -49,7 +49,7 @@ test_that("Test metadata.read with bibliography", {
 
 
 test_that("Test metadata.read without bibliography", {
-  
+
   data <- c("---",
             "title:  An Introduction to Optimization Algorithms",
             "",
@@ -72,10 +72,10 @@ test_that("Test metadata.read without bibliography", {
             "xvxvc",
             "",
             "sfsdf");
-  
-  
+
+
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
-  
+
   expect_false(is.null(yaml));
   expect_length(yaml, 11L);
   expect_identical(yaml$papersize, "a4");
@@ -90,7 +90,7 @@ test_that("Test metadata.read without bibliography", {
 
 
 test_that("Test metadata.read with code repo", {
-  
+
   data <- c("blablabla",
             "dgdfgdg",
             "",
@@ -118,10 +118,10 @@ test_that("Test metadata.read with code repo", {
             "xvxvc",
             "",
             "sfsdf");
-  
-  
+
+
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
-  
+
   expect_false(is.null(yaml));
   expect_length(yaml, 12L);
   expect_identical(yaml$papersize, "a4");
@@ -138,7 +138,7 @@ test_that("Test metadata.read with code repo", {
 
 
 test_that("Test metadata.read with code repo and bibliography", {
-  
+
   data <- c("blablabla",
             "dgdfgdg",
             "",
@@ -167,10 +167,10 @@ test_that("Test metadata.read with code repo and bibliography", {
             "xvxvc",
             "",
             "sfsdf");
-  
-  
+
+
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
-  
+
   expect_false(is.null(yaml));
   expect_length(yaml, 13L);
   expect_identical(yaml$papersize, "a4");
@@ -179,14 +179,13 @@ test_that("Test metadata.read with code repo and bibliography", {
   expect_identical(yaml$keywords, c("Optimization", "Metaheuristics", "Local Search", "Global Search"));
   expect_identical(yaml$author, "Thomas Weise");
   expect_identical(yaml$title, "An Introduction to Optimization Algorithms");
-  
+
   expect_identical(metadata.getCodeRepo(yaml), "https://github.com/thomasWeise/bookbuildeR.git");
   expect_true(metadata.hasBibliography(yaml));
 })
 
 
 test_that("Test metadata.read with raw attribute", {
-  
   data <- c(
     "sdfgsdfg",
     "---",
@@ -252,10 +251,98 @@ test_that("Test metadata.read with raw attribute", {
     "xvxvc",
     "",
     "sfsdf");
-  
-  
+
+
   yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
-  
+
+  expect_false(is.null(yaml));
+  expect_identical(length(yaml), 31L);
+  expect_identical(yaml$title, "An Introduction to Optimization Algorithms");
+  expect_identical(yaml$codeBlockCaptions, TRUE);
+  expect_identical(yaml$toccolor, "black");
+  expect_identical(yaml$cref, TRUE);
+  expect_identical(yaml$chapters, TRUE);
+  expect_identical(yaml$keywords, c("Optimization", "Metaheuristics", "Local Search", "Global Search"));
+  expect_identical(yaml$eqnPrefix, c("Equation", "Equations"));
+})
+
+
+
+test_that("Test metadata.read with raw attribute 2", {
+
+  data <- c(
+    "sdfgsdfg",
+    "---",
+    "# book metadata",
+    "title:  An Introduction to Optimization Algorithms",
+    "author: [Thomas Weise]",
+    "date: \"2018-01-12\"",
+    "keywords: [Optimization, Metaheuristics, Local Search, Global Search]",
+    "rights: © 2018 Thomas Weise, CC BY-NC-SA 4.0",
+    "lang: en-US",
+    "",
+    "# reference to associated code repository",
+    "codeRepo: http://github.com/thomasWeise/aitoa-code.git",
+    "",
+    "# bibliography metadata",
+    "bibliography: bibliography.bib",
+    "csl: http://www.zotero.org/styles/association-for-computing-machinery",
+    "link-citations: true",
+    "",
+    "# LaTeX template metadata",
+    "template.latex: eisvogel-book.latex",
+    "titlepage: true",
+    "titlepage-color: \"9F2925\"",
+    "titlepage-text-color: \"FFFFFF\"",
+    "titlepage-rule-color: \"E67015\"",
+    "toc-own-page: true",
+    "linkcolor: blue!50!black",
+    "citecolor: blue!50!black",
+    "urlcolor: blue!50!black",
+    "toccolor: black",
+    "",
+    "# line 1..3: hold floating objects in the same section and sub-section",
+    "# line 4..6: prevent ugly broken footnotes",
+    "header-includes:",
+    "  - |",
+    "  ```{=latex}",
+    "  \\usepackage[section,above,below]{placeins}",
+    "  \\let\\Oldsubsection\\subsection",
+    "  \\renewcommand{\\subsection}{\\FloatBarrier\\Oldsubsection}",
+    "  \\addtolength{\\topskip}{0pt plus 10pt}",
+    "  \\interfootnotelinepenalty=10000",
+    "  \\raggedbottom",
+    "  ```",
+    "",
+    "# pandoc-crossref setup",
+    "cref: true",
+    "chapters: true",
+    "figPrefix:",
+    "  - \"Figure\"",
+    "  - \"Figures\"",
+    "eqnPrefix:",
+    "  - \"Equation\"",
+    "  - \"Equations\"",
+    "tblPrefix:",
+    "  - \"Table\"",
+    "  - \"Tables\"",
+    "lstPrefix:",
+    "  - \"Listing\"",
+    "  - \"Listings\"",
+    "secPrefix:",
+    "  - \"Section\"",
+    "  - \"Sections\"",
+    "linkReferences: true",
+    "listings: false",
+    "codeBlockCaptions: true",
+    "...",
+    "xvxvc",
+    "",
+    "sfsdf");
+
+
+  yaml <- metadata.get(paste(data, sep="\n", collapse="\n"));
+
   expect_false(is.null(yaml));
   expect_identical(length(yaml), 31L);
   expect_identical(yaml$title, "An Introduction to Optimization Algorithms");

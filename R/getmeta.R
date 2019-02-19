@@ -25,7 +25,7 @@ metadata.get <- function(text) {
   if(nchar(text) <= 0L) {
     exit("Empty metadata?");
   }
-  
+
   # take care of multi-line content
   text <- trimws(ore.subst(ore(paste(ore.escape("|"), "\\s*$(.*?\\n)\\n", sep="", collapse=""),
                     options="m"),
@@ -37,20 +37,15 @@ metadata.get <- function(text) {
                 },
                 text,
                 all=TRUE));
-  
+
   if(nchar(text) <= 0L) {
     exit("Empty metadata after multi-line merging?");
   }
-  
+
   # take care of raw attributes
   s <- "REPLACED";
-  text <- trimws(ore.subst(ore(
-                paste(ore.escape("```{="), ".*", ore.escape("}"), "\\s*(.*?\\n)*", ore.escape("```"),
-                      sep="", collapse=""), options="m"),
-                function(found) s,
-                text,
-                all=TRUE));
-  
+  text <- trimws(gsub("\`\`\`.+\`\`\`", s, text));
+
   if((nchar(text) <= 0L) || (text == s)) {
     exit("Empty metadata after raw attribute removal?");
   }
