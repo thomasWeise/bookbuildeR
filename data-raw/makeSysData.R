@@ -126,6 +126,17 @@ template.resources[["eisvogel-book.latex"]] <- .temp;
 rm(.temp);
 logger("Done converting 'eisvogel-article.latex' to 'eisvogel-book.latex'.");
 
+logger("Now improving template 'GitHub.html5'.");
+.temp <- unname(unlist(template.resources[["GitHub.html5"]]));
+for(i in seq_along(.temp)) {
+  .temp[[i]] <- gsub("div.line-block{white-space:pre-line}",
+                     "div.line-block{line-height:0.85;white-space:pre-line}",
+                     .temp[[i]], fixed=TRUE);
+  .temp[[i]] <- force(.temp[[i]]);
+}
+template.resources[["GitHub.html5"]] <- .temp;
+rm(.temp);
+logger("Done fixing 'GitHub.html5'.");
 
 logger("Now storing resources in R/sysdata.rda.");
 # store all contents in the sysdata.rda file

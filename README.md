@@ -5,6 +5,7 @@
 # 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
+You can see it in action in our project [An Introduction to Optimization Algorithms](https://github.com/thomasWeise/aitoa), which is written in Markdown and automatically converted to [pdf](http://thomasweise.github.io/aitoa/aitoa.pdf), [html](http://thomasweise.github.io/aitoa/aitoa.html), and [epub](http://thomasweise.github.io/aitoa/aitoa.epub).
 This package aims at making it easier to dynamically write books online.
 It therefore extends the standard tools provided by pandoc with a set of additional commands.
 
@@ -36,6 +37,7 @@ You can now use the following commands in your markdown:
 - `\relativel.input{file}` is a command similar to `\relativel.path`. If this command is used, it must be the only text/command on the current line. It will resolve the path to `file` relative to the directory of the current file and *recursively* include that file. This is another tool to allow for building documents structured in chapters, sections, and folders without needed to specify the overall, global structure anywhere and instead specify the inclusion of files where they are actually needed. 
 - `\meta.time` prints the current date and time.
 - `\meta.date` prints the current date.
+- `\meta.year` prints the current year.
 - `\text.block{type}{label}{body}` creates a text block by putting the title-cased `type` together with the block number in front in double-emphasis (the blocks of each type are numbered separately) and then the `body`. `\text.block{definition}{d1}{blabla} \text.block{definition}{d2}{blubblub}` will render to `**Defininition&nbsp;1:**&nbsp;blabla**Defininition&nbsp;2:**&nbsp;blubblub`. Blocks can be referenced in the text via their `label` in `\text.ref{label}`. The goal is to achieve theorem-style environments, but on top of markdown.
 - `\text.ref{label}` references a text block with the same label (see command above). In the example given above, `\text.ref{d2}` would render to `Definition&nbsp;2`.
 - `\relative.code{path}{lines}{tags}` inserts the content of a file identified by the path `path` which is interpreted relative to the current file. Different from `\relative.input`, this is intented for reading code and this command therefore provides two content selection mechanisms: `lines` allows you to specify lines to insert, e.g., `20:22,1:4,7` would insert the lines 1 to 4, 7, and 20 to 22 (in that order). `tags` allows you to specify a comma-separated list of tags. A tag is a string, say "example1", and then everything between a line containing "start example1" and a line "end example1" is included. The idea is that you would put these start and end markers into line comments (in R starting with "#", in Java with "//"). If you specify multiple tags, the corresponding bodies are merged. If you specify both \code{lines} and \code{tags}, we first apply the line selection and then the tag selection only on the selected lines.

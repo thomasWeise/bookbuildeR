@@ -10,6 +10,7 @@ Description: With this package, we provide some R utilities for using pandoc.
     The tool chain allows for including source code examples, either from local
     files or linked to a git repository, as well as mathematic equations or figures.
     Book projects can be hierarchically structured files.
+    The resulting documents are html, pdf, and epub.
 License: GPL-3
 Encoding: UTF-8
 URL: http://www.github.com/thomasWeise/bookbuildeR
