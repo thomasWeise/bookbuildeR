@@ -115,10 +115,15 @@ logger("Done with downloading and processing the URLs of the known templates one
 
 template.urls[["eisvogel-article.latex"]] <- template.urls[["eisvogel.latex"]];
 template.resources[["eisvogel-article.latex"]] <- template.resources[["eisvogel.latex"]];
+
 logger("Converting 'eisvogel-article.latex' to 'eisvogel-book.latex'.");
-template.resources["eisvogel-book.latex"] <- gsub("scrartcl", "scrbook",
-                                                   template.resources["eisvogel.latex"],
-                                                   fixed=TRUE);
+.temp <- unname(unlist(template.resources[["eisvogel.latex"]]));
+for(i in seq_along(.temp)) {
+  .temp[[i]] <- gsub("scrartcl", "scrbook", .temp[[i]], fixed=TRUE);
+  .temp[[i]] <- force(.temp[[i]]);
+}
+template.resources[["eisvogel-book.latex"]] <- .temp;
+rm(.temp);
 logger("Done converting 'eisvogel-article.latex' to 'eisvogel-book.latex'.");
 
 
