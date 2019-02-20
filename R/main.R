@@ -76,7 +76,7 @@ bookbuildeR.main <- function(sourceFile,
                       bibliography=bibliography,
                       metadata=metadata);
   logger("Finished building the book in EPUB format, generated file '",
-          epub, "'., now creating HTML-5 output");
+          epub, "'. Now creating HTML-5 output.");
 
   html <- pandoc.html(sourceFile=tempFile,
                       destName=destName,

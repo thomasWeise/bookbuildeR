@@ -49,7 +49,10 @@ pandoc.html<- function(sourceFile,
                  crossref=crossref,
                  bibliography=bibliography,
                  template=NA_character_,
-                 numberSections=numberSections);
+                 numberSections=numberSections,
+                 "--katex",
+                 "--ascii",
+                 "--html-q-tags");
 
 
   # see if a template has been specified
@@ -76,9 +79,6 @@ pandoc.html<- function(sourceFile,
     len <- len + 1L;
     params[[len]] <- "--self-contained";
   }
-
-  len <- len + 1L;
-  params[[len]] <- "--katex";
 
   destFile <- do.call(pandoc.invoke, params);
 
