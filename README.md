@@ -2,12 +2,24 @@
 
 [<img alt="Travis CI Build Status" src="http://img.shields.io/travis/thomasWeise/bookbuildeR/master.svg" height="20"/>](http://travis-ci.org/thomasWeise/bookbuildeR/)
 
-# 1. Introduction
+## 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
 You can see it in action in our project [An Introduction to Optimization Algorithms](https://github.com/thomasWeise/aitoa), which is written in Markdown and automatically converted to [pdf](http://thomasweise.github.io/aitoa/aitoa.pdf), [html](http://thomasweise.github.io/aitoa/aitoa.html), and [epub](http://thomasweise.github.io/aitoa/aitoa.epub).
 This package aims at making it easier to dynamically write books online.
 It therefore extends the standard tools provided by pandoc with a set of additional commands.
+
+The package is the basis for our [docker](https://en.wikipedia.org/wiki/Docker_(software)) container "[thomasWeise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/)".
+The sources of this container are provided in the [GitHub](http://www.github.com) repository [thomasWeise/docker-bookbuilder](https://github.com/thomasWeise/docker-bookbuilder).
+The container includes all necessary software components needed to run and build electronic books by using the scripts here, such as complete installations of [pandoc](http://pandoc.org/), [`R`](http://www.r-project.org/), and [TeX Live](http://tug.org/texlive/).
+
+It is suitable for the integration into a CI environment, which can be used to completely automate the development of electronic books.
+
+## 2. Extented Markdown
+
+In order to allow for an easy way to work on books, especially for the fields of computer science and mathematics, several additional commands are provided.
+
+### 2.1. Added Functionality
 
 The core facility is the hierarchical inclusion and referencing of files, which allows for a more 'decentralized' working method, where the global book structure results from the locally included files and does not need to be known in the root document.
 Thus, you can more easily modify the book structure by including files and nesting folders in your current working position without going back and forth to the main document.
@@ -29,7 +41,7 @@ This package, together with a complete installation of [pandoc](http://pandoc.or
 Thus, you can use it as tool for all your book-writing purposes.
 You may even integrate it with [Travis CI](http;//travis-ci.org) and [GitHub](http://www.github.com), as described [here](http://iao.hfuu.edu.cn/157) to achieve a fully-atumated book writing and publishing tool chain.
 
-# 2. Provided Commands
+### 2.2. Provided Commands
 
 You can now use the following commands in your markdown:
 
@@ -48,18 +60,178 @@ You can now use the following commands in your markdown:
 - `\direct.r{rcode}` directly executes a piece `rcode` of `R` code. If the code writes any output via, e.g., `cat(..)`, then this output is pasted into the file. If the code does not produce such output, the its return value is transformed to a string and pasted.
 - `\relative.r{path}` similar to `\direct.r`, but instead execute the file refered by `path`, which is relative to the current directory.
 
-The following commands will only work within Travis.CI builds and (intentionally) crash otherwise:
+The following commands will only work within [Travis CI](http://travis-ci.org/) builds and (intentionally) crash otherwise:
 
 - `\meta.repository` get the repository in format `owner/repository`
 - `\meta.commit` get the commit id
 
-## 3. License
+### 3. An Automatic Book Building Approach based on `pandoc`, `docker`, `GitHub`, and `Travis-CI`
+
+First, both for writing and hosting the book, we suggest to use a [GitHub](http://www.github.com/) repository, very much like the one for the book I just began working on [here](http://github.com/thomasWeise/aitoa).
+The book should be written in [Pandoc's markdown](http://pandoc.org/MANUAL.html#pandocs-markdown) syntax, which allows us to include most of the stuff we need, such as equations and citation references, with the additional comments listed above.
+For building the book, we will use [Travis CI](http://travis-ci.org/), which offers a free integration with GitHub to build open source software - triggered by repository commits.
+
+Every time you push a commit to your book repository, Travis CI will be notified, and check out the repository.
+But we have to tell Travis CI what to do with out book's sources, namely to compile them with [Pandoc](http://pandoc.org/), which we have packaged with all necessary tools and filters into a [docker container](http://hub.docker.com/r/thomasweise/docker-bookbuilder/).
+Once Travis has finished downloading the container and building the book with it, it can "deploy" the produced files.
+
+For this purpose, we make use of [GitHub Pages](http://help.github.com/articles/what-is-github-pages/), a feature of [GitHub](http://www.github.com) which allows you to have a website for a repository.
+So we simply let Travis deploy the compiled book, in PDF and EPUB, to the book's repository website.
+Once the repository, website, and Travis build procedure are all set up, we can concentrate on working on our book and whenever some section or text is finished, commit, and enjoy the automatically new versions.
+
+Since the book's sources are available as GitHub repository, our readers can file issues to the repository, with change suggestions, discovered typos, or with questions to add clarification.
+They may even file pull requests with content to include.
+
+### 3.1. The Repository
+
+In order to use our workflow, you need to first have an account at [GitHub](http://www.github.com/) and then create an open repository for your book.
+GitHub is built around the distributed version control system [git](http://git-scm.com/), for which a variety of [graphical user interfaces](http://git-scm.com/downloads/guis) exist - see, e.g., of [here](http://git-scm.com/downloads/guis).
+If you have a Debian-based Linux system, you can install the basic `git` client with command line interface as follows: `sudo apt-get install git`.
+You can use either this client or such a GUI to work with your repository.
+
+We suggest that in your main branch of the repository, you put a folder `book` where all the raw sources and graphics for your book go.
+In the repository root folder, you can then leave the non-book-related things, like `README.md`, `.travis.yml`, and `LICENSE.md`. At this step, you should choose a license for your project, maybe a [creative commons](http://creativecommons.org/) one, if you want.
+
+You should now put a file named "book.md" into the "book" folder of your repository, it could just contain some random text for now, the real book comes later.
+
+### 3.2. The `gh-pages` Branch
+
+Since we want the book to be automatically be built and published to the internet, we should have a `gh-pages` branch in our repository as well.
+I assume that you have a Unix/Linux system with `git` installed.
+In that case, you can do this as follows (based on [here](http://stackoverflow.com/questions/13969050) and [here](http://stackoverflow.com/questions/34100048)), by replacing `YOUR_USER_NAME` with your user name and `YOUR_REPOSITORY` with your repository name:
+
+    git clone --depth=50 --branch=master https://github.com/YOUR_USER_NAME/YOUR_REPOSITORY.git YOUR_USER_NAME/YOUR_REPOSITORY
+    cd YOUR_USER_NAME/YOUR_REPOSITORY
+    git checkout --orphan gh-pages
+    ls -la |awk '{print $9}' |grep -v git |xargs -I _ rm -rf ./_ 
+    git rm -rf .
+    git commit --allow-empty -m "root commit"
+    git push origin gh-pages
+
+You can now safely delete the folder `YOUR_USER_NAME/YOUR_REPOSITORY` that was created during this procedure.
+If you go to the settings page of your repository, it should now display something like "` Your site is published at https://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/`" under point "GitHub Pages".
+This is where your book will later go.
+
+### 3.3. Personal Access Token
+
+Later, we will use [Travis CI](http://travis-ci.org/) to automatically build your book and to automatically deploy it the GitHub pages branch of your repository.
+For the latter, Travis will need a so-called personal access token, as described [here](http://docs.travis-ci.com/user/deployment/pages/).
+You need to create such a token following the steps detailed [here](http://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/).
+Basically, you go to your personal settings page for your GitHub account, click "Developer Settings" and then "Personal Access Tokens".
+You click "Generate new token" and confirm your password.
+Then you need to choose `public_repo` and click "Generate token".
+Make sure you store the token as text somewhere safe, we need this token text later on.
+
+### 3.4. Travis CI: Building and Deployment
+
+With that in place, we can now setup [Travis CI](http://travis-ci.org/) for automated building and deployment.
+You can get a Travis account easily and even sign in with GitHub.
+When you sign into Travis, it should show you a list with your public GitHub repositories.
+You need to should enable your book repository for automated build.
+
+Click on the now-activated repository in Travis and click "More Settings".
+Scroll down to "Environment Variables" and then add a variable named "GITHUB_TOKEN".
+As value, copy the text of the personal access token that we have created in the previous step.
+
+### 3.5. `.travis.yml`
+
+Now we need to finally tell Travis how to build our book, and this can be done by placing a file called `.travis.yml` into the root folder of your GitHub repository.
+This file should have the following contents, where `YOUR_BOOK_OUTPUT_BASENAME` should be replaced with the base name of the files to be generated (e.g., "myBook" will result in "myBook.pdf" and "myBook.epub" later):
+
+    sudo: required
+    
+    language: generic
+    
+    services:
+      - docker
+    
+    script:
+    - |
+      baseDir="$(pwd)" &amp;&amp;\
+      inputDir="${baseDir}/book" &amp;&amp;\
+      outputDir="${baseDir}/output" &amp;&amp;\
+      mkdir -p "${outputDir}" &amp;&amp;\
+      docker run -v "${inputDir}/":/input/ \
+                 -v "${outputDir}/":/output/ \
+                 -e TRAVIS_COMMIT=$TRAVIS_COMMIT \
+                 -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
+                 -t -i thomasweise/docker-bookbuilder book.md YOUR_BOOK_OUTPUT_BASENAME &amp;&amp;\
+      cd "${outputDir}"
+    
+    deploy:
+      provider: pages
+      skip-cleanup: true
+      github-token: $GITHUB_TOKEN
+      keep-history: false
+      on:
+        branch: master
+      target-branch: gh-pages
+      local-dir: output
+
+
+After adding this file, commit the changes and push the commit to the repository.
+Shortly thereafter, a new Travis build should start.
+If it goes well, it will produce three files, namely "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.pdf`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.html`", and "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.epub`" (where `YOUR_USER_NAME` will be the lower-case version of your user name). You can link them from the README.md file that you probably have in your project's root folder.
+
+### 3.6. Interaction with Source Code Repository
+
+As discussed above, there are several commands for inte racting with a source code repository.
+The idea is as follows: You can write your book online, by keeping the *book sources* in a GitHub repository.
+Whenever you make a commit to the repository, the book's pdf and epub files will be rebuilt, so the newest book version is always online.
+
+If you write a book related to, e.g., computer science, you may have lots of example codes in some programming language in your book.
+I think that it is often nice to not just have examples on some "meta-level," but to have real, executable programs as examples.
+Of course, you may choose to print snippets of them in the book only, but they should be available "in full" somewhere.
+
+For this purpose, the *code repository* exists.
+It can be a second GitHub repository, where you keep your programming examples.
+This second repository may have an independent build cycle, e.g., be a [Maven](http://maven.apache.org/) build with unit tests executed on Travis CI, as well.
+You can specify the URL of this repository as `codeRepo` in the YAML meta data of your book and then use commands such as `\repo.code{path}{lines}{tags}`, `\repo.listing{label}{caption}{language}{path}{lines}{tags}`, `\repo.name`, and `\repo.commit` to directly access files in the meta information of this repository.
+
+If you do that, you may choose to follow the approach given in [plume-lib/trigger-travis](http://github.com/plume-lib/trigger-travis) to automatically trigger a build of your book when a commit to your source code repository happens.
+This is a good idea, because this way your book will stay up-to-date when you, e.g., fix bugs in your example codes or refactor them.
+Each time your example code repository passes the automatic build process, your book's build process will be triggered and the book will be compiled and published anew.
+
+This concept means that you can edit your source code examples completely independently from the book.
+You could even write a book about an application you develop on GitHub and cite its sources wherever you want.
+By using the `trigger-travis` approach, you will get a new version of the book whenever you change the book *and* whenever you change the source code.
+
+### 3.7. Infrastructure
+
+While we have already discussed the interplay of GitHub and Travis CI to get your book compiled, we have omitted one more element of our infrastructure: [Docker](http://www.docker.com).
+Docker allows us to build something like very light-weight virtual machines (I know, they are not strictly virtual machines).
+For this purpose, we can build images, which are basically states of a file system.
+Our Travis builds load such an image, namely [thomasweise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/), which provides my [bookbuildeR](http://github.com/thomasWeise/bookbuildeR) `R` package on top of an `R` installation ([thomasweise/docker-pandoc-r](http://hub.docker.com/r/thomasweise/docker-pandoc-r/)) on top of a Pandoc installation ([thomasweise/docker-pandoc](http://hub.docker.com/r/thomasweise/docker-pandoc/)) on top of a TeX Live installation ([thomasweise/docker-texlive-full](http://hub.docker.com/r/thomasweise/docker-texlive-full/)).
+Of course, you could also use any of these containers locally or extend them in any way you want, in order to use different tools or book building procedures.
+ 
+
+## 4. Related Contributed Projects and Components
+
+The following components have been contributed by us to provide this tool chain.
+They are all open source and available on GitHub.
+
+- The `R` package [bookbuildeR](http://github.com/thomasWeise/bookbuildeR) providing the commands wrapping around pandoc and extending Markdown to automatically build electronic books.
+- "An Introduction to Optimization Algorithms," is a book we are currently working on. It is work in progress, but can serve as an example on how to use this tool chain.
+  + [aitoa](http://github.com/thomasWeise/aitoa) the repository for the sources of the book,
+  + [aitoa-code](http://github.com/thomasWeise/aitoa-code) the repository for the sources of the example programs used in and referenced by the book,
+  + [aitoa.pdf](http://thomasweise.github.io/aitoa/aitoa.pdf) the pdf version of the book, generated automatically by this tool chain,
+  + [aitoa.html](http://thomasweise.github.io/aitoa/aitoa.html) the html version of the book, generated automatically by this tool chain, and
+  + [aitoa.epub](http://thomasweise.github.io/aitoa/aitoa.epub) the epub version of the book, generated automatically by this tool chain (the epub format is not yet working well).
+- A hierarchy of docker containers forms the infrastructure for the automated builds:
+  + [docker-bookbuilder](http://github.com/thomasWeise/docker-bookbuilder) is the docker container that can be used to compile an electronic book based on our tool chain. [Here](http://github.com/thomasWeise/docker-bookbuilder) you can find it on GitHub and [here](http://hub.docker.com/r/thomasweise/docker-bookbuilder/) on docker hub.
+  + [docker-pandoc-r](http://github.com/thomasWeise/docker-pandoc-r) is a docker container with a complete pandoc, TeX Live, and R installation. It forms the basis for [docker-bookbuilder](http://github.com/thomasWeise/docker-bookbuilder) and its sources are [here](http://github.com/thomasWeise/docker-pandoc-r) while it is located [here](http://hub.docker.com/r/thomasweise/docker-pandoc-r/) on docker hub.
+  + [docker-pandoc](http://github.com/thomasWeise/docker-pandoc) is the container which is the basis for [docker-pandoc-r](http://github.com/thomasWeise/docker-pandoc-r). It holds a complete installation of pandoc and TeX Live and its sources are [here](http://github.com/thomasWeise/docker-pandoc) while it is located [here](http://hub.docker.com/r/thomasweise/docker-pandoc/).
+  + [docker-texlive-full](http://github.com/thomasWeise/docker-texlive-full) is the container which is the basis for [docker-pandoc](http://github.com/thomasWeise/docker-pandoc). It holds a complete installation of TeX Live and its sources are [here](http://github.com/thomasWeise/docker-texlive-full) while it is located [here](http://hub.docker.com/r/thomasweise/docker-texlive-full/).
+- The `R` package [utilizeR](http://github.com/thomasWeise/utilizeR) holds some utility methods used by [bookbuildeR](http://github.com/thomasWeise/bookbuildeR).
+
+
+## 5. License
 
 The copyright holder of this package is Prof. Dr. Thomas Weise (see Contact).
 The package is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
 This package also contains third-party components which are under the following licenses;
 
-### 3.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
+### 5.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
 
 We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template) by Pascal Wgler and John MacFarlane, which is under the [BSD 3 license](http://github.com/Wandmalfarbe/pandoc-latex-template/blob/master/LICENSE). For this, the following terms hold:
 
@@ -102,7 +274,7 @@ We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](h
     % http://github.com/Wandmalfarbe/pandoc-latex-template
     %%
     
-###3.2 [tajmone/pandoc-goodies HTML Template](http://github.com/tajmone/pandoc-goodies)
+### 5.2 [tajmone/pandoc-goodies HTML Template](http://github.com/tajmone/pandoc-goodies)
 
 We include the pandoc HTML-5 template from [tajmone/pandoc-goodies](http://github.com/tajmone/pandoc-goodies) by Tristano Ajmone, Sindre Sorhus, and GitHub Inc., which is under the [MIT license](http://raw.githubusercontent.com/tajmone/pandoc-goodies/master/templates/html5/github/LICENSE). For this, the following terms hold:
 
@@ -138,7 +310,7 @@ We include the pandoc HTML-5 template from [tajmone/pandoc-goodies](http://githu
     SOFTWARE.
 
 
-## 4. Contact
+## 6. Contact
 
 If you have any questions or suggestions, please contact
 [Prof. Dr. Thomas Weise](http://iao.hfuu.edu.cn/team/director) of the
