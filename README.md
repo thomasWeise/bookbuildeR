@@ -86,12 +86,12 @@ Here, it is assumed that
 - `OUTPUT_DIR` is the output directory where the compiled files should be placed, e.g., `/home/my/book/compiled/`. This is where the resulting files will be placed.
 - `YOUR_BOOK_OUTPUT_BASENAME` is the basis for the names of the compiled files, e.g., `coolBook`, which would lead to the creation of `coolBook.pdf`, `coolBook.html`, and `coolBook.epub` in the folder references by `OUTPUT_DIR`.
 - If you make use of the command `\meta.commit`, you need to tell the container a commit-id. Only in this case, you need to specify the parameter "`-e COMMIT=MY_COMMIT`", where `MY_COMMIT` must be replaced with that id. Otherwise, you can leave this parameter away.
-- If you make use of the command `\meta.meta.repository`, you need to tell the container a commit-id. Only in this case, you need to specify the parameter "`-e REPOSITORY=MY_REPOSITORY_NAME`", where `MY_REPOSITORY_NAME` must be replaced with that id. Otherwise, you can leave this parameter away.
+- If you make use of the command `\meta.repository`, you need to tell the container a commit-id. Only in this case, you need to specify the parameter "`-e REPOSITORY=MY_REPOSITORY_NAME`", where `MY_REPOSITORY_NAME` must be replaced with that id. Otherwise, you can leave this parameter away.
 
 And that's it.
 No software installation, besides docker, is required.
 The container brings all required tools, scripts, packages, and what not.
-Even more so, in the section below you can see how the whole build process can be automated by using continuous integration tool chains.
+Additionally, in the section below you can see how the whole build process can be automated by using continuous integration tool chains.
 
 ## 4. An Automatic Book Building Approach based on `pandoc`, `docker`, `GitHub`, and `Travis-CI`
 
