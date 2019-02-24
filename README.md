@@ -46,7 +46,7 @@ You may even integrate it with [Travis CI](http;//travis-ci.org) and [GitHub](ht
 You can now use the following commands in your markdown:
 
 - `\relativel.path{path}` is a path expression relative to the currently processed file's directory which will be resolved to be relative to the root folder of the document. This is intended to allow you to place chapters and sections in a hierarchical folder structure and their contained images in sub-folders, while referencing them relatively from the current path.
-- `\relativel.input{file}` is a command similar to `\relativel.path`. If this command is used, it must be the only text/command on the current line. It will resolve the path to `file` relative to the directory of the current file and *recursively* include that file. This is another tool to allow for building documents structured in chapters, sections, and folders without needed to specify the overall, global structure anywhere and instead specify the inclusion of files where they are actually needed. 
+- `\relative.input{file}` is a command similar to `\relativel.path`. If this command is used, it must be the only text/command on the current line. It will resolve the path to `file` relative to the directory of the current file and *recursively* include that file. This is another tool to allow for building documents structured in chapters, sections, and folders without needed to specify the overall, global structure anywhere and instead specify the inclusion of files where they are actually needed. 
 - `\meta.time` prints the current date and time.
 - `\meta.date` prints the current date.
 - `\meta.year` prints the current year.
@@ -62,10 +62,38 @@ You can now use the following commands in your markdown:
 
 The following commands will only work within [Travis CI](http://travis-ci.org/) builds and (intentionally) crash otherwise:
 
-- `\meta.repository` get the repository in format `owner/repository`
-- `\meta.commit` get the commit id
+- `\meta.repository` get the repository in format `owner/repository`, taken from the environment variable `TRAVIS_REPO_SLUG` or, if that is not defined, `REPOSITORY`
+- `\meta.commit` get the commit id, taken from the environment variable `TRAVIS_COMMIT`, or, if that not exists, `COMMIT`
 
-### 3. An Automatic Book Building Approach based on `pandoc`, `docker`, `GitHub`, and `Travis-CI`
+## 3. Local Book Compilation
+
+You can apply this package locally to a book or document you write on your computer.
+In order to avoid installing all required software and even to avoid messing with `R`, you can use the [docker container](http://hub.docker.com/r/thomasweise/docker-bookbuilder/) we have developed for this purpose.
+[Docker](https://en.wikipedia.org/wiki/Docker_(software)) is something like a light-weight virtual machine, and our container is basically a copy of a complete Linux installation with all required components that you can run on your local computer.
+
+If you have Linux and docker installed on your system, all what it takes is the following command:
+
+      docker run -v "INPUT_DIR":/input/ \
+                 -v "OUTPUT_DIR":/output/ \
+                 -e COMMIT=MY_COMMIT \
+                 -e REPOSITORY=MY_REPOSITORY_NAME \
+                 -t -i thomasweise/docker-bookbuilder BOOK_ROOT_MD_FILE YOUR_BOOK_OUTPUT_BASENAME
+
+Here, it is assumed that
+
+- `INPUT_DIR` is the directory where your book sources reside, let's say `/home/my/book/sources/`.
+- `BOOK_ROOT_MD_FILE` is the root file of your book, say `book.md` (in which case, the full path of `book.md` would be `/home/my/book/sources/book.md`). Notice that you can specify only a single file, but this file can reference other files in sub-directories of `INPUT_DIR` by using commands such as  `\relative.input`.
+- `OUTPUT_DIR` is the output directory where the compiled files should be placed, e.g., `/home/my/book/compiled/`. This is where the resulting files will be placed.
+- `YOUR_BOOK_OUTPUT_BASENAME` is the basis for the names of the compiled files, e.g., `coolBook`, which would lead to the creation of `coolBook.pdf`, `coolBook.html`, and `coolBook.epub` in the folder references by `OUTPUT_DIR`.
+- If you make use of the command `\meta.commit`, you need to tell the container a commit-id. Only in this case, you need to specify the parameter "`-e COMMIT=MY_COMMIT`", where `MY_COMMIT` must be replaced with that id. Otherwise, you can leave this parameter away.
+- If you make use of the command `\meta.meta.repository`, you need to tell the container a commit-id. Only in this case, you need to specify the parameter "`-e REPOSITORY=MY_REPOSITORY_NAME`", where `MY_REPOSITORY_NAME` must be replaced with that id. Otherwise, you can leave this parameter away.
+
+And that's it.
+No software installation, besides docker, is required.
+The container brings all required tools, scripts, packages, and what not.
+Even more so, in the section below you can see how the whole build process can be automated by using continuous integration tool chains.
+
+## 4. An Automatic Book Building Approach based on `pandoc`, `docker`, `GitHub`, and `Travis-CI`
 
 First, both for writing and hosting the book, we suggest to use a [GitHub](http://www.github.com/) repository, very much like the one for the book I just began working on [here](http://github.com/thomasWeise/aitoa).
 The book should be written in [Pandoc's markdown](http://pandoc.org/MANUAL.html#pandocs-markdown) syntax, which allows us to include most of the stuff we need, such as equations and citation references, with the additional comments listed above.
@@ -82,7 +110,7 @@ Once the repository, website, and Travis build procedure are all set up, we can 
 Since the book's sources are available as GitHub repository, our readers can file issues to the repository, with change suggestions, discovered typos, or with questions to add clarification.
 They may even file pull requests with content to include.
 
-### 3.1. The Repository
+### 4.1. The Repository
 
 In order to use our workflow, you need to first have an account at [GitHub](http://www.github.com/) and then create an open repository for your book.
 GitHub is built around the distributed version control system [git](http://git-scm.com/), for which a variety of [graphical user interfaces](http://git-scm.com/downloads/guis) exist - see, e.g., of [here](http://git-scm.com/downloads/guis).
@@ -94,7 +122,7 @@ In the repository root folder, you can then leave the non-book-related things, l
 
 You should now put a file named "book.md" into the "book" folder of your repository, it could just contain some random text for now, the real book comes later.
 
-### 3.2. The `gh-pages` Branch
+### 4.2. The `gh-pages` Branch
 
 Since we want the book to be automatically be built and published to the internet, we should have a `gh-pages` branch in our repository as well.
 I assume that you have a Unix/Linux system with `git` installed.
@@ -112,7 +140,7 @@ You can now safely delete the folder `YOUR_USER_NAME/YOUR_REPOSITORY` that was c
 If you go to the settings page of your repository, it should now display something like "` Your site is published at https://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/`" under point "GitHub Pages".
 This is where your book will later go.
 
-### 3.3. Personal Access Token
+### 4.3. Personal Access Token
 
 Later, we will use [Travis CI](http://travis-ci.org/) to automatically build your book and to automatically deploy it the GitHub pages branch of your repository.
 For the latter, Travis will need a so-called personal access token, as described [here](http://docs.travis-ci.com/user/deployment/pages/).
@@ -122,7 +150,7 @@ You click "Generate new token" and confirm your password.
 Then you need to choose `public_repo` and click "Generate token".
 Make sure you store the token as text somewhere safe, we need this token text later on.
 
-### 3.4. Travis CI: Building and Deployment
+### 4.4. Travis CI: Building and Deployment
 
 With that in place, we can now setup [Travis CI](http://travis-ci.org/) for automated building and deployment.
 You can get a Travis account easily and even sign in with GitHub.
@@ -133,7 +161,7 @@ Click on the now-activated repository in Travis and click "More Settings".
 Scroll down to "Environment Variables" and then add a variable named "GITHUB_TOKEN".
 As value, copy the text of the personal access token that we have created in the previous step.
 
-### 3.5. `.travis.yml`
+### 4.5. `.travis.yml`
 
 Now we need to finally tell Travis how to build our book, and this can be done by placing a file called `.travis.yml` into the root folder of your GitHub repository.
 This file should have the following contents, where `YOUR_BOOK_OUTPUT_BASENAME` should be replaced with the base name of the files to be generated (e.g., "myBook" will result in "myBook.pdf" and "myBook.epub" later):
@@ -173,7 +201,7 @@ After adding this file, commit the changes and push the commit to the repository
 Shortly thereafter, a new Travis build should start.
 If it goes well, it will produce three files, namely "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.pdf`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.html`", and "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.epub`" (where `YOUR_USER_NAME` will be the lower-case version of your user name). You can link them from the README.md file that you probably have in your project's root folder.
 
-### 3.6. Interaction with Source Code Repository
+### 4.6. Interaction with Source Code Repository
 
 As discussed above, there are several commands for inte racting with a source code repository.
 The idea is as follows: You can write your book online, by keeping the *book sources* in a GitHub repository.
@@ -196,7 +224,7 @@ This concept means that you can edit your source code examples completely indepe
 You could even write a book about an application you develop on GitHub and cite its sources wherever you want.
 By using the `trigger-travis` approach, you will get a new version of the book whenever you change the book *and* whenever you change the source code.
 
-### 3.7. Infrastructure
+### 4.7. Infrastructure
 
 While we have already discussed the interplay of GitHub and Travis CI to get your book compiled, we have omitted one more element of our infrastructure: [Docker](http://www.docker.com).
 Docker allows us to build something like very light-weight virtual machines (I know, they are not strictly virtual machines).
@@ -205,7 +233,7 @@ Our Travis builds load such an image, namely [thomasweise/docker-bookbuilder](ht
 Of course, you could also use any of these containers locally or extend them in any way you want, in order to use different tools or book building procedures.
  
 
-## 4. Related Contributed Projects and Components
+## 5. Related Contributed Projects and Components
 
 The following components have been contributed by us to provide this tool chain.
 They are all open source and available on GitHub.
@@ -225,13 +253,13 @@ They are all open source and available on GitHub.
 - The `R` package [utilizeR](http://github.com/thomasWeise/utilizeR) holds some utility methods used by [bookbuildeR](http://github.com/thomasWeise/bookbuildeR).
 
 
-## 5. License
+## 6. License
 
 The copyright holder of this package is Prof. Dr. Thomas Weise (see Contact).
 The package is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
 This package also contains third-party components which are under the following licenses;
 
-### 5.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
+### 6.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
 
 We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template) by Pascal Wgler and John MacFarlane, which is under the [BSD 3 license](http://github.com/Wandmalfarbe/pandoc-latex-template/blob/master/LICENSE). For this, the following terms hold:
 
@@ -274,7 +302,7 @@ We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](h
     % http://github.com/Wandmalfarbe/pandoc-latex-template
     %%
     
-### 5.2 [tajmone/pandoc-goodies HTML Template](http://github.com/tajmone/pandoc-goodies)
+### 6.2 [tajmone/pandoc-goodies HTML Template](http://github.com/tajmone/pandoc-goodies)
 
 We include the pandoc HTML-5 template from [tajmone/pandoc-goodies](http://github.com/tajmone/pandoc-goodies) by Tristano Ajmone, Sindre Sorhus, and GitHub Inc., which is under the [MIT license](http://raw.githubusercontent.com/tajmone/pandoc-goodies/master/templates/html5/github/LICENSE). For this, the following terms hold:
 
@@ -310,11 +338,11 @@ We include the pandoc HTML-5 template from [tajmone/pandoc-goodies](http://githu
     SOFTWARE.
 
 
-## 6. Contact
+## 7. Contact
 
 If you have any questions or suggestions, please contact
 [Prof. Dr. Thomas Weise](http://iao.hfuu.edu.cn/team/director) of the
 [Institute of Applied Optimization](http://iao.hfuu.edu.cn/) at
 [Hefei University](http://www.hfuu.edu.cn) in
 Hefei, Anhui, China via
-email to [tweise@hfuu.edu.cn](mailto:tweise@hfuu.edu.cn).
+email to [tweise@hfuu.edu.cn](mailto:tweise@hfuu.edu.cn) and [tweise@gmx.de](mailto:tweise@gmx.de).
