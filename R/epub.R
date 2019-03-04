@@ -12,7 +12,11 @@
 #' @param crossref use pandoc-crossref?
 #' @param bibliography do we have a bibliography?
 #' @param numberSections should sections be numbered?
-#' @param mathToGraphic should math be converted to graphics?
+#' @param mathToGraphic should math be converted to graphics? If \code{TRUE},
+#'   math is rendered to png images, which takes quite some time. If
+#'   \code{FALSE}, then math is rendered as MathML, which should, by now, be
+#'   supported by many EPUB readers. As of version \code{0.8.3}, we stick with
+#'   the latter.
 #' @param metadata the metadata
 #' @return the canonical path to the destination file
 #' @export pandoc.epub
@@ -31,7 +35,7 @@ pandoc.epub<- function(sourceFile,
                        crossref=TRUE,
                        bibliography=TRUE,
                        numberSections=TRUE,
-                       mathToGraphic=TRUE,
+                       mathToGraphic=FALSE,
                        metadata=NULL) {
   logger("Now building EPUB.");
 
@@ -77,6 +81,9 @@ pandoc.epub<- function(sourceFile,
   len <- len + 1L;
   params[[len]] <- "--ascii";
 
+  len <- len + 1L;
+  params[[len]] <- "--html-q-tags"
+
   if(isTRUE(standalone)) {
     len <- len + 1L;
     params[[len]] <- "--self-contained";
@@ -84,7 +91,10 @@ pandoc.epub<- function(sourceFile,
 
   if(isTRUE(mathToGraphic)) {
     len <- len + 1L;
-    params[[len]] <-"--filter latex-formulae-filter";
+    params[[len]] <- "--filter latex-formulae-filter";
+  } else {
+    len <- len + 1L;
+    params[[len]] <- "--mathml";
   }
 
 #  logger("Invoking pandoc.invoke with parameters '",

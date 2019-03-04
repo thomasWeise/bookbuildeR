@@ -8,7 +8,7 @@ pandoc.epub(sourceFile, destName = sub(pattern = "\\\\..*", replacement =
   "", x = basename(sourceFile)), destDir = dirname(sourceFile),
   format.in = "markdown", standalone = TRUE, tabstops = 2L,
   toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, numberSections = TRUE, mathToGraphic = TRUE,
+  bibliography = TRUE, numberSections = TRUE, mathToGraphic = FALSE,
   metadata = NULL)
 }
 \arguments{
@@ -35,7 +35,11 @@ or \code{NA} to not replace}
 
 \item{numberSections}{should sections be numbered?}
 
-\item{mathToGraphic}{should math be converted to graphics?}
+\item{mathToGraphic}{should math be converted to graphics? If \code{TRUE},
+math is rendered to png images, which takes quite some time. If
+\code{FALSE}, then math is rendered as MathML, which should, by now, be
+supported by many EPUB readers. As of version \code{0.8.3}, we stick with
+the latter.}
 
 \item{metadata}{the metadata}
 }
