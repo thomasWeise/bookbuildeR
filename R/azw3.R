@@ -15,7 +15,8 @@ calibre.azw3<- function(epubFile,
   destDir <- check.dir(destDir);
 
   # create dest file
-  destFile <- normalizePath(file.path(destDir, .paste(destFileName, ".azw3"), mustWork = FALSE));
+  destFile <- normalizePath(file.path(destDir, paste(destName,
+                            ".azw3", sep="", collapse=""), mustWork = FALSE));
   if(file.exists(destFile)) {
     exit("Destination file '", destFile, "' already exists.");
   }
@@ -30,7 +31,7 @@ calibre.azw3<- function(epubFile,
   # check result
   if(result != 0L) {
     exit("ebook-convert has failed with error code ", result, " for arguments '",
-         paste(args, sep=" ", collapse=" "), "' in directory '", sourceDir, "'.");
+         paste(args, sep=" ", collapse=" "), "' in directory '", destDir, "'.");
   }
   destFile <- check.file(destFile);
 

@@ -32,12 +32,13 @@
 #' @param files a list of \code{(path, desc)} tuples with file paths and
 #'   corresponding descriptions
 #' @param destDir the destination directory
+#' @param metadata the meta data
 #' @return the canonical path to the \code{index.html} file
 #' @export index.html
 #' @include logger.R
 #' @importFrom utilizeR is.non.empty.list is.non.empty.string is.non.empty.vector path.relativize
 index.html <- function(files,
-                       destDir=dirname(pdfFile),
+                       destDir=dirname(files[[1L]]$path),
                        metadata) {
   logger("Now building index.html file.");
 

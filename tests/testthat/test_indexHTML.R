@@ -25,9 +25,9 @@ test_that("test creating index.html", {
                  list(path=htmlFile,
                       desc="in <a href=\"http://en.wikipedia.org/wiki/HTML5\">HTML5</a>&nbsp;format for reading in a  web browser or on other devices"));
 
-  meta <- list(title="title tile", author="the dude");
+  metadata <- list(title="title tile", author="the dude");
 
-  indexHTML <- index.html(files, destDir=tmpdir, meta=meta);
+  indexHTML <- index.html(files, destDir=tmpdir, metadata=metadata);
   expect_true(file.exists(indexHTML));
 
   unlink(indexHTML);
