@@ -5,8 +5,9 @@
 ## 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
-You can see it in action in our project [An Introduction to Optimization Algorithms](https://github.com/thomasWeise/aitoa), which is written in Markdown and automatically converted to [pdf](http://thomasweise.github.io/aitoa/aitoa.pdf), [html](http://thomasweise.github.io/aitoa/aitoa.html), and [epub](http://thomasweise.github.io/aitoa/aitoa.epub).
-This package aims at making it easier to dynamically write books online.
+You can see it in action in our project [An Introduction to Optimization Algorithms](https://github.com/thomasWeise/aitoa), which is written in Markdown and automatically converted to [pdf](http://thomasweise.github.io/aitoa/aitoa.pdf), [html](http://thomasweise.github.io/aitoa/aitoa.html), 
+[epub](http://thomasweise.github.io/aitoa/aitoa.epub), and [azw3](http://thomasweise.github.io/aitoa/aitoa.azw3).
+This package aims at making it easier to dynamically write books and even publish them online by reducing most of the work to the invocation of a single command.
 It therefore extends the standard tools provided by pandoc with a set of additional commands.
 
 The package is the basis for our [docker](https://en.wikipedia.org/wiki/Docker_(software)) container "[thomasWeise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/)".
@@ -65,11 +66,20 @@ The following commands will only work within [Travis CI](http://travis-ci.org/) 
 - `\meta.repository` get the repository in format `owner/repository`, taken from the environment variable `TRAVIS_REPO_SLUG` or, if that is not defined, `REPOSITORY`
 - `\meta.commit` get the commit id, taken from the environment variable `TRAVIS_COMMIT`, or, if that not exists, `COMMIT`
 
-## 3. Local Book Compilation
+## 3. Automated Local Book Compilation based on `pandoc`, `calibre`, and `docker`
 
 You can apply this package locally to a book or document you write on your computer.
 In order to avoid installing all required software and even to avoid messing with `R`, you can use the [docker container](http://hub.docker.com/r/thomasweise/docker-bookbuilder/) we have developed for this purpose.
 [Docker](https://en.wikipedia.org/wiki/Docker_(software)) is something like a light-weight virtual machine, and our container is basically a copy of a complete Linux installation with all required components that you can run on your local computer.
+
+By using our container, the following output formats will automatically be generated:
+
+- [`PDF`](http://en.wikipedia.org/wiki/Pdf) for reading on the computer and/or printing,
+- [`EPUB3`](http://en.wikipedia.org/wiki/EPUB) for reading on most mobile phones or other hand-held devices,
+- [`AZW3`](http://en.wikipedia.org/wiki/Kindle_File_Format) for reading on [Kindle](http://en.wikipedia.org/wiki/Amazon_Kindle) and similar devices, and
+- stand-alone [`HTML5`](http://en.wikipedia.org/wiki/HTML5) for reading in a web browser on any device.
+
+Additionally, a file named `index.html` will be created, which is a rundimentary directory index listing the above four generated files with their sizes and description.
 
 If you have Linux and docker installed on your system, all what it takes is the following command:
 
@@ -93,7 +103,12 @@ No software installation, besides docker, is required.
 The container brings all required tools, scripts, packages, and what not.
 Additionally, in the section below you can see how the whole build process can be automated by using continuous integration tool chains.
 
-## 4. An Automatic Book Building Approach based on `pandoc`, `docker`, `GitHub`, and `Travis-CI`
+## 4. An Automatic Online-Book Building Approach by Using `GitHub` and `Travis-CI`
+
+With out package and associated docker container, you can conveniently build your electronic book on your computer with a single command.
+However, you can also integrate the whole process with a [version control](http://en.wikipedia.org/wiki/Version_control) software like [Git](http://en.wikipedia.org/wiki/Git) and a [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration) framework.
+Then, you can automate the compilation of your book to run every time you change your book sources.
+Actually, there are several open source and free environments that you can use to that for you for free &ndash; in exchange for you making your book free for everyone to read.
 
 First, both for writing and hosting the book, we suggest to use a [GitHub](http://www.github.com/) repository, very much like the one for the book I just began working on [here](http://github.com/thomasWeise/aitoa).
 The book should be written in [Pandoc's markdown](http://pandoc.org/MANUAL.html#pandocs-markdown) syntax, which allows us to include most of the stuff we need, such as equations and citation references, with the additional comments listed above.
@@ -199,7 +214,8 @@ This file should have the following contents, where `YOUR_BOOK_OUTPUT_BASENAME` 
 
 After adding this file, commit the changes and push the commit to the repository.
 Shortly thereafter, a new Travis build should start.
-If it goes well, it will produce three files, namely "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.pdf`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.html`", and "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.epub`" (where `YOUR_USER_NAME` will be the lower-case version of your user name). You can link them from the README.md file that you probably have in your project's root folder.
+If it goes well, it will produce three files, namely "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.pdf`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.html`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.epub`", and "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.azw3`", as well as
+"`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/index.html`" (where `YOUR_USER_NAME` will be the lower-case version of your user name). You can link them from the README.md file that you probably have in your project's root folder.
 
 ### 4.6. Interaction with Source Code Repository
 

@@ -23,7 +23,7 @@
 #' @include pandoc.R
 #' @include logger.R
 #' @include templates.R
-#' @importFrom utilizeR is.non.empty.list is.non.empty.list
+#' @importFrom utilizeR is.non.empty.list is.non.empty.string
 pandoc.epub<- function(sourceFile,
                        destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                        destDir=dirname(sourceFile),

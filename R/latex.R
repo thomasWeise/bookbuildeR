@@ -20,7 +20,7 @@
 #' @include pandoc.R
 #' @include logger.R
 #' @include templates.R
-#' @importFrom utilizeR is.non.empty.list is.non.empty.list
+#' @importFrom utilizeR is.non.empty.list is.non.empty.string
 pandoc.latex <- function(sourceFile,
                          destName=sub(pattern="\\..*", replacement="", x=basename(sourceFile)),
                          destDir=dirname(sourceFile),
@@ -39,7 +39,7 @@ pandoc.latex <- function(sourceFile,
 
   sourceFile <- check.file(sourceFile);
   destDir <- check.dir(destDir);
-  
+
   # the basic parameters
   params <- list(sourceFile=sourceFile,
                  destFileName=paste(destName, ".pdf", sep="", collapse=""),
@@ -77,7 +77,7 @@ pandoc.latex <- function(sourceFile,
 
   len <- len + 1L;
   params[[len]] <- paste("--top-level-division=", topLevelDivision, sep="", collapse="");
-  
+
   # should we use the listings package?
   if(isTRUE(useListings)) {
     len <- len + 1L;

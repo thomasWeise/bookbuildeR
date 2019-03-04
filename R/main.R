@@ -11,6 +11,8 @@
 #' @include latex.R
 #' @include epub.R
 #' @include html.R
+#' @include azw3.R
+#' @include indexHTML.R
 #' @export bookbuildeR.main
 bookbuildeR.main <- function(sourceFile,
                              format.in="markdown",
@@ -85,10 +87,32 @@ bookbuildeR.main <- function(sourceFile,
                       bibliography=bibliography,
                       metadata=metadata);
   logger("Finished building the book in HTML format, generated file '",
-         html, "'.");
+         html, "'. Now creating azw3 output.");
+
+  azw3 <- calibre.azw3(epubFile=epub,
+                       destName=destName,
+                       destDir=destDir);
+  logger("Finished building the book in AZW3 format, generated file '",
+         azw3, "'. Now creating index.html");
+
+  files <- list( list(path=pdfFile,
+                      desc="in the <a href=\"http://en.wikipedia.org/wiki/Pdf\">PDF</a>&nbsp;format for reading on the computer and/or printing (but please don't print this, save paper)"),
+                 list(path=epubFile,
+                      desc="in the <a href=\"http://en.wikipedia.org/wiki/EPUB\">EPUB3</a>&nbsp;format for reading on most mobile phones or other hand-held devices"),
+                 list(path=azw3File,
+                      desc="in the <a href=\"http://en.wikipedia.org/wiki/Kindle_File_Format\">AZW3</a>&nbsp;format for reading on <a href=\"http://en.wikipedia.org/wiki/Amazon_Kindle\">Kindle</a> and similar devices"),
+                 list(path=htmlFile,
+                      desc="in a stand-alone <a href=\"http://en.wikipedia.org/wiki/HTML5\">HTML5</a>&nbsp;format for reading in a web browser on any device"));
+
+  index <- index.html(files=files,
+                      destDir=destDir,
+                      metadata=metadata);
+  logger("Finished index.html, generated file '",
+         index, "'. Now cleaning up");
 
   unlink(tempFile, force=TRUE);
   logger("Finished deleting temporary source '",
           tempFile, "' - we are done.");
-  return(list(pdf=pdf, epub=epub, html=html));
+  return(list(pdf=pdf, epub=epub, html=html, azw3=azw3,
+              index=index));
 }
