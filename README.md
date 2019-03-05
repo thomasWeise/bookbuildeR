@@ -6,8 +6,8 @@
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
 You can see it in action in our project [An Introduction to Optimization Algorithms](https://github.com/thomasWeise/aitoa), which is written in Markdown and automatically converted to [pdf](http://thomasweise.github.io/aitoa/aitoa.pdf), [html](http://thomasweise.github.io/aitoa/aitoa.html), 
-[epub](http://thomasweise.github.io/aitoa/aitoa.epub), and [azw3](http://thomasweise.github.io/aitoa/aitoa.azw3).
-This package aims at making it easier to dynamically write books and even publish them online by reducing most of the work to the invocation of a single command.
+[epub](http://thomasweise.github.io/aitoa/aitoa.epub), and [azw3](http://thomasweise.github.io/aitoa/aitoa.azw3) by using this package.
+Our package aims at making it easier to dynamically write books and even publish them online by reducing most of the work to the invocation of a single command.
 It therefore extends the standard tools provided by pandoc with a set of additional commands.
 
 The package is the basis for our [docker](https://en.wikipedia.org/wiki/Docker_(software)) container "[thomasWeise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/)".
@@ -248,8 +248,9 @@ For this purpose, we can build images, which are basically states of a file syst
 Our Travis builds load such an image, namely [thomasweise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/), which provides my [bookbuildeR](http://github.com/thomasWeise/bookbuildeR) `R` package on top of an `R` installation ([thomasweise/docker-pandoc-r](http://hub.docker.com/r/thomasweise/docker-pandoc-r/)) on top of a Pandoc installation ([thomasweise/docker-pandoc](http://hub.docker.com/r/thomasweise/docker-pandoc/)) on top of a TeX Live installation ([thomasweise/docker-texlive-full](http://hub.docker.com/r/thomasweise/docker-texlive-full/)).
 Of course, you could also use any of these containers locally or extend them in any way you want, in order to use different tools or book building procedures.
  
+## 5. Related Projects and Components
 
-## 5. Related Contributed Projects and Components
+### 5.1. Own Contributed Projects and Components
 
 The following components have been contributed by us to provide this tool chain.
 They are all open source and available on GitHub.
@@ -259,8 +260,9 @@ They are all open source and available on GitHub.
   + [aitoa](http://github.com/thomasWeise/aitoa) the repository for the sources of the book,
   + [aitoa-code](http://github.com/thomasWeise/aitoa-code) the repository for the sources of the example programs used in and referenced by the book,
   + [aitoa.pdf](http://thomasweise.github.io/aitoa/aitoa.pdf) the pdf version of the book, generated automatically by this tool chain,
-  + [aitoa.html](http://thomasweise.github.io/aitoa/aitoa.html) the html version of the book, generated automatically by this tool chain, and
-  + [aitoa.epub](http://thomasweise.github.io/aitoa/aitoa.epub) the epub version of the book, generated automatically by this tool chain (the epub format is not yet working well).
+  + [aitoa.html](http://thomasweise.github.io/aitoa/aitoa.html) the html version of the book, generated automatically by this tool chain,
+  + [aitoa.epub](http://thomasweise.github.io/aitoa/aitoa.epub) the epub version of the book, and
+  + [aitoa.awz3](http://thomasweise.github.io/aitoa/aitoa.awz3) the awz3 version of the book. generated automatically by this tool chain (the epub format is not yet working well).
 - A hierarchy of docker containers forms the infrastructure for the automated builds:
   + [docker-bookbuilder](http://github.com/thomasWeise/docker-bookbuilder) is the docker container that can be used to compile an electronic book based on our tool chain. [Here](http://github.com/thomasWeise/docker-bookbuilder) you can find it on GitHub and [here](http://hub.docker.com/r/thomasweise/docker-bookbuilder/) on docker hub.
   + [docker-pandoc-r](http://github.com/thomasWeise/docker-pandoc-r) is a docker container with a complete pandoc, TeX Live, and R installation. It forms the basis for [docker-bookbuilder](http://github.com/thomasWeise/docker-bookbuilder) and its sources are [here](http://github.com/thomasWeise/docker-pandoc-r) while it is located [here](http://hub.docker.com/r/thomasweise/docker-pandoc-r/) on docker hub.
@@ -269,16 +271,34 @@ They are all open source and available on GitHub.
   + [docker-texlive-full](http://github.com/thomasWeise/docker-texlive-full) is the container which is the basis for [docker-pandoc](http://github.com/thomasWeise/docker-pandoc). It holds a complete installation of TeX Live and its sources are [here](http://github.com/thomasWeise/docker-texlive-full) while it is located [here](http://hub.docker.com/r/thomasweise/docker-texlive-full/).
 - The `R` package [utilizeR](http://github.com/thomasWeise/utilizeR) holds some utility methods used by [bookbuildeR](http://github.com/thomasWeise/bookbuildeR).
 
+### 5.2. Related Projects and Components Used
+
+- [pandoc](http://pandoc.org/), with which we convert markdown to HTML, pdf, and epub, along with several `pandoc` filters, namely
+   + [`pandoc-citeproc`](http://github.com/jgm/pandoc-citeproc),
+   + [`pandoc-crossref`](http://github.com/lierdakil/pandoc-crossref),
+   + [`latex-formulae-pandoc`](http://github.com/liamoc/latex-formulae), and
+   + [`pandoc-citeproc-preamble`](http://github.com/spwhitton/pandoc-citeproc-preamble)
+and the two `pandoc` templates
+   + [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template/), an excellent `pandoc` template for LaTeX by [Pascal Wagler](http://github.com/Wandmalfarbe)
+   + the [GitHub Pandoc HTML5 template](http://github.com/tajmone/pandoc-goodies/tree/master/templates/html5/github) by [Tristano Ajmone](http://github.com/tajmone)
+- [TeX Live](http://tug.org/texlive/), a [LaTeX](http://en.wikipedia.org/wiki/LaTeX) installation used by pandoc for generating the pdf output
+- [`R`](http://www.r-project.org/), the programming language in which this package is written
+- [docker](https://en.wikipedia.org/wiki/Docker_(software)), used to create containers in which all required software is pre-installed,
+- [`cabal`](http://www.haskell.org/cabal/), the compilation and package management system via which pandoc is obtained,
+- [`calibre`](http://calibre-ebook.com), which allows us to convert epub to awz3 files
+- [`imagemagick`](http://www.imagemagick.org/) used by `pandoc` for image conversion
+- [`ghostscript`](http://ghostscript.com/), used by our script to include all fonts into a pdf
+- [`poppler-utils`](http://poppler.freedesktop.org/), used by our script for checking whether the pdfs are OK.
 
 ## 6. License
 
 The copyright holder of this package is Prof. Dr. Thomas Weise (see Contact).
-The package is licensed under the  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
+The package is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
 This package also contains third-party components which are under the following licenses;
 
 ### 6.1. [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template)
 
-We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template) by Pascal Wgler and John MacFarlane, which is under the [BSD 3 license](http://github.com/Wandmalfarbe/pandoc-latex-template/blob/master/LICENSE). For this, the following terms hold:
+We include the pandoc LaTeX template from [Wandmalfarbe/pandoc-latex-template](http://github.com/Wandmalfarbe/pandoc-latex-template) by Pascal Wagler and John MacFarlane, which is under the [BSD 3 license](http://github.com/Wandmalfarbe/pandoc-latex-template/blob/master/LICENSE). For this, the following terms hold:
 
     % Copyright (c) 2018, Pascal Wagler;  
     % Copyright (c) 2014--2018, John MacFarlane
