@@ -16,7 +16,7 @@ calibre.azw3<- function(epubFile,
 
   # create dest file
   destFile <- normalizePath(file.path(destDir, paste(destName,
-                            ".azw3", sep="", collapse=""), mustWork = FALSE));
+                            ".azw3", sep="", collapse="")), mustWork = FALSE);
   if(file.exists(destFile)) {
     exit("Destination file '", destFile, "' already exists.");
   }
