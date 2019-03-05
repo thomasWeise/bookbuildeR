@@ -95,13 +95,13 @@ bookbuildeR.main <- function(sourceFile,
   logger("Finished building the book in AZW3 format, generated file '",
          azw3, "'. Now creating index.html");
 
-  files <- list( list(path=pdfFile,
+  files <- list( list(path=pdf,
                       desc="in the <a href=\"http://en.wikipedia.org/wiki/Pdf\">PDF</a>&nbsp;format for reading on the computer and/or printing (but please don't print this, save paper)"),
-                 list(path=epubFile,
+                 list(path=epub,
                       desc="in the <a href=\"http://en.wikipedia.org/wiki/EPUB\">EPUB3</a>&nbsp;format for reading on most mobile phones or other hand-held devices"),
-                 list(path=azw3File,
+                 list(path=azw3,
                       desc="in the <a href=\"http://en.wikipedia.org/wiki/Kindle_File_Format\">AZW3</a>&nbsp;format for reading on <a href=\"http://en.wikipedia.org/wiki/Amazon_Kindle\">Kindle</a> and similar devices"),
-                 list(path=htmlFile,
+                 list(path=html,
                       desc="in a stand-alone <a href=\"http://en.wikipedia.org/wiki/HTML5\">HTML5</a>&nbsp;format for reading in a web browser on any device"));
 
   index <- index.html(files=files,
