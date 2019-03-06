@@ -90,10 +90,13 @@ code.listing <- function(
         n.old <- nchar(code);
 
         if(language == "java") {
-          code.split <- unlist(strsplit(code, "\n", fixed=TRUE));
+          code.split <- trimws(unlist(strsplit(code, "\n", fixed=TRUE)), which="right");
           if(length(code.split) <= 0L) {
             exit("Error in file '", path, "', no lines found.");
           }
+          # remove trailing string markers
+          code.split <- gsub("\\s*(\\/\\/\\$NON-NLS-[1-9]+[0-9]*\\$)+$", "", code.split);
+
           code.split.trim <- trimws(code.split);
           for(remove in c("@Override", "@FunctionalInterface")) {
             keep <- (code.split.trim != remove);
