@@ -96,6 +96,8 @@ code.listing <- function(
           }
           # remove trailing string markers
           code.split <- gsub("\\s*(\\/\\/\\$NON-NLS-[1-9]+[0-9]*\\$)+$", "", code.split);
+          # removing cosmetic end-of-line "//"s in Java
+          code.split <- gsub("\\s*\\/\\/+$", "", code.split);
 
           code.split.trim <- trimws(code.split);
           for(remove in c("@Override", "@FunctionalInterface")) {
