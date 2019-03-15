@@ -66,6 +66,19 @@ The following commands will only work within [Travis CI](http://travis-ci.org/) 
 - `\meta.repository` get the repository in format `owner/repository`, taken from the environment variable `TRAVIS_REPO_SLUG` or, if that is not defined, `REPOSITORY`
 - `\meta.commit` get the commit id, taken from the environment variable `TRAVIS_COMMIT`, or, if that not exists, `COMMIT`
 
+### 2.3. Graphics
+
+Generally, we suggest to use only [vector graphics](http://en.wikipedia.org/wiki/Vector_graphics) in your books, as opposed to [raster graphics](http://en.wikipedia.org/wiki/Raster_graphics) like [`jpg`](http://en.wikipedia.org/wiki/JPEG) or [`png`](http://en.wikipedia.org/wiki/Portable_Network_Graphics).
+Don't use `jpg` or `png` for anything different from photos.
+Vector graphics can scale well and have a higher quality when being printed or when being zoomed in.
+Raster graphics often get blurry or even display artifacts.
+
+In my opinion, the best graphics format to use in conjunction with our tool is [`svg`](http://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (and, in particular, its compressed variant `svgz`).
+You can create `svg` graphics using the open-source editor [Inkscape](http://en.wikipedia.org/wiki/Inkscape) or software such as [Adobe Illustrator](http://en.wikipedia.org/wiki/Adobe_Illustrator) or [Corel DRAW](http://en.wikipedia.org/wiki/CorelDRAW).
+
+We provide the small tool [ultraSvgz](http://github.com/thomasWeise/ultraSvgz), which runs under Linux and can create very small, minified and compressd `svgz` files to `svg`s.
+Our too suite supports `svgz` fully and such files tend to be smaller than [`pdf`](http://en.wikipedia.org/wiki/PDF) or [`eps`](http://en.wikipedia.org/wiki/Encapsulated_PostScript) graphics.
+
 ## 3. Automated Local Book Compilation based on `pandoc`, `calibre`, and `docker`
 
 You can apply this package locally to a book or document you write on your computer.
