@@ -52,4 +52,4 @@ Collate:
     'preprocessor.R'
     'rexec.R'
     'rsource.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

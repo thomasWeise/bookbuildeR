@@ -6,9 +6,9 @@
     return(paste(size, "&nbsp;B", sep="", collapse=""));
   }
   if(size < 1048576L) {
-    return(paste(signif(size/1024L, 1L), "&nbsp;KiB", sep="", collapse=""));
+    return(paste(signif(size/1024L, 2L), "&nbsp;KiB", sep="", collapse=""));
   }
-  return(paste(signif(size/1048576L, 1L), "&nbsp;MiB", sep="", collapse=""));
+  return(paste(signif(size/1048576L, 2L), "&nbsp;MiB", sep="", collapse=""));
 }
 
 # insert commas and "and"s as appropriate
@@ -127,6 +127,7 @@ index.html <- function(files,
              "<ul>",
              files,
              "</ul>",
+             "<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package.</p>",
              "</main>",
              "</body>",
              "</html>");
