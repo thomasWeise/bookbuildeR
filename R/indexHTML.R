@@ -36,6 +36,7 @@
 #' @return the canonical path to the \code{index.html} file
 #' @export index.html
 #' @include logger.R
+#' @include meta.R
 #' @importFrom utilizeR is.non.empty.list is.non.empty.string is.non.empty.vector path.relativize
 index.html <- function(files,
                        destDir=dirname(files[[1L]]$path),
@@ -120,14 +121,19 @@ index.html <- function(files,
   } else {
     start <- "<p>This book";
   }
-  start <- paste(start, " is available in the following formats:</p>");
+  start <- paste(start, " is available in the following formats:</p>", sep="", collapse="");
+
+  compiled <- paste("<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package on ",
+                    meta.date(),
+                    "</p>",
+                    sep="", collapse="");
 
   lines <- c(lines, "<main>",
              start,
              "<ul>",
              files,
              "</ul>",
-             "<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package.</p>",
+             compiled,
              "</main>",
              "</body>",
              "</html>");
