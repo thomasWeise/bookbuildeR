@@ -46,16 +46,23 @@ meta.repository <- function() {
 }
 
 # make sure that we always return the same time
-.now <- strftime(Sys.time(), format="%F %T UTC%z");
-.date <- strsplit(.now, " ", TRUE)[[1L]][1L];
-.year <- strsplit(.now, "-", TRUE)[[1L]][1L];
+.env.dates <- new.env();
+
+.init.time <- function() {
+  if(!exists(".now", envir=.env.dates, inherits=FALSE)) {
+    assign(".now", strftime(Sys.time(), format="%F %T UTC%z"), envir=.env.dates);
+    assign(".date", strsplit(.env.dates$.now, " ", TRUE)[[1L]][1L], envir=.env.dates);
+    assign(".year", strsplit(.env.dates$.now, "-", TRUE)[[1L]][1L], envir=.env.dates);
+  }
+}
 
 #' @title Get the Current Date and Time
 #' @description Get the current date and time as string.
 #' @return the current date and time as string
 #' @export meta.time
 meta.time <- function() {
-  return(.now);
+  .init.time();
+  return(get(".now", envir=.env.dates, inherits=FALSE));
 }
 
 #' @title Get the Current Date
@@ -63,7 +70,8 @@ meta.time <- function() {
 #' @return the current date as string
 #' @export meta.date
 meta.date <- function() {
-  return(.date);
+  .init.time();
+  return(get(".date", envir=.env.dates, inherits=FALSE));
 }
 
 #' @title Get the Current Year
@@ -71,5 +79,6 @@ meta.date <- function() {
 #' @return the current year as string
 #' @export meta.year
 meta.year <- function() {
-  return(.year);
+  .init.time();
+  return(get(".year", envir=.env.dates, inherits=FALSE));
 }
