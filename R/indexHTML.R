@@ -125,7 +125,7 @@ index.html <- function(files,
 
   compiled <- paste("<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package on ",
                     meta.date(),
-                    "</p>",
+                    ".</p>",
                     sep="", collapse="");
 
   lines <- c(lines, "<main>",
