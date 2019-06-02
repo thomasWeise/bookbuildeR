@@ -2,6 +2,14 @@
 
 [<img alt="Travis CI Build Status" src="http://img.shields.io/travis/thomasWeise/bookbuildeR/master.svg" height="20"/>](http://travis-ci.org/thomasWeise/bookbuildeR/)
 
+1. [Introduction](#1-introduction)
+2. [Features via Extented Markdown](#2-features-via-extented-markdown)
+3. [Running the Tool Chain Locally](#3-automated-local-book-compilation-based-on-pandoc-calibre-and-docker)
+4. [Running the Tool Chain in the Cloud / via GitHub + Travis CI](#4-an-automatic-online-book-building-approach-by-using-github-and-travis-ci)
+5. [Related Projects and Building Blocks](#5-related-projects-and-components)
+6. [License](#6-license)
+7. [Contact](#7-contact)
+
 ## 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
@@ -10,23 +18,29 @@ You can see it in action in our project [An Introduction to Optimization Algorit
 Our package aims at making it easier to dynamically write books and even publish them online by reducing most of the work to the invocation of a single command.
 It therefore extends the standard tools provided by pandoc with a set of additional commands.
 
-The package is the basis for our [docker](https://en.wikipedia.org/wiki/Docker_(software)) container "[thomasWeise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/)".
+The package is the basis for our [docker](https://en.wikipedia.org/wiki/Docker_(software)) container "[thomasweise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/)" at Docker Hub.
 The sources of this container are provided in the [GitHub](http://www.github.com) repository [thomasWeise/docker-bookbuilder](https://github.com/thomasWeise/docker-bookbuilder).
 The container includes all necessary software components needed to run and build electronic books by using the scripts here, such as complete installations of [pandoc](http://pandoc.org/), [`R`](http://www.r-project.org/), and [TeX Live](http://tug.org/texlive/).
 
 It is suitable for the integration into a CI environment, which can be used to completely automate the development of electronic books.
 
-## 2. Extented Markdown
+## 2. Features via Extented Markdown
 
-In order to allow for an easy way to work on books, especially for the fields of computer science and mathematics, several additional commands are provided.
+If you use this tool chain, you will write the book in [pandoc flavored markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown).
+However, we introduce some additional features to make life easier.
+For instance, pandoc traditionally processes a list of files sequentially.
+If you write a larger book, however, you may sometimes want to insert a section as a new file into a chapter.
+Thus, we add commands so that you can structure your book as a hierarchy of files where each file can "include" other files, making it unnecessary to maintain a global file order in a single location.
+Also, you may want to include the current date or repository commit into the book &ndash; and there are now commands for that as well.
+Thus, we provide several additional commands to ease the work on books, especially for the fields of computer science and mathematics.
 
 ### 2.1. Added Functionality
 
 The core facility is the hierarchical inclusion and referencing of files, which allows for a more 'decentralized' working method, where the global book structure results from the locally included files and does not need to be known in the root document.
-Thus, you can more easily modify the book structure by including files and nesting folders in your current working position without going back and forth to the main document.
-These commands also allow you to define and reference proof/definition/...-like environments that are converted to markdown.
+You can easily modify the book structure by including files and nesting folders in your current working directory without going back and forth to the main document.
+We also add commands also allow you to define and reference proof/definition/...-like environments.
 
-Furthermore, it allows for dynamically linking to a "source code repository".
+Furthermore, the added commands allow for dynamically linking to a "source code repository".
 Let's say you write a book about Java.
 You would then probably want to have a lot of programming examples.
 You can keep these in a separate source code repository, e.g., on GitHub.
@@ -36,9 +50,10 @@ You can specify this repository as `codeRepo` in the book's [YAML](http://en.wik
 The source code repository is automatically cloned during the book building process and all of its files are accessible.
 You even have access to the commit id of the source code repository, so that you can print it in the book and thus allow the readers to go back to exactly the right version of the code even if you further improve the code in the future.
 
-Since the package provides scripts to be used from the command line, it is designed to hard-fail on any error.
+The scripts of our package are to be used from the command line.
+The functions are is designed to hard-fail on any error, so you can directly see if there is a problem instead of having some garbage output somewhere in your compiled book.
 
-This package, together with a complete installation of [pandoc](http://pandoc.org/), [`R`](http://www.r-project.org/), [TeX Live](http://tug.org/texlive/), and all needed tools is available as a Docker image at http://hub.docker.com/r/thomasweise/docker-bookbuilder.
+This package, together with a complete installation of [pandoc](http://pandoc.org/), [`R`](http://www.r-project.org/), [TeX Live](http://tug.org/texlive/), [calibre](http://calibre-ebook.com), and all other necessary tools is available as a Docker image at http://hub.docker.com/r/thomasweise/docker-bookbuilder.
 Thus, you can use it as tool for all your book-writing purposes.
 You may even integrate it with [Travis CI](http;//travis-ci.org) and [GitHub](http://www.github.com), as described [here](http://iao.hfuu.edu.cn/157) to achieve a fully-automated book writing and publishing tool chain.
 
@@ -135,8 +150,11 @@ For this purpose, we make use of [GitHub Pages](http://help.github.com/articles/
 So we simply let Travis deploy the compiled book, in PDF and EPUB, to the book's repository website.
 Once the repository, website, and Travis build procedure are all set up, we can concentrate on working on our book and whenever some section or text is finished, commit, and enjoy the automatically new versions.
 
-Since the book's sources are available as GitHub repository, our readers can file issues to the repository, with change suggestions, discovered typos, or with questions to add clarification.
-They may even file pull requests with content to include.
+Having your book sources on GitHub brings several additional advantages, for instance:
+
+- Since the book's sources are available as GitHub repository, our readers can file issues to the repository, with change suggestions, discovered typos, or with questions to add clarification.
+- They may even file pull requests with content to include.
+- You could also write a book collaboratively &ndash; like a software project. This might also be interesting for students who write course notes together.
 
 ### 4.1. The Repository
 
