@@ -1,7 +1,7 @@
 Package: bookbuildeR
 Type: Package
 Title: An R Package for Building Books or Documents using pandoc 
-Version: 0.8.6
+Version: 0.8.7
 Author: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Maintainer: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Description: With this package, we provide some R utilities for using pandoc.
@@ -17,14 +17,14 @@ URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
 Imports: utilizeR (>= 0.8.6),
          ore (>= 1.6.3),
-         utils (>= 3.6.1),
+         utils (>= 3.5.0),
          R.utils (>= 2.9.2),
          yaml (>= 2.2.1)
 Suggests: testthat (>= 2.3.1),
           devtools (>= 2.2.1),
           roxygen2 (>= 7.0.2),
           usethis (>= 1.5.1)
-Depends: R (>= 3.6.1)
+Depends: R (>= 3.5.0)
 Remotes: github::thomasWeise/utilizeR
 ByteCompile: true
 LazyData: true
