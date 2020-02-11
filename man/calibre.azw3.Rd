@@ -4,8 +4,11 @@
 \alias{calibre.azw3}
 \title{Use Calibre to Generate awz3 from epub}
 \usage{
-calibre.azw3(epubFile, destName = sub(pattern = "\\\\..*", replacement =
-  "", x = basename(epubFile)), destDir = dirname(epubFile))
+calibre.azw3(
+  epubFile,
+  destName = sub(pattern = "\\\\..*", replacement = "", x = basename(epubFile)),
+  destDir = dirname(epubFile)
+)
 }
 \arguments{
 \item{epubFile}{the path to the EPUB file (see \link{pandoc.epub})}

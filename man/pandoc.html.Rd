@@ -4,11 +4,20 @@
 \alias{pandoc.html}
 \title{Invoke Pandoc to Produce a \code{HTML-5} File}
 \usage{
-pandoc.html(sourceFile, destName = sub(pattern = "\\\\..*", replacement =
-  "", x = basename(sourceFile)), destDir = dirname(sourceFile),
-  format.in = "markdown", standalone = TRUE, tabstops = 2L,
-  toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, numberSections = TRUE, metadata = NULL)
+pandoc.html(
+  sourceFile,
+  destName = sub(pattern = "\\\\..*", replacement = "", x = basename(sourceFile)),
+  destDir = dirname(sourceFile),
+  format.in = "markdown",
+  standalone = TRUE,
+  tabstops = 2L,
+  toc.print = TRUE,
+  toc.depth = 3L,
+  crossref = TRUE,
+  bibliography = TRUE,
+  numberSections = TRUE,
+  metadata = NULL
+)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}

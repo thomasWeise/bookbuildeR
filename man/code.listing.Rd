@@ -5,10 +5,20 @@
 \title{Read Code from a File according to Parameters given as Strings and Put
   it into a Listings Environment}
 \usage{
-code.listing(label = "", caption = "", language = "", path,
-  lines = "", tags = "", basePath = NULL, repo = NULL,
-  codeBlockCaptions = TRUE, removeMetaComments = TRUE,
-  removeUnnecessary = TRUE, numberLines = TRUE)
+code.listing(
+  label = "",
+  caption = "",
+  language = "",
+  path,
+  lines = "",
+  tags = "",
+  basePath = NULL,
+  repo = NULL,
+  codeBlockCaptions = TRUE,
+  removeMetaComments = TRUE,
+  removeUnnecessary = TRUE,
+  numberLines = TRUE
+)
 }
 \arguments{
 \item{label}{the label to use}

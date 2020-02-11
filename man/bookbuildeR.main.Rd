@@ -4,8 +4,12 @@
 \alias{bookbuildeR.main}
 \title{Invoke the bookBuildeR Tool Chain}
 \usage{
-bookbuildeR.main(sourceFile, format.in = "markdown", destName = "book",
-  destDir)
+bookbuildeR.main(
+  sourceFile,
+  format.in = "markdown",
+  destName = "book",
+  destDir
+)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}

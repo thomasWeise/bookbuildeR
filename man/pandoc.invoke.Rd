@@ -4,11 +4,22 @@
 \alias{pandoc.invoke}
 \title{Invoke Pandoc}
 \usage{
-pandoc.invoke(sourceFile, destFileName, destDir = dirname(sourceFile),
-  format.in = "markdown", format.out = "latex", standalone = TRUE,
-  tabstops = 2L, toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, template = NA_character_,
-  numberSections = TRUE, ...)
+pandoc.invoke(
+  sourceFile,
+  destFileName,
+  destDir = dirname(sourceFile),
+  format.in = "markdown",
+  format.out = "latex",
+  standalone = TRUE,
+  tabstops = 2L,
+  toc.print = TRUE,
+  toc.depth = 3L,
+  crossref = TRUE,
+  bibliography = TRUE,
+  template = NA_character_,
+  numberSections = TRUE,
+  ...
+)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}

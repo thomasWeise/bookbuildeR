@@ -4,8 +4,7 @@
 \alias{preprocess.command.regexp}
 \title{Create a Regular Expression for a LaTeX-Style Command}
 \usage{
-preprocess.command.regexp(prefix = "", n = 1L,
-  stripWhiteSpace = FALSE)
+preprocess.command.regexp(prefix = "", n = 1L, stripWhiteSpace = FALSE)
 }
 \arguments{
 \item{prefix}{the prefix of the command}

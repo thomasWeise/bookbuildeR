@@ -4,12 +4,22 @@
 \alias{pandoc.latex}
 \title{Invoke Pandoc to Produce a \code{pdf} via LaTeX}
 \usage{
-pandoc.latex(sourceFile, destName = sub(pattern = "\\\\..*", replacement
-  = "", x = basename(sourceFile)), destDir = dirname(sourceFile),
-  format.in = "markdown", standalone = TRUE, tabstops = 2L,
-  toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, topLevelDivision = "chapter",
-  numberSections = TRUE, metadata = NULL, useListings = FALSE)
+pandoc.latex(
+  sourceFile,
+  destName = sub(pattern = "\\\\..*", replacement = "", x = basename(sourceFile)),
+  destDir = dirname(sourceFile),
+  format.in = "markdown",
+  standalone = TRUE,
+  tabstops = 2L,
+  toc.print = TRUE,
+  toc.depth = 3L,
+  crossref = TRUE,
+  bibliography = TRUE,
+  topLevelDivision = "chapter",
+  numberSections = TRUE,
+  metadata = NULL,
+  useListings = FALSE
+)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}

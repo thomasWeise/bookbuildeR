@@ -15,15 +15,16 @@ License: GPL-3
 Encoding: UTF-8
 URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
-Imports: utilizeR (>= 0.8.5),
-         ore (>= 1.6.1),
-         utils (>= 3.4.4),
-         R.utils (>= 2.7.0),
-         yaml (>= 2.1.19)
-Suggests: testthat (>= 2.0.0),
-          devtools (>= 1.13.5),
-          roxygen2 (>= 6.0.1)
-Depends: R (>= 3.3.0)
+Imports: utilizeR (>= 0.8.6),
+         ore (>= 1.6.3),
+         utils (>= 3.6.1),
+         R.utils (>= 2.9.2),
+         yaml (>= 2.2.1)
+Suggests: testthat (>= 2.3.1),
+          devtools (>= 2.2.1),
+          roxygen2 (>= 7.0.2),
+          usethis (>= 1.5.1)
+Depends: R (>= 3.6.1)
 Remotes: github::thomasWeise/utilizeR
 ByteCompile: true
 LazyData: true
@@ -52,4 +53,4 @@ Collate:
     'preprocessor.R'
     'rexec.R'
     'rsource.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

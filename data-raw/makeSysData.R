@@ -140,7 +140,7 @@ logger("Done fixing 'GitHub.html5'.");
 
 logger("Now storing resources in R/sysdata.rda.");
 # store all contents in the sysdata.rda file
-devtools::use_data(template.urls,
+usethis::use_data(template.urls,
                    template.resources,
                    internal = TRUE,
                    overwrite = TRUE,

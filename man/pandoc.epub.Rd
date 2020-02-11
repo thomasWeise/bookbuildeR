@@ -4,12 +4,21 @@
 \alias{pandoc.epub}
 \title{Invoke Pandoc to Produce an Electronic Book}
 \usage{
-pandoc.epub(sourceFile, destName = sub(pattern = "\\\\..*", replacement =
-  "", x = basename(sourceFile)), destDir = dirname(sourceFile),
-  format.in = "markdown", standalone = TRUE, tabstops = 2L,
-  toc.print = TRUE, toc.depth = 3L, crossref = TRUE,
-  bibliography = TRUE, numberSections = TRUE, mathToGraphic = FALSE,
-  metadata = NULL)
+pandoc.epub(
+  sourceFile,
+  destName = sub(pattern = "\\\\..*", replacement = "", x = basename(sourceFile)),
+  destDir = dirname(sourceFile),
+  format.in = "markdown",
+  standalone = TRUE,
+  tabstops = 2L,
+  toc.print = TRUE,
+  toc.depth = 3L,
+  crossref = TRUE,
+  bibliography = TRUE,
+  numberSections = TRUE,
+  mathToGraphic = FALSE,
+  metadata = NULL
+)
 }
 \arguments{
 \item{sourceFile}{the path to the source file}
