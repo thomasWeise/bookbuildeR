@@ -71,7 +71,7 @@ index.html <- function(files,
     }
   }
   if(!(is.null(author))) {
-# for now, we just perform a very cruder name concatenation
+# for now, we just perform a very crude name concatenation
     author <- paste(.name.and(author), sep=" ", collapse=" ");
   }
 
