@@ -14,19 +14,19 @@
 #' @export preprocess.doc
 preprocess.doc <- function(sourceFile, destName) {
   # get the canonical path of the source file
-  sourceFile <- check.file(sourceFile);
-  sourceDir <- check.dir(dirname(sourceFile));
+  sourceFile <- .check.file(sourceFile);
+  sourceDir <- .check.dir(dirname(sourceFile));
 
   # create dest file
   destFile <- normalizePath(file.path(sourceDir, destName), mustWork = FALSE);
   if(file.exists(destFile)) {
-    exit("Destination file '", destFile, "' already exists.");
+    .exit("Destination file '", destFile, "' already exists.");
   }
 
   # load the text
   text <- preprocess.input(sourceFile);
   
-  logger("Now preprocessing the ",
+  .logger("Now preprocessing the ",
           nchar(text), " characters loaded from '",
           sourceFile, "'.");
   
@@ -44,7 +44,7 @@ preprocess.doc <- function(sourceFile, destName) {
   text <- unname(unlist(strsplit(
               text, split="\n", fixed = TRUE)));
   
-  logger("Obtained ", length(text),
+  .logger("Obtained ", length(text),
           " lines of text from preprocessing '",
           sourceFile, "', now writing to '",
           destFile, "'.");
@@ -53,9 +53,9 @@ preprocess.doc <- function(sourceFile, destName) {
   writeLines(text=text, con=output);
   
   close(output);
-  destFile <- check.file(destFile);
+  destFile <- .check.file(destFile);
 
-  logger("Finished pre-processing contents from main source file '",
+  .logger("Finished pre-processing contents from main source file '",
          sourceFile,
          "' to output file '",
          destFile,

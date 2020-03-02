@@ -7,17 +7,17 @@
 #' @include logger.R
 #' @export git.clone
 git.clone <- function(repo) {
-  logger("Begin cloning repo '", repo, "'.");
+  .logger("Begin cloning repo '", repo, "'.");
   
   destDir <- tempfile();
   dir.create(destDir);
-  destDir <- check.dir(destDir);
+  destDir <- .check.dir(destDir);
   
   ret <- system2("git", args=c("-C", destDir, "clone",
                                "--depth", "1",
                                 repo, destDir));
   if(ret == 0L) {
-    logger("git clone of repo '", repo,
+    .logger("git clone of repo '", repo,
            "' successfully completed to path '",
            destDir);
     
@@ -36,7 +36,7 @@ git.clone <- function(repo) {
           if(commit.l > 0L) { # check its trimmed version
             commit <- trimws(substr(commit, 7, commit.l));
             if(nchar(commit) == 40L) { # commit is right length
-              logger("Repository '",
+              .logger("Repository '",
                      repo, "' commit is '",
                      commit, "'.");
               return(list(path=destDir, commit=commit));
@@ -45,13 +45,13 @@ git.clone <- function(repo) {
         }
       }
       unlink(destDir, recursive = TRUE);
-      exit("git log for cloned repo '", repo,
+      .exit("git log for cloned repo '", repo,
            "' in path '",
            destDir,
            "' resulted in invalid commit id.");
     } else {
       unlink(destDir, recursive = TRUE);
-      exit("git log for cloned repo '", repo,
+      .exit("git log for cloned repo '", repo,
            "' in path '",
            destDir,
            "' failed with error code ",
@@ -59,7 +59,7 @@ git.clone <- function(repo) {
     }
   } else {
     unlink(destDir, recursive = TRUE);
-    exit("git clone of repo '", repo,
+    .exit("git clone of repo '", repo,
              "' to path '",
              destDir,
              "' failed with error code ",

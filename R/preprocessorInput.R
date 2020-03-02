@@ -11,7 +11,7 @@
   if(endsWith(path, ".svgz")) {
     dest <- substr(path, 1L, (nchar(path)-1L));
     gunzip(filename=path, destname=dest, skip=TRUE, remove=FALSE);
-    return(check.file(dest));
+    return(.check.file(dest));
   }
   return(path);
 }
@@ -22,20 +22,20 @@
 .resolve.path <- function(path, currentDir, rootDir) {
   if((!(is.non.empty.vector(path))) ||
      (length(path) != 1L)) {
-    exit("Incorrect arguments for resolving relative path.");
+    .exit("Incorrect arguments for resolving relative path.");
   }
 
   path <- path[[1L]];
   path <- force(path);
   if(!is.non.empty.string(path)) {
-    exit("Error trying to resolve empty path relative to directory '",
+    .exit("Error trying to resolve empty path relative to directory '",
          currentDir, "' towards '", rootDir, "'.");
   }
 
   path <- trimws(path);
   path <- force(path);
   if(!is.non.empty.string(path)) {
-    exit("Error trying to resolve path '",
+    .exit("Error trying to resolve path '",
          path,
          "' composed only of white space relative to directory '",
          currentDir, "' towards '", rootDir, "'.");
@@ -43,13 +43,13 @@
 
   path <- file.path(currentDir, path);
   path <- force(path);
-  path <- check.file(path);
+  path <- .check.file(path);
   path <- .resolve.svgz(path); # http://github.com/jgm/pandoc/issues/5163
   path <- force(path);
 
   path <- path.relativize(path, rootDir);
   path <- force(path);
-  check.file(file.path(rootDir, path));
+  .check.file(file.path(rootDir, path));
 
   return(path);
 }
@@ -61,23 +61,23 @@
 .load.file <- function(relativeFile, currentDir, rootDir, .surroundByNewlines,
                        .regexp.lf, .regexp.rp, .regexp.lc,
                        .regexp.rs) {
-  logger("Beginning to load file '",
+  .logger("Beginning to load file '",
           relativeFile, "' as relative path to '",
           currentDir, "'.");
 
   if((!(is.non.empty.vector(relativeFile))) ||
      (length(relativeFile) != 1L)) {
-    exit("Incorrect arguments for recursively loading file.");
+    .exit("Incorrect arguments for recursively loading file.");
   }
   relativeFile <- relativeFile[[1L]];
 
   if(!is.non.empty.string(relativeFile)) {
-    exit("Error trying to load file with empty name relative to directory '",
+    .exit("Error trying to load file with empty name relative to directory '",
          currentDir, "'.");
   }
   relativeFile <- trimws(relativeFile);
   if(!is.non.empty.string(relativeFile)) {
-    exit("Error trying to load file '",
+    .exit("Error trying to load file '",
          relativeFile, "' whose name is only white space relative to directory '",
          currentDir, "'.");
   }
@@ -85,19 +85,19 @@
   # check if we can open the source file
   sourceFile <- file.path(currentDir, relativeFile);
   sourceFile <- force(sourceFile);
-  sourceFile <- check.file(sourceFile);
+  sourceFile <- .check.file(sourceFile);
   sourceFile <- force(sourceFile);
 
   # get the current directory
   sourceDir <- dirname(sourceFile);
   sourceDir <- force(sourceDir);
-  sourceDir <- check.dir(sourceDir);
+  sourceDir <- .check.dir(sourceDir);
   sourceDir <- force(sourceDir);
 
   # read the contents
   src  <- file(sourceFile, open="rt");
   text <- tryCatch(readLines(src),
-           error=function(e) exit("Error '", e,
+           error=function(e) .exit("Error '", e,
                                   "' occured when reading input file '", src,
                                   "'."));
   close(src);
@@ -112,7 +112,7 @@
       text <- force(text);
     }
   } else {
-    exit("File '", sourceFile, "' has no text.");
+    .exit("File '", sourceFile, "' has no text.");
   }
 
   # apply the relative path resolver
@@ -141,13 +141,13 @@
   text <- force(text);
 
   if(is.non.empty.string(text)) {
-    logger("Finished loading source file '",
+    .logger("Finished loading source file '",
             sourceFile,
             "', found ", nchar(text),
             " characters.");
     return(text);
   }
-  exit("Error loading file '",
+  .exit("Error loading file '",
        sourceFile,
        "' -- found no text.");
 }
@@ -164,16 +164,16 @@
 #' @importFrom utilizeR is.non.empty.string
 #' @export preprocess.input
 preprocess.input <- function(sourceFile) {
-  logger("Recursively loading file '", sourceFile, "'.");
+  .logger("Recursively loading file '", sourceFile, "'.");
 
   # check if we can open the source file
-  sourceFile <- check.file(sourceFile);
+  sourceFile <- .check.file(sourceFile);
   sourceFile <- force(sourceFile);
 
   # get the current directory
   sourceDir <- dirname(sourceFile);
   sourceDir <- force(sourceDir);
-  sourceDir <- check.dir(sourceDir);
+  sourceDir <- .check.dir(sourceDir);
   sourceDir <- force(sourceDir);
 
   # load the file
@@ -188,13 +188,13 @@ preprocess.input <- function(sourceFile) {
 
   if(is.non.empty.string(text)) {
     text <- trimws(text);
-    logger("Finished recursively loading file '",
+    .logger("Finished recursively loading file '",
             sourceFile, "', found ",
             nchar(text), " characters.");
     text <- force(text);
     return(text);
   }
 
-  exit("Error loading file '", sourceFile,
+  .exit("Error loading file '", sourceFile,
        "' -- found no text.");
 }

@@ -31,10 +31,10 @@ pandoc.html<- function(sourceFile,
                        bibliography=TRUE,
                        numberSections=TRUE,
                        metadata=NULL) {
-  logger("Now building HTML-5.");
+  .logger("Now building HTML-5.");
 
-  sourceFile <- check.file(sourceFile);
-  destDir <- check.dir(destDir);
+  sourceFile <- .check.file(sourceFile);
+  destDir <- .check.dir(destDir);
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
@@ -61,7 +61,7 @@ pandoc.html<- function(sourceFile,
     template <- metadata$template.html;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      logger("Found HTML template specification in metadata for template '",
+      .logger("Found HTML template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -69,7 +69,7 @@ pandoc.html<- function(sourceFile,
         params$template <- template;
       }
     } else {
-      logger("No HTML template specified in metadata.");
+      .logger("No HTML template specified in metadata.");
     }
   }
 
@@ -82,6 +82,6 @@ pandoc.html<- function(sourceFile,
 
   destFile <- do.call(pandoc.invoke, params);
 
-  logger("Finished building a html5 output '", destFile, "'.");
+  .logger("Finished building a html5 output '", destFile, "'.");
   return(destFile);
 }

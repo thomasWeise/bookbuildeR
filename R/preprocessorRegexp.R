@@ -1,7 +1,7 @@
 # the internal regexpression invoker for regular expressions without groups
 .preprocess.regexp <- function(found, func, ...) {
   if(is.null(found)) {
-    exit("Error in groupless regular expression processing: '",
+    .exit("Error in groupless regular expression processing: '",
          found, "' occurences.");
   }
 
@@ -11,14 +11,14 @@
     result <- tryCatch(
         as.character(unname(unlist(vapply(
                X=found, FUN=func, FUN.VALUE = "", ...)))),
-    error = function(e) exit("Error '", e, "' occured while invoking groupless regex processor."),
-    warnining = function(e) exit("Warning '", e, "' occured while invoking groupless regex processor."));
+    error = function(e) .exit("Error '", e, "' occured while invoking groupless regex processor."),
+    warnining = function(e) .exit("Warning '", e, "' occured while invoking groupless regex processor."));
 
     result <- force(result);
     return(result);
   }
 
-  exit("Matches '", found, "' improperly coerced into vector?");
+  .exit("Matches '", found, "' improperly coerced into vector?");
 }
 
 
@@ -36,10 +36,10 @@ preprocess.regexp <- function(regex, text, func, ...) {
   result <- tryCatch(
     ore.subst(regex=regex, replacement=.preprocess.regexp,
               text=text, func=func, ..., all=TRUE),
-    error=function(e) exit("Error '", e,
+    error=function(e) .exit("Error '", e,
                            "' occured while invoking groupless regex processor on expression '",
                            regex, "'."),
-    warnining=function(e) exit("Warning '", e,
+    warnining=function(e) .exit("Warning '", e,
                                "' occured while invoking groupless regex processor on expression '",
                                regex, "'."));
   result <- force(result);

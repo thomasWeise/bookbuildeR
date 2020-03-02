@@ -13,10 +13,10 @@
 preprocess.repo <- function(text, metadata) {
   repository <- metadata.getCodeRepo(metadata);
   if(is.null(repository)) {
-    logger("No source code repository specified.");
+    .logger("No source code repository specified.");
     return(text);
   }
-  logger("Source code repository '", repository,
+  .logger("Source code repository '", repository,
          "' repository specified.");
   
   repo <- git.clone(repository);
@@ -38,7 +38,7 @@ preprocess.repo <- function(text, metadata) {
   
   codeBlockCaptions <- (isTRUE(metadata$codeBlockCaptions) ||
                         identical(metadata$codeBlockCaptions, "true"));
-  logger("Code block captions value '",
+  .logger("Code block captions value '",
          metadata$codeBlockCaptions,
         "' lets to ", codeBlockCaptions, ".");
   text <- preprocess.command(

@@ -33,16 +33,16 @@ r.exec <- function(code) {
             res.2 <- force(res.2);
             return(res.2);
           } else {
-            exit("R code '", code, "' has neither output nor a non-empty string result.");
+            .exit("R code '", code, "' has neither output nor a non-empty string result.");
           }
         } else {
-          exit("R code '", code, "' has neither output nor a non-null result.");
+          .exit("R code '", code, "' has neither output nor a non-null result.");
         }
       }
     } else {
-      exit("R code cannot just consist of white space.");
+      .exit("R code cannot just consist of white space.");
     }
   } else {
-    exit("R code cannot empty.");
+    .exit("R code cannot empty.");
   }
 }

@@ -41,14 +41,14 @@
 index.html <- function(files,
                        destDir=dirname(files[[1L]]$path),
                        metadata) {
-  logger("Now building index.html file.");
+  .logger("Now building index.html file.");
 
-  destDir <- check.dir(destDir);
+  destDir <- .check.dir(destDir);
 
   # create dest file
   destFile <- normalizePath(file.path(destDir, "index.html"), mustWork = FALSE);
   if(file.exists(destFile)) {
-    exit("Destination file '", destFile, "' already exists.");
+    .exit("Destination file '", destFile, "' already exists.");
   }
 
 # load title
@@ -78,7 +78,7 @@ index.html <- function(files,
 # put the contents together: first create links and add file sizes and descriptions
   files <- vapply(X=files,
                   FUN=function(f) {
-                    path <- check.file(f$path);
+                    path <- .check.file(f$path);
                     size <- file.size(path);
                     path <- path.relativize(path, destDir);
                     return(paste("<a href=\"", path, "\">",
@@ -141,8 +141,8 @@ index.html <- function(files,
   writeLines(text=lines,
              con=destFile);
 
-  destFile <- check.file(destFile);
+  destFile <- .check.file(destFile);
 
-  logger("Finished building index.html '", destFile, "'.");
+  .logger("Finished building index.html '", destFile, "'.");
   return(destFile);
 }

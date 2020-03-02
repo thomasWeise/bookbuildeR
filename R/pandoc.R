@@ -34,23 +34,23 @@ pandoc.invoke <- function(sourceFile,
                           numberSections=TRUE,
                           ...) {
   # get the canonical path of the source file
-  sourceFile <- check.file(sourceFile);
+  sourceFile <- .check.file(sourceFile);
   # get the source directory
   sourceDir <- dirname(sourceFile);
 
   # create dest file
   destFile <- normalizePath(file.path(destDir, destFileName), mustWork = FALSE);
   if(file.exists(destFile)) {
-    exit("Destination file '", destFile, "' already exists.");
+    .exit("Destination file '", destFile, "' already exists.");
   }
 
   # get destination directory
   destDir <- dirname(destFile);
   dir.create(destDir, showWarnings = FALSE, recursive=TRUE);
-  destDir  <- check.dir(destDir);
+  destDir  <- .check.dir(destDir);
   destFile <- normalizePath(file.path(destDir, basename(destFile)), mustWork = FALSE);
 
-  logger("Applying pandoc to create '", destFile, "' from '", sourceFile, "'.");
+  .logger("Applying pandoc to create '", destFile, "' from '", sourceFile, "'.");
 
   wd <- getwd();
   setwd(sourceDir);
@@ -119,14 +119,14 @@ pandoc.invoke <- function(sourceFile,
   result <- system2("pandoc", args=args);
 
   if(result != 0L) {
-    exit("pandoc has failed with error code ", result, " for arguments '",
+    .exit("pandoc has failed with error code ", result, " for arguments '",
          paste(args, sep=" ", collapse=" "), "' in directory '", sourceDir, "'.");
   }
 
   setwd(wd);
 
-  destFile <- check.file(destFile);
-  logger("pandoc has succeeded for arguments '",
+  destFile <- .check.file(destFile);
+  .logger("pandoc has succeeded for arguments '",
          paste(args, sep=" ", collapse=" "),
          "' in directory '",
          sourceDir, "' and produced file '",

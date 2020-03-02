@@ -4,19 +4,19 @@
 #' @include logger.R
 .text.block.subst.inner <- function(found, env) {
   if(is.null(found) || (length(found) != 3L)) {
-    exit("Error in \\text.block{", paste(found, sep=", ", collapse=", "), "}'.");
+    .exit("Error in \\text.block{", paste(found, sep=", ", collapse=", "), "}'.");
   }
 
   type <- found[[1L]];
   type <- force(type);
   if(!(is.non.empty.string(type))) {
-    exit("Empty text block type: '", type, "'.");
+    .exit("Empty text block type: '", type, "'.");
   }
   type   <- tolower(trimws(type));
   type   <- force(type);
   type.n <- nchar(type);
   if(type.n <= 0L) {
-    exit("Text block type only composed of white space.");
+    .exit("Text block type only composed of white space.");
   }
 
   label <- found[[2L]];
@@ -31,12 +31,12 @@
   body <- found[[3L]];
   body <- force(body);
   if(!(is.non.empty.string(body))) {
-    exit("Empty text block body: '", body, "'.");
+    .exit("Empty text block body: '", body, "'.");
   }
   body <- trimws(body);
   body <- force(body);
   if(nchar(body) <= 0L) {
-    exit("Text block body only composed of white space.");
+    .exit("Text block body only composed of white space.");
   }
 
   count <- (get0(x=type, envir=env, inherits=FALSE, ifnotfound=0L) + 1L);
@@ -55,7 +55,7 @@
     if(is.null(found)) {
       assign(x=label, value=title, pos=env);
     } else {
-      exit("Error: text block label '", label, "' already defined as '", found, "'.");
+      .exit("Error: text block label '", label, "' already defined as '", found, "'.");
     }
   }
 
@@ -69,7 +69,7 @@
 #' @include logger.R
 .text.ref.subst.inner <- function(found, env) {
   if(is.null(found) || (length(found) != 1L)) {
-    exit("Error in \\text.ref{", paste(found, sep=", ", collapse=", "), "}'.");
+    .exit("Error in \\text.ref{", paste(found, sep=", ", collapse=", "), "}'.");
   }
 
   label <- found[[1L]];
@@ -83,10 +83,10 @@
       if(is.non.empty.string(found)) {
         return(found);
       }
-      exit("Error: \\text.ref label '", label, "' not found.");
+      .exit("Error: \\text.ref label '", label, "' not found.");
     }
   }
-  exit("Empty label in \\text.ref or label composed only of white space.")
+  .exit("Empty label in \\text.ref or label composed only of white space.")
 }
 
 #' @title Process all Text Blocks in a Markdown file

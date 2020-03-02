@@ -37,10 +37,10 @@ pandoc.epub<- function(sourceFile,
                        numberSections=TRUE,
                        mathToGraphic=FALSE,
                        metadata=NULL) {
-  logger("Now building EPUB.");
+  .logger("Now building EPUB.");
 
-  sourceFile <- check.file(sourceFile);
-  destDir <- check.dir(destDir);
+  sourceFile <- .check.file(sourceFile);
+  destDir <- .check.dir(destDir);
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
@@ -64,7 +64,7 @@ pandoc.epub<- function(sourceFile,
     template <- metadata$template.epub;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      logger("Found EPUB template specification in metadata for template '",
+      .logger("Found EPUB template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -72,7 +72,7 @@ pandoc.epub<- function(sourceFile,
         params$template <- template;
       }
     } else {
-      logger("No EPUB template specified in metadata.");
+      .logger("No EPUB template specified in metadata.");
     }
   }
 
@@ -97,11 +97,11 @@ pandoc.epub<- function(sourceFile,
     params[[len]] <- "--mathml";
   }
 
-#  logger("Invoking pandoc.invoke with parameters '",
+#  .logger("Invoking pandoc.invoke with parameters '",
 #          paste(params, sep=", ", collapse=", "),
 #          "'.");
   destFile <- do.call(pandoc.invoke, params);
 
-  logger("Finished building a EPUB output '", destFile, "'.");
+  .logger("Finished building a EPUB output '", destFile, "'.");
   return(destFile);
 }

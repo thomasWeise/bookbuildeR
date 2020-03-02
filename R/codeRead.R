@@ -20,7 +20,7 @@
   # fix trailing and leading newlines
   len <- length(text);
   if(len <= 0L) {
-    exit("Empty text selected from file '", path, "'.");
+    .exit("Empty text selected from file '", path, "'.");
   }
   for(i in seq_along(text)) {
     if(nchar(trimws(text[[i]])) > 0L) {
@@ -34,7 +34,7 @@
   }
   if((i > 1L) || (j < len)) {
     if(j <= i) {
-      exit("Empty text in after selection and trimming in file '",
+      .exit("Empty text in after selection and trimming in file '",
            path, "'.");
     }
     text <- text[i:j]
@@ -56,7 +56,7 @@
   text <- trimws(text, which="right");
   text <- force(text);
   if(nchar(text) <= 0) {
-    exit("After trimming, the selected code from file '",
+    .exit("After trimming, the selected code from file '",
          path, "' is empty.");
   }
   return(text);
@@ -70,13 +70,13 @@
 #' @export code.read
 #' @include logger.R
 code.read <- function(path, lines=NULL, tags=NULL) {
-  path <- check.file(path);
-  logger("reading text from file '", path, "'.");
+  path <- .check.file(path);
+  .logger("reading text from file '", path, "'.");
 
   handle <- file(path, "rt");
   text <- readLines(handle);
   close(handle);
-  logger("finished reading text from file '", path, "', now processing it.");
+  .logger("finished reading text from file '", path, "', now processing it.");
 
   # pick the selected lines
   if((!(is.null(lines))) && (length(lines) > 0L)) {
@@ -100,14 +100,14 @@ code.read <- function(path, lines=NULL, tags=NULL) {
       # check the number of occurences
       l <- length(start);
       if(l != length(end)) {
-        exit("Number ", l,
+        .exit("Number ", l,
              " of starts of tag '", tag,
              "' does not equal number ",
              length(end), " of ends in '",
              path, "'.");
       }
       if(l <= 0L) {
-        exit("Did not find tag '", tag,
+        .exit("Did not find tag '", tag,
              "' in '", path, "'.");
       }
 
@@ -116,7 +116,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
         s <- start[i];
         e <- end[i];
         if(s >= e) {
-          exit("Start line ", s,
+          .exit("Start line ", s,
                " of tag '", tag,
                "' larger or equal than end line ",
                e, " in '",
@@ -147,7 +147,7 @@ code.read <- function(path, lines=NULL, tags=NULL) {
   text <- .remove.trailing.spaces(text, path);
   text <- force(text);
   
-  logger("Finished reading ",
+  .logger("Finished reading ",
          length(gregexpr("\n", text, fixed=TRUE)[[1]]),
          " lines of text from file '",
          path, "'.");

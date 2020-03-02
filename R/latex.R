@@ -35,10 +35,10 @@ pandoc.latex <- function(sourceFile,
                          numberSections=TRUE,
                          metadata=NULL,
                          useListings=FALSE) {
-  logger("Now building a pdf output via LaTeX.");
+  .logger("Now building a pdf output via LaTeX.");
 
-  sourceFile <- check.file(sourceFile);
-  destDir <- check.dir(destDir);
+  sourceFile <- .check.file(sourceFile);
+  destDir <- .check.dir(destDir);
 
   # the basic parameters
   params <- list(sourceFile=sourceFile,
@@ -61,7 +61,7 @@ pandoc.latex <- function(sourceFile,
     template <- metadata$template.latex;
     template <- force(template);
     if(is.non.empty.string(template)) {
-      logger("Found LaTeX template specification in metadata for template '",
+      .logger("Found LaTeX template specification in metadata for template '",
               template, "'.");
       template <- template.load(template, dirname(sourceFile));
       if(is.non.empty.string(template)) {
@@ -69,7 +69,7 @@ pandoc.latex <- function(sourceFile,
         params$template <- template;
       }
     } else {
-      logger("No LaTeX template specified in metadata.");
+      .logger("No LaTeX template specified in metadata.");
     }
   }
 
@@ -86,6 +86,6 @@ pandoc.latex <- function(sourceFile,
 
   destFile <- do.call(pandoc.invoke, params);
 
-  logger("Finished building a pdf output '", destFile, "' via LaTeX.");
+  .logger("Finished building a pdf output '", destFile, "' via LaTeX.");
   return(destFile);
 }

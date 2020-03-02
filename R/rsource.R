@@ -14,20 +14,20 @@
 #' @include logger.R
 r.source <- function(path, basePath=NULL) {
   if(!is.null(basePath)) {
-    path2 <- check.file(file.path(basePath, path));
-    logger("resolved r script path '", path,
+    path2 <- .check.file(file.path(basePath, path));
+    .logger("resolved r script path '", path,
            "' versus path '", basePath,
            "' for r script execution, got '", path2, "'.");
     path <- path2;
   }
-  path <- check.file(path);
+  path <- .check.file(path);
   path <- force(path);
   
-  logger("reading r source from file '", path, "'.");
+  .logger("reading r source from file '", path, "'.");
   handle <- file(path, "rt");
   text <- readLines(handle);
   close(handle);
-  logger("finished reading r source from file '", path, "', now executing.");
+  .logger("finished reading r source from file '", path, "', now executing.");
   
   return(r.exec(text));
 }

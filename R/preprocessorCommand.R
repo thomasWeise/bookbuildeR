@@ -19,7 +19,7 @@ preprocess.command.regexp <- function(prefix="", n=1L, stripWhiteSpace=FALSE) {
   
   # check parameters
   if(!(is.non.empty.string(prefix))) {
-    exit("Invalid regular expression.");
+    .exit("Invalid regular expression.");
   }
   
   # First, we build the regular expression, which makes sure that braces numbers
@@ -89,10 +89,10 @@ preprocess.command <- function(regex, text, func, ...) {
     ore.subst(regex=regex, replacement=.preprocessor.regexp.invoke,
               preprocessor=.preprocess.command.strip,
               text=text, func=func, ..., all=TRUE),
-    error=function(e) exit("Error '", e,
+    error=function(e) .exit("Error '", e,
                            "' occured while invoking grouplfull regex processor on expression '",
                            regex, "'."),
-    warnining=function(e) exit("Warning '", e,
+    warnining=function(e) .exit("Warning '", e,
                                "' occured while invoking groupfull regex processor on expression '",
                                regex, "'."));
   result <- force(result);
@@ -104,7 +104,7 @@ preprocess.command <- function(regex, text, func, ...) {
 #' @importFrom ore groups
 .preprocessor.regexp.invoke <- function(found, func, preprocessor=trimws, ...) {
   if(is.null(found)) {
-    exit("Error in groupfull regular expression processing: '",
+    .exit("Error in groupfull regular expression processing: '",
          found, "' occurences.");
   }
   
@@ -112,7 +112,7 @@ preprocess.command <- function(regex, text, func, ...) {
   g <- groups(found);
   g <- force(g);
   if(is.null(g)) {
-    exit("Error in groupfull regular expression processing: '",
+    .exit("Error in groupfull regular expression processing: '",
          found, "' has NULL groups.");
   }
   
@@ -130,10 +130,10 @@ preprocess.command <- function(regex, text, func, ...) {
                                           t <- force(t);
                                           return(t);
                                         }, FUN.VALUE = "")))),
-      error=function(e) exit("Error '", e, "' occured while invoking regex processor."),
-      warnining=function(e) exit("Warning '", e, "' occured while invoking regex processor."));
+      error=function(e) .exit("Error '", e, "' occured while invoking regex processor."),
+      warnining=function(e) .exit("Warning '", e, "' occured while invoking regex processor."));
     result <- force(result);
     return(result);
   }
-  exit("Zero group rows in regular expression match '", g, "'.");
+  .exit("Zero group rows in regular expression match '", g, "'.");
 }

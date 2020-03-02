@@ -15,15 +15,15 @@ metadata.get <- function(text) {
                       options="m"),
                      text, all=FALSE);
   if(is.null(found)) {
-    logger("No metadata found in text.");
+    .logger("No metadata found in text.");
     return(NULL);
   }
   if(found$nMatches != 1L) {
-    exit("Error in YAML metadata matching.");
+    .exit("Error in YAML metadata matching.");
   }
   text <- trimws(groups(found)[,1L]);
   if(nchar(text) <= 0L) {
-    exit("Empty metadata?");
+    .exit("Empty metadata?");
   }
 
   # take care of multi-line content
@@ -39,7 +39,7 @@ metadata.get <- function(text) {
                 all=TRUE));
 
   if(nchar(text) <= 0L) {
-    exit("Empty metadata after multi-line merging?");
+    .exit("Empty metadata after multi-line merging?");
   }
 
   # take care of raw attributes
@@ -47,30 +47,30 @@ metadata.get <- function(text) {
   text <- trimws(gsub("\`\`\`.+\`\`\`", s, text));
 
   if((nchar(text) <= 0L) || (text == s)) {
-    exit("Empty metadata after raw attribute removal?");
+    .exit("Empty metadata after raw attribute removal?");
   }
 
   tryCatch({
     yaml <- read_yaml(text=text);
   }, error=function(e) {
-    exit("Error '", e,
+    .exit("Error '", e,
          "' when parsing yaml metadata '",
          text,
          "'.");
   }, warning=function(e) {
-    exit("Warning '", e,
+    .exit("Warning '", e,
          "' when parsing yaml metadata '",
          text,
          "'.");
   });
 
   if(is.non.empty.list(yaml)) {
-    logger("Finished loading ",
+    .logger("Finished loading ",
            length(yaml), " metadata items from.");
     return(yaml);
   }
 
-  exit("Empty parsed metadata, although text '", text, "' is not empty.");
+  .exit("Empty parsed metadata, although text '", text, "' is not empty.");
   return(NULL);
 }
 

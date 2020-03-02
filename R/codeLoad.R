@@ -14,8 +14,8 @@
 #' @importFrom utilizeR is.non.empty.string is.non.empty.vector
 code.load <- function(path, lines="", tags="", basePath=NULL) {
   if(!is.null(basePath)) {
-    path2 <- check.file(file.path(basePath, path));
-    logger("resolved code path '", path,
+    path2 <- .check.file(file.path(basePath, path));
+    .logger("resolved code path '", path,
            "' versus path '", basePath,
            "' for code loading, got '", path2, "'.");
     path <- path2;
@@ -40,12 +40,12 @@ code.load <- function(path, lines="", tags="", basePath=NULL) {
         if(is.integer(res)) {
           lines <- res;
         } else {
-          exit("lines expression '", old,
+          .exit("lines expression '", old,
                "' cannot be translated to an integer vector for file '",
                path, "'.");
         }
       } else {
-        exit("lines expression '", old,
+        .exit("lines expression '", old,
              "' cannot be translated to an vector for file '",
              path, "'.");
       }
@@ -64,7 +64,7 @@ code.load <- function(path, lines="", tags="", basePath=NULL) {
       if(is.non.empty.vector(res)) {
         tags <- res;
       } else {
-        exit("tags expression '", old,
+        .exit("tags expression '", old,
              "' cannot be translated to an vector for file '",
              path, "'.");
       }

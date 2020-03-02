@@ -12,7 +12,7 @@ meta.commit <- function() {
     env.var.2 <- "COMMIT";
     commit <- Sys.getenv(x=env.var.2, unset=NA);
     if(is.null(commit) || is.na(commit)|| (length(commit) != 1L) || (nchar(commit) <= 0L)) {
-      exit("Commit unknown because environment variables '",
+      .exit("Commit unknown because environment variables '",
            env.var,
            "' and '",
            env.var.2,
@@ -35,7 +35,7 @@ meta.repository <- function() {
     env.var.2 <- "REPOSITORY";
     repo <- Sys.getenv(x=env.var.2, unset=NA);
     if(is.null(repo) || is.na(repo)|| (length(repo) != 1L) || (nchar(repo) <= 0L)) {
-      exit("repository unknown because environment variables '",
+      .exit("repository unknown because environment variables '",
            env.var,
            "' and '",
            env.var.2,

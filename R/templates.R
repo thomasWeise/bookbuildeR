@@ -10,7 +10,7 @@
 #' @export template.load
 template.load <- function(template, dir=getwd()) {
   dir <- force(dir);
-  dir <- check.dir(dir);
+  dir <- .check.dir(dir);
   template <- force(template);
 
   # does the template already exist?
@@ -18,10 +18,10 @@ template.load <- function(template, dir=getwd()) {
   template.path <- force(template.path);
   if(file.exists(template.path)) {
     template.path <- normalizePath(template.path, mustWork = FALSE);
-    logger("Template '", template,
+    .logger("Template '", template,
             "' exists as file '", template.path, "'.");
   } else {
-    logger("Template '", template,
+    .logger("Template '", template,
            "' not provided as local file '", template.path,
            "', now trying sysdata.rda resource with name '", template,
            "'.");
@@ -31,25 +31,25 @@ template.load <- function(template, dir=getwd()) {
     resource <- template.resources[[template]];
     if(!(is.null(resource))) {
       if(!(is.character(resource))) {
-        exit("Corrupted sysdata.rda resource '", resource, "' - is not a character list.");
+        .exit("Corrupted sysdata.rda resource '", resource, "' - is not a character list.");
       }
       if(length(resource) <= 0L) {
-        exit("Corrupted sysdata.rda resource '", resource, "' - character list is empty.");
+        .exit("Corrupted sysdata.rda resource '", resource, "' - character list is empty.");
       }
       template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
       template.path <- force(template.path);
       tryCatch({
         writeLines(text=resource, con=template.path);
       }, error=function(e) {
-        exit("Error '", e,
+        .exit("Error '", e,
              "' when trying to copy sysdata.rda resource '", template,
              "' to file '", template.path, "'.");
       }, warning=function(e) {
-        exit("Warning '", e,
+        .exit("Warning '", e,
              "' when trying to copy sysdata.rda resource '", template,
              "' to file '", template.path, "'.");
       });
-      logger("Discovered template '",
+      .logger("Discovered template '",
              template,
              "' in sysdata resources '", template,
              "' and copied it to file '",  template.path, "'.");
@@ -57,7 +57,7 @@ template.load <- function(template, dir=getwd()) {
     }
 
     if(have.not) {
-      logger("Template '",
+      .logger("Template '",
              template,
              "' does not exist as sysdata resources '", template,
              "', now looking checking whether it is a URL we can download.");
@@ -66,7 +66,7 @@ template.load <- function(template, dir=getwd()) {
       have <- template.urls[[template]];
       have <- force(have);
       if(is.non.empty.string(have)) {
-        logger("Template '",
+        .logger("Template '",
                template,
                "' has pre-defined URL '", have,
                "'.");
@@ -76,7 +76,7 @@ template.load <- function(template, dir=getwd()) {
 
       template.path <- tempfile(pattern="tmp", tmpdir=dir, fileext=".template");
       template.path <- force(template.path);
-      logger("Beginning to download template from '",
+      .logger("Beginning to download template from '",
              template,
              "' to file '",
              template.path, "'.");
@@ -84,16 +84,16 @@ template.load <- function(template, dir=getwd()) {
       tryCatch({
         download.file(url=template, destfile=template.path);
         template.path <- normalizePath(template.path, mustWork = FALSE);
-        logger("Finished downloading template from '",
+        .logger("Finished downloading template from '",
                 template,
                 "' to file '",
                 template.path, "'.");
       }, error=function(e) {
-        exit("Error '", e,
+        .exit("Error '", e,
              "' when trying to access url '",
              template, "'.");
       }, warning=function(e) {
-        exit("Warning '", e,
+        .exit("Warning '", e,
              "' when trying to access url '",
              template, "'.");
       })
@@ -101,7 +101,7 @@ template.load <- function(template, dir=getwd()) {
   }
 
   template.path <- force(template.path);
-  template.path <- check.file(template.path);
+  template.path <- .check.file(template.path);
   template.path <- force(template.path);
   return(template.path);
 }

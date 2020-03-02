@@ -9,16 +9,16 @@
 calibre.azw3<- function(epubFile,
                         destName=sub(pattern="\\..*", replacement="", x=basename(epubFile)),
                         destDir=dirname(epubFile)) {
-  logger("Now building AWZ3 from EPUB file '", epubFile, "'.");
+  .logger("Now building AWZ3 from EPUB file '", epubFile, "'.");
 
-  epubFile <- check.file(epubFile);
-  destDir <- check.dir(destDir);
+  epubFile <- .check.file(epubFile);
+  destDir <- .check.dir(destDir);
 
   # create dest file
   destFile <- normalizePath(file.path(destDir, paste(destName,
                             ".azw3", sep="", collapse="")), mustWork = FALSE);
   if(file.exists(destFile)) {
-    exit("Destination file '", destFile, "' already exists.");
+    .exit("Destination file '", destFile, "' already exists.");
   }
 
   args <- c(epubFile,
@@ -30,11 +30,11 @@ calibre.azw3<- function(epubFile,
 
   # check result
   if(result != 0L) {
-    exit("ebook-convert has failed with error code ", result, " for arguments '",
+    .exit("ebook-convert has failed with error code ", result, " for arguments '",
          paste(args, sep=" ", collapse=" "), "' in directory '", destDir, "'.");
   }
-  destFile <- check.file(destFile);
+  destFile <- .check.file(destFile);
 
-  logger("Finished building a AWZ3 output '", destFile, "'.");
+  .logger("Finished building a AWZ3 output '", destFile, "'.");
   return(destFile);
 }

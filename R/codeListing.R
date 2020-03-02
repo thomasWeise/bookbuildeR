@@ -76,7 +76,7 @@ code.listing <- function(
           code  <- force(code);
           if(nchar(code) < n.old) {
             # if the meta-comments were removed, there might be longer trailing space sequences
-            logger("Removed some meta comments from code in file '", path, "'.");
+            .logger("Removed some meta comments from code in file '", path, "'.");
             code <- unlist(strsplit(code, "\n", fixed=TRUE)[[1L]]);
             code <- force(code);
             code <- .remove.trailing.spaces(code, path);
@@ -92,7 +92,7 @@ code.listing <- function(
         if(language == "java") {
           code.split <- trimws(unlist(strsplit(code, "\n", fixed=TRUE)), which="right");
           if(length(code.split) <= 0L) {
-            exit("Error in file '", path, "', no lines found.");
+            .exit("Error in file '", path, "', no lines found.");
           }
           # remove trailing string markers
           code.split <- gsub("\\s*(\\/\\/\\$NON-NLS-[1-9]+[0-9]*\\$)+$", "", code.split);
@@ -104,7 +104,7 @@ code.listing <- function(
             keep <- (code.split.trim != remove);
             code.split <- code.split[keep];
             if(length(code.split) <= 0L) {
-              exit("Error in file '", path, "', no lines remain after removing annotations.");
+              .exit("Error in file '", path, "', no lines remain after removing annotations.");
             }
             code.split.trim <- code.split.trim[keep];
           }
@@ -114,7 +114,7 @@ code.listing <- function(
             keep <- 2L:length(code.split);
             code.split <- code.split[keep];
             if(length(code.split) <= 1L) {
-              exit("Error in file '", path, "', no lines remain after removing package declaration.");
+              .exit("Error in file '", path, "', no lines remain after removing package declaration.");
             }
             code.split.trim <- code.split.trim[keep];
           }
@@ -123,7 +123,7 @@ code.listing <- function(
                               endsWith(code.split.trim, ")");
           code.split <- code.split[!suppressWarnings];
           if(length(code.split) <= 0L) {
-            exit("Error in file '", path, "', no lines remain after removing @SuppressWarnings annotations.");
+            .exit("Error in file '", path, "', no lines remain after removing @SuppressWarnings annotations.");
           }
 
           rm(code.split.trim);
@@ -137,7 +137,7 @@ code.listing <- function(
 
         if(nchar(code) < n.old) {
           # if the unnecessary stuff was removed, there might be longer trailing space sequences
-          logger("Removed some unnecessary stuff from code in file '", path, "'.");
+          .logger("Removed some unnecessary stuff from code in file '", path, "'.");
           code <- unlist(strsplit(code, "\n", fixed=TRUE)[[1L]]);
           code <- force(code);
           code <- .remove.trailing.spaces(code, path);
@@ -176,19 +176,19 @@ code.listing <- function(
                          sep="", collapse="");
       }
     } else {
-      exit("Caption of code path '", path, "' cannot just contain white space.");
+      .exit("Caption of code path '", path, "' cannot just contain white space.");
     }
   } else {
-    exit("Caption of code path '", path, "' cannot be empty.");
+    .exit("Caption of code path '", path, "' cannot be empty.");
   }
 
   if(is.non.empty.string(label)) {
     label <- trimws(label);
     if(!is.non.empty.string(label)) {
-      exit("Label of code path '", path, "' cannot just contain white space.");
+      .exit("Label of code path '", path, "' cannot just contain white space.");
     }
   } else {
-    exit("Label of code path '", path, "' cannot just contain be empty.");
+    .exit("Label of code path '", path, "' cannot just contain be empty.");
   }
 
   res <- paste("```{#", label, sep="", collapse="");
