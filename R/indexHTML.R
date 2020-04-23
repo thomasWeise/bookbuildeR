@@ -31,14 +31,17 @@
 #' @description Generate an \code{index.html} File
 #' @param files a list of \code{(path, desc)} tuples with file paths and
 #'   corresponding descriptions
+#' @param sourceDir the source directory: used to resolve the include
 #' @param destDir the destination directory
 #' @param metadata the meta data
 #' @return the canonical path to the \code{index.html} file
 #' @export index.html
 #' @include logger.R
 #' @include meta.R
-#' @importFrom utilizeR is.non.empty.list is.non.empty.string is.non.empty.vector path.relativize
+#' @importFrom utilizeR is.non.empty.list is.non.empty.string
+#'   is.non.empty.vector path.relativize
 index.html <- function(files,
+                       sourceDir=NULL,
                        destDir=dirname(files[[1L]]$path),
                        metadata) {
   .logger("Now building index.html file.");
@@ -128,12 +131,34 @@ index.html <- function(files,
                     ".</p>",
                     sep="", collapse="");
 
+# load a potential include file
+  if(is.non.empty.string(metadata$website.include)) {
+    include <- normalizePath(file.path(sourceDir, metadata$website.include),
+                             mustWork = FALSE);
+    if(!file.exists(include)) {
+      .exit("Website include file '", include, "' does not exist.");
+    }
+
+    include <- unname(unlist(readLines(include)));
+    if(length(include) <= 0L) {
+      include <- NULL;
+    } else {
+      include <- trimws(include);
+      if(sum(nchar(include)) <= 0L) {
+        include <- NULL;
+      }
+    }
+  } else {
+    include <- NULL;
+  }
+
   lines <- c(lines, "<main>",
              start,
              "<ul>",
              files,
              "</ul>",
              compiled,
+             include,
              "</main>",
              "</body>",
              "</html>");

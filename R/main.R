@@ -105,6 +105,7 @@ bookbuildeR.main <- function(sourceFile,
                       desc="in a stand-alone HTML5&nbsp;format for reading in a web browser on any device"));
 
   index <- index.html(files=files,
+                      sourceDir=sourceDir,
                       destDir=destDir,
                       metadata=metadata);
   .logger("Finished index.html, generated file '",

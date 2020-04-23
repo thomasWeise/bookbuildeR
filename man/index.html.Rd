@@ -4,11 +4,18 @@
 \alias{index.html}
 \title{Generate an \code{index.html} File}
 \usage{
-index.html(files, destDir = dirname(files[[1L]]$path), metadata)
+index.html(
+  files,
+  sourceDir = NULL,
+  destDir = dirname(files[[1L]]$path),
+  metadata
+)
 }
 \arguments{
 \item{files}{a list of \code{(path, desc)} tuples with file paths and
 corresponding descriptions}
+
+\item{sourceDir}{the source directory: used to resolve the include}
 
 \item{destDir}{the destination directory}
 
