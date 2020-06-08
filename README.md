@@ -9,6 +9,7 @@
 5. [Related Projects and Building Blocks](#5-related-projects-and-components)
 6. [License](#6-license)
 7. [Contact](#7-contact)
+8. [Links](#8-links)
 
 ## 1. Introduction
 
@@ -414,3 +415,9 @@ If you have any questions or suggestions, please contact
 [Hefei University](http://www.hfuu.edu.cn) in
 Hefei, Anhui, China via
 email to [tweise@hfuu.edu.cn](mailto:tweise@hfuu.edu.cn) and [tweise@gmx.de](mailto:tweise@gmx.de).
+
+### 8. Links
+
+- [personal post](https://www.linkedin.com/feed/update/urn:li:activity:6540439180223307776)
+- [personal article](https://www.linkedin.com/pulse/writing-books-github-have-travis-ci-automatically-compile-weise/)
+- [post on institute website](http://iao.hfuu.edu.cn/157)

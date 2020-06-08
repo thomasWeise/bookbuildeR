@@ -1,7 +1,7 @@
 Package: bookbuildeR
 Type: Package
 Title: An R Package for Building Books or Documents using pandoc 
-Version: 0.8.8
+Version: 0.8.9
 Author: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Maintainer: Dr. Thomas Weise <tweise@hfuu.edu.cn>
 Description: With this package, we provide some R utilities for using pandoc.
@@ -53,4 +53,4 @@ Collate:
     'preprocessor.R'
     'rexec.R'
     'rsource.R'
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

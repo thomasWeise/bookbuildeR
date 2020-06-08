@@ -1,5 +1,12 @@
 
-library(utilizeR);
+if(!require("utilizeR")) {
+  if(!require("devtools")) {
+    install.packages("devtools");
+    stopifnot(require("devtools"));
+  }
+  install_github("thomasWeise/utilizeR");
+  stopifnot(require("utilizeR"));
+}
 source("R/logger.R");
 
 .logger("Beginning to build resources R/sysdata.rda.");

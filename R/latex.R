@@ -71,6 +71,16 @@ pandoc.latex <- function(sourceFile,
     } else {
       .logger("No LaTeX template specified in metadata.");
     }
+
+# look for pdf engine specification: could be useful for Chinese?
+    pdf.engine <- metadata$pdf.engine;
+    pdf.engine <- force(pdf.engine);
+    if(is.non.empty.string(pdf.engine)) {
+      .logger("Found pdf.engine specification '", pdf.engine, "' in metadata.");
+      params[[length(params) + 1L]] <- paste0("--pdf-engine=", pdf.engine);
+    } else {
+      .logger("No pdf.engine specified.");
+    }
   }
 
   len <- length(params);
