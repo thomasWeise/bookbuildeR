@@ -90,7 +90,7 @@ index.html <- function(files,
     if(is.character(include) && (!any(is.na(include))) && (sum(nchar(include)) > 0L)) {
       include <- unname(unlist(markdownToHTML(text=include,
                                               fragment.only = TRUE,
-                                              options = c('toc', 'fragment_only'))));
+                                              options = c('fragment_only'))));
       if(is.character(include) && (!is.na(include)) && (sum(nchar(include)) > 0L)) {
         include <- trimws(unname(unlist(strsplit(include, "\n", fixed=TRUE))));
         include <- include[nchar(include) > 0];
