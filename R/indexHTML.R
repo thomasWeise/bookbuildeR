@@ -40,6 +40,7 @@
 #' @include meta.R
 #' @importFrom utilizeR is.non.empty.list is.non.empty.string
 #'   is.non.empty.vector path.relativize
+#' @importFrom markdown markdownToHTML
 index.html <- function(files,
                        sourceDir=NULL,
                        destDir=dirname(files[[1L]]$path),
@@ -60,43 +61,6 @@ index.html <- function(files,
     title <- NULL;
   }
 
-# load authors
-  author <- metadata$author;
-  if(is.non.empty.list(author)) {
-    author <- unname(unlist(author));
-  } else {
-    if(is.non.empty.vector(author)) {
-      author <- unname(author);
-    } else {
-      if(!is.non.empty.string(author)) {
-        author = NULL;
-      }
-    }
-  }
-  if(!(is.null(author))) {
-# for now, we just perform a very crude name concatenation
-    author <- paste(.name.and(author), sep=" ", collapse=" ");
-  }
-
-# put the contents together: first create links and add file sizes and descriptions
-  files <- vapply(X=files,
-                  FUN=function(f) {
-                    path <- .check.file(f$path);
-                    size <- file.size(path);
-                    path <- path.relativize(path, destDir);
-                    return(paste("<a href=\"", path, "\">",
-                                 path, "</a>&nbsp;[",
-                                 .file.size(size),
-                                 "] ",
-                                 f$desc, sep="", collapse=""))
-                  }, "");
-# now put "," and "and"s where they belong
-  files <- .name.and(files);
-# put the final "."
-  files[length(files)] <- paste(files[length(files)], ".", sep="", collapse="");
-# collapse into a list
-  files <- vapply(files, FUN=function(f) paste("<li>", f, "</li>", sep="", collapse=""), "");
-
 # build the html skeleton
   lines <- c("<!DOCTYPE html>",
   "<html dir=\"ltr\" lang=\"en\">",
@@ -108,58 +72,107 @@ index.html <- function(files,
   }
   lines <- c(lines, "</head>", "<body>");
 # if we have a title, there should be a "header" tag
-  if(!(is.null(title))) {
-    lines <- c(lines, "<header>", paste("<h1>", title, "</h1>", sep="", collapse=""));
-    if(!(is.null(author))) {
-      lines <- c(lines, paste("<h2>by&nbsp;", author, "</h2>", sep="", collapse=""))
-    }
-    lines <- c(lines, "</header>");
-  }
-
-  if(!is.null(title)) {
-    start <- paste("<p>The book <em><q>", title, "</q></em>", sep="", collapse="");
-    if(!is.null(author)) {
-      start <- paste(start, " by ", author, sep="", collapse="");
-    }
-  } else {
-    start <- "<p>This book";
-  }
-  start <- paste(start, " is available in the following formats:</p>", sep="", collapse="");
 
   compiled <- paste("<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package on ",
                     meta.date(),
                     ".</p>",
                     sep="", collapse="");
 
-# load a potential include file
-  if(is.non.empty.string(metadata$website.include)) {
-    include <- normalizePath(file.path(sourceDir, metadata$website.include),
+# load a potential markdown include file
+  if(is.non.empty.string(metadata$website.md)) {
+    include <- normalizePath(file.path(sourceDir, metadata$website.md),
                              mustWork = FALSE);
     if(!file.exists(include)) {
-      .exit("Website include file '", include, "' does not exist.");
+      .exit("Website markdown include file '", include, "' does not exist.");
     }
 
-    include <- unname(unlist(readLines(include)));
-    if(length(include) <= 0L) {
-      include <- NULL;
-    } else {
-      include <- trimws(include);
-      if(sum(nchar(include)) <= 0L) {
-        include <- NULL;
+    include <- readLines(con=include);
+    if(is.character(include) && (!any(is.na(include))) && (sum(nchar(include)) > 0L)) {
+      include <- unname(unlist(markdownToHTML(text=include,
+                                              fragment.only = TRUE,
+                                              options = c('toc', 'fragment_only'))));
+      if(is.character(include) && (!is.na(include)) && (sum(nchar(include)) > 0L)) {
+        include <- trimws(unname(unlist(strsplit(include, "\n", fixed=TRUE))));
+        include <- include[nchar(include) > 0];
+        .logger("Finished rendering website markdown include.");
+        if(length(include) < 1L) {
+          .exit("Markdown rendering of include file produced empty result.");
+        } else {
+          lines <- c(lines, include, compiled);
+        }
+      } else {
+        .exit("Error when rendering markdown include.");
       }
+    } else {
+      .exit("Website markdown include file is empty!");
     }
   } else {
-    include <- NULL;
+    # load authors
+    author <- metadata$author;
+    if(is.non.empty.list(author)) {
+      author <- unname(unlist(author));
+    } else {
+      if(is.non.empty.vector(author)) {
+        author <- unname(author);
+      } else {
+        if(!is.non.empty.string(author)) {
+          author = NULL;
+        }
+      }
+    }
+    if(!(is.null(author))) {
+      # for now, we just perform a very crude name concatenation
+      author <- paste(.name.and(author), sep=" ", collapse=" ");
+    }
+
+    if(!(is.null(title))) {
+      lines <- c(lines, "<header>", paste("<h1>", title, "</h1>", sep="", collapse=""));
+      if(!(is.null(author))) {
+        lines <- c(lines, paste("<h2>by&nbsp;", author, "</h2>", sep="", collapse=""))
+      }
+      lines <- c(lines, "</header>");
+    }
+
+    if(!is.null(title)) {
+      start <- paste("<p>The book <em><q>", title, "</q></em>", sep="", collapse="");
+      if(!is.null(author)) {
+        start <- paste(start, " by ", author, sep="", collapse="");
+      }
+    } else {
+      start <- "<p>This book";
+    }
+    start <- paste(start, " is available in the following formats:</p>", sep="", collapse="");
+
+    # put the contents together: first create links and add file sizes and descriptions
+    files <- vapply(X=files,
+                    FUN=function(f) {
+                      path <- .check.file(f$path);
+                      size <- file.size(path);
+                      path <- path.relativize(path, destDir);
+                      return(paste("<a href=\"", path, "\">",
+                                   path, "</a>&nbsp;[",
+                                   .file.size(size),
+                                   "] ",
+                                   f$desc, sep="", collapse=""))
+                    }, "");
+    # now put "," and "and"s where they belong
+    files <- .name.and(files);
+    # put the final "."
+    files[length(files)] <- paste(files[length(files)], ".", sep="", collapse="");
+    # collapse into a list
+    files <- vapply(files, FUN=function(f) paste("<li>", f, "</li>", sep="", collapse=""), "");
+
+    lines <- c(lines, "<main>",
+               start,
+               "<ul>",
+               files,
+               "</ul>",
+               compiled,
+               "</main>");
+
   }
 
-  lines <- c(lines, "<main>",
-             start,
-             "<ul>",
-             files,
-             "</ul>",
-             compiled,
-             include,
-             "</main>",
+  lines <- c(lines,
              "</body>",
              "</html>");
 

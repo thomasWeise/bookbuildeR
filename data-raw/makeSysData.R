@@ -148,9 +148,9 @@ rm(.temp);
 .logger("Now storing resources in R/sysdata.rda.");
 # store all contents in the sysdata.rda file
 usethis::use_data(template.urls,
-                   template.resources,
-                   internal = TRUE,
-                   overwrite = TRUE,
-                   compress="xz")
+                  template.resources,
+                  internal = TRUE,
+                  overwrite = TRUE,
+                  compress="xz")
 .logger("Done: Now please re-build and install the package.");
 

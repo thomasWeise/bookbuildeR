@@ -134,7 +134,7 @@ Additionally, in the section below you can see how the whole build process can b
 
 ## 4. An Automatic Online-Book Building Approach by Using `GitHub` and `Travis-CI`
 
-With out package and associated docker container, you can conveniently build your electronic book on your computer with a single command.
+With our package and associated docker container, you can conveniently build your electronic book on your computer with a single command.
 However, you can also integrate the whole process with a [version control](http://en.wikipedia.org/wiki/Version_control) software like [Git](http://en.wikipedia.org/wiki/Git) and a [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration) framework.
 Then, you can automate the compilation of your book to run every time you change your book sources.
 Actually, there are several open source and free environments that you can use to that for you for free &ndash; in exchange for you making your book free for everyone to read.

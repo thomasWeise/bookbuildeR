@@ -16,6 +16,7 @@ Encoding: UTF-8
 URL: http://www.github.com/thomasWeise/bookbuildeR
 BugReports: http://www.github.com/thomasWeise/bookbuildeR/issues
 Imports: utilizeR (>= 0.8.6),
+         markdown (>= 1.1),
          ore (>= 1.6.3),
          utils (>= 3.5.0),
          R.utils (>= 2.9.2),
