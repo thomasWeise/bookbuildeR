@@ -73,7 +73,7 @@ index.html <- function(files,
   lines <- c(lines, "</head>", "<body>");
 # if we have a title, there should be a "header" tag
 
-  compiled <- paste("<p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package on ",
+  compiled <- paste("<hr><p>This book has been compiled using the <a href=\"http://github.com/thomasWeise/bookbuildeR\">bookbuildeR</a> package on ",
                     meta.date(),
                     ".</p>",
                     sep="", collapse="");
