@@ -13,8 +13,8 @@ source("R/logger.R");
 
 # the urls of the templates
 template.urls <- list(
-  eisvogel.latex = "http://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex",
-  GitHub.html5 = "http://raw.githubusercontent.com/tajmone/pandoc-goodies/master/templates/html5/github/GitHub.html5"
+  eisvogel.latex = "https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex",
+  GitHub.html5 = "https://raw.githubusercontent.com/tajmone/pandoc-goodies/master/templates/html5/github/GitHub.html5"
 );
 
 
@@ -61,6 +61,7 @@ template.urls <- list(
                length(result), " lines). Now overwriting local source file ",
                local.copy, ".");
         writeLines(text=result, con=local.copy);
+        Sys.sleep(10L);
       } else {
         result <- NULL;
       }
