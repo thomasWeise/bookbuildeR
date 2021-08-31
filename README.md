@@ -11,6 +11,8 @@
 7. [Contact](#7-contact)
 8. [Links](#8-links)
 
+**[This package is now obsolete and no longer maintained. Please check `thomasWeise/bookbuilderpy` for a new and improved version.](https://github.com/thomasWeise/bookbuilderpy)**
+
 ## 1. Introduction
 
 This is an `R` package intended for building electronic books from [pandoc's markdown flavor](http://pandoc.org/MANUAL.html#pandocs-markdown) by using, well, [pandoc](http://pandoc.org/) and [`R`](http://www.r-project.org/).
@@ -24,6 +26,8 @@ The sources of this container are provided in the [GitHub](http://www.github.com
 The container includes all necessary software components needed to run and build electronic books by using the scripts here, such as complete installations of [pandoc](http://pandoc.org/), [`R`](http://www.r-project.org/), and [TeX Live](http://tug.org/texlive/).
 
 It is suitable for the integration into a CI environment, which can be used to completely automate the development of electronic books.
+
+**[This package is now obsolete and no longer maintained. Please check `thomasWeise/bookbuilderpy` for a new and improved version.](https://github.com/thomasWeise/bookbuilderpy)**
 
 ## 2. Features via Extented Markdown
 
@@ -164,123 +168,17 @@ GitHub is built around the distributed version control system [git](http://git-s
 If you have a Debian-based Linux system, you can install the basic `git` client with command line interface as follows: `sudo apt-get install git`.
 You can use either this client or such a GUI to work with your repository.
 
-We suggest that in your main branch of the repository, you put a folder `book` where all the raw sources and graphics for your book go.
-In the repository root folder, you can then leave the non-book-related things, like `README.md`, `.travis.yml`, and `LICENSE.md`. At this step, you should choose a license for your project, maybe a [creative commons](http://creativecommons.org/) one, if you want.
+Before you create the repository and interact with it, I suggest that you have a bare minimum book ready locally.
 
-You should now put a file named "book.md" into the "book" folder of your repository, it could just contain some random text for now, the real book comes later.
+First, create a repository on `GitHub`, maybe with a `README.md` file.
+You should choose a license for your project, maybe a [creative commons](http://creativecommons.org/) one, if you want.
 
-### 4.2. The `gh-pages` Branch
+You should now put a file named "book.md" into the root folder of your repository, it could just contain some random text for now, the real book comes later.
 
-Since we want the book to be automatically be built and published to the internet, we should have a `gh-pages` branch in our repository as well.
-I assume that you have a Unix/Linux system with `git` installed.
-In that case, you can do this as follows (based on [here](http://stackoverflow.com/questions/13969050) and [here](http://stackoverflow.com/questions/34100048)), by replacing `YOUR_USER_NAME` with your user name and `YOUR_REPOSITORY` with your repository name:
-
-    git clone --depth=50 --branch=master https://github.com/YOUR_USER_NAME/YOUR_REPOSITORY.git YOUR_USER_NAME/YOUR_REPOSITORY
-    cd YOUR_USER_NAME/YOUR_REPOSITORY
-    git checkout --orphan gh-pages
-    ls -la |awk '{print $9}' |grep -v git |xargs -I _ rm -rf ./_ 
-    git rm -rf .
-    git commit --allow-empty -m "root commit"
-    git push origin gh-pages
-
-You can now safely delete the folder `YOUR_USER_NAME/YOUR_REPOSITORY` that was created during this procedure.
-If you go to the settings page of your repository, it should now display something like "` Your site is published at https://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/`" under point "GitHub Pages".
-This is where your book will later go.
-
-### 4.3. Personal Access Token
-
-Later, we will use [Travis CI](http://travis-ci.org/) to automatically build your book and to automatically deploy it the GitHub pages branch of your repository.
-For the latter, Travis will need a so-called personal access token, as described [here](http://docs.travis-ci.com/user/deployment/pages/).
-You need to create such a token following the steps detailed [here](http://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/).
-Basically, you go to your personal settings page for your GitHub account, click "Developer Settings" and then "Personal Access Tokens".
-You click "Generate new token" and confirm your password.
-Then you need to choose `public_repo` and click "Generate token".
-Make sure you store the token as text somewhere safe, we need this token text later on.
-
-### 4.4. Travis CI: Building and Deployment
-
-With that in place, we can now setup [Travis CI](http://travis-ci.org/) for automated building and deployment.
-You can get a Travis account easily and even sign in with GitHub.
-When you sign into Travis, it should show you a list with your public GitHub repositories.
-You need to should enable your book repository for automated build.
-
-Click on the now-activated repository in Travis and click "More Settings".
-Scroll down to "Environment Variables" and then add a variable named "GITHUB_TOKEN".
-As value, copy the text of the personal access token that we have created in the previous step.
-
-### 4.5. `.travis.yml`
-
-Now we need to finally tell Travis how to build our book, and this can be done by placing a file called `.travis.yml` into the root folder of your GitHub repository.
-This file should have the following contents, where `YOUR_BOOK_OUTPUT_BASENAME` should be replaced with the base name of the files to be generated (e.g., "myBook" will result in "myBook.pdf" and "myBook.epub" later):
-
-    sudo: required
-    
-    language: generic
-    
-    services:
-      - docker
-    
-    script:
-    - |
-      baseDir="$(pwd)" &amp;&amp;\
-      inputDir="${baseDir}/book" &amp;&amp;\
-      outputDir="${baseDir}/output" &amp;&amp;\
-      mkdir -p "${outputDir}" &amp;&amp;\
-      docker run -v "${inputDir}/":/input/ \
-                 -v "${outputDir}/":/output/ \
-                 -e TRAVIS_COMMIT=$TRAVIS_COMMIT \
-                 -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
-                 -t -i thomasweise/docker-bookbuilder book.md YOUR_BOOK_OUTPUT_BASENAME &amp;&amp;\
-      cd "${outputDir}"
-    
-    deploy:
-      provider: pages
-      skip-cleanup: true
-      github-token: $GITHUB_TOKEN
-      keep-history: false
-      on:
-        branch: master
-      target-branch: gh-pages
-      local-dir: output
-
-
-After adding this file, commit the changes and push the commit to the repository.
-Shortly thereafter, a new Travis build should start.
-If it goes well, it will produce three files, namely "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.pdf`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.html`", "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.epub`", and "`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/YOUR_BOOK_OUTPUT_BASENAME.azw3`", as well as
-"`http://YOUR_USER_NAME.github.io/YOUR_REPOSITORY/index.html`" (where `YOUR_USER_NAME` will be the lower-case version of your user name). You can link them from the README.md file that you probably have in your project's root folder.
-
-### 4.6. Interaction with Source Code Repository
-
-As discussed above, there are several commands for inte racting with a source code repository.
-The idea is as follows: You can write your book online, by keeping the *book sources* in a GitHub repository.
-Whenever you make a commit to the repository, the book's pdf and epub files will be rebuilt, so the newest book version is always online.
-
-If you write a book related to, e.g., computer science, you may have lots of example codes in some programming language in your book.
-I think that it is often nice to not just have examples on some "meta-level," but to have real, executable programs as examples.
-Of course, you may choose to print snippets of them in the book only, but they should be available "in full" somewhere.
-
-For this purpose, the *code repository* exists.
-It can be a second GitHub repository, where you keep your programming examples.
-This second repository may have an independent build cycle, e.g., be a [Maven](http://maven.apache.org/) build with unit tests executed on Travis CI, as well.
-You can specify the URL of this repository as `codeRepo` in the YAML meta data of your book and then use commands such as `\repo.code{path}{lines}{tags}`, `\repo.listing{label}{caption}{language}{path}{lines}{tags}`, `\repo.name`, and `\repo.commit` to directly access files in the meta information of this repository.
-
-If you do that, you may choose to follow the approach given in [plume-lib/trigger-travis](http://github.com/plume-lib/trigger-travis) to automatically trigger a build of your book when a commit to your source code repository happens.
-This is a good idea, because this way your book will stay up-to-date when you, e.g., fix bugs in your example codes or refactor them.
-Each time your example code repository passes the automatic build process, your book's build process will be triggered and the book will be compiled and published anew.
-
-This concept means that you can edit your source code examples completely independently from the book.
-You could even write a book about an application you develop on GitHub and cite its sources wherever you want.
-By using the `trigger-travis` approach, you will get a new version of the book whenever you change the book *and* whenever you change the source code.
-
-### 4.7. Infrastructure
-
-While we have already discussed the interplay of GitHub and Travis CI to get your book compiled, we have omitted one more element of our infrastructure: [Docker](http://www.docker.com).
-Docker allows us to build something like very light-weight virtual machines (I know, they are not strictly virtual machines).
-For this purpose, we can build images, which are basically states of a file system.
-Our Travis builds load such an image, namely [thomasweise/docker-bookbuilder](http://hub.docker.com/r/thomasweise/docker-bookbuilder/), which provides my [bookbuildeR](http://github.com/thomasWeise/bookbuildeR) `R` package on top of an `R` installation ([thomasweise/docker-pandoc-r](http://hub.docker.com/r/thomasweise/docker-pandoc-r/)) on top of a Pandoc installation ([thomasweise/docker-pandoc](http://hub.docker.com/r/thomasweise/docker-pandoc/)) on top of a TeX Live installation ([thomasweise/docker-texlive-thin](http://hub.docker.com/r/thomasweise/docker-texlive-thin/)).
-Of course, you could also use any of these containers locally or extend them in any way you want, in order to use different tools or book building procedures.
  
 ## 5. Related Projects and Components
+
+**[This package is now obsolete and no longer maintained. Please check `thomasWeise/bookbuilderpy` for a new and improved version.](https://github.com/thomasWeise/bookbuilderpy)**
 
 ### 5.1. Own Contributed Projects and Components
 
@@ -418,6 +316,7 @@ email to [tweise@hfuu.edu.cn](mailto:tweise@hfuu.edu.cn) and [tweise@gmx.de](mai
 
 ### 8. Links
 
+- **[thomasWeise/bookbuilderpy](https://github.com/thomasWeise/bookbuilderpy)**
 - [personal post](https://www.linkedin.com/feed/update/urn:li:activity:6540439180223307776)
 - [personal article](https://www.linkedin.com/pulse/writing-books-github-have-travis-ci-automatically-compile-weise/)
 - [post on institute website](http://iao.hfuu.edu.cn/157)
